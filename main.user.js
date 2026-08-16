@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         NX Tweaks
+// @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
 // @version      1.5
 // @author       zykieboi
