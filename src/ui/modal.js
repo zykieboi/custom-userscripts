@@ -1,3 +1,5 @@
+// src/ui/modal.js
+
 (function() {
     'use strict';
 
@@ -32,6 +34,7 @@
             panelIcon: { cat: 'visual', label: 'Panel Icon' },
             hideAlert: { cat: 'visual', label: 'Hide Alert' },
             copyUserId: { cat: 'function', label: 'Copy User ID' },
+            inventorySearch: { cat: 'function', label: 'Inventory Search' },
             removeAds: { cat: 'performance', label: 'Remove Ads' }
         };
 
@@ -103,6 +106,7 @@
             panelIcon: 'panelIcon',
             hideAlert: 'hideAlert',
             copyUserId: 'copyUserId',
+            inventorySearch: 'inventorySearch',
             removeAds: 'removeAds'
         };
 
