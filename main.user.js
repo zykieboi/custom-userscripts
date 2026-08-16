@@ -6,6 +6,8 @@
 // @description  testing stuff :)
 // @match        https://www.pekora.zip/*
 // @match        pekora.zip/*
+// @connect      http://www.pekora.zip
+// @connect      pekora.zip
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
