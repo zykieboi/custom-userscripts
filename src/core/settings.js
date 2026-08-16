@@ -1,7 +1,9 @@
+// src/core/settings.js
+
 (function() {
     'use strict';
 
-    const DEFAULTS = {
+    var DEFAULTS = {
         panelIcon: false,
         hideAlert: false,
         removeAds: false,
