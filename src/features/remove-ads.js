@@ -1,3 +1,5 @@
+// src/features/remove-ads.js
+
 (function() {
     'use strict';
 
@@ -8,14 +10,13 @@
 
         var style = document.createElement('style');
         style.textContent = `
-            [class*="adWrapper"],
-            [class*="ad-"],
-            [class*="Ad"],
             .adWrapper-0-2-7,
             .adWrapper-0-2-11,
+            .adWrapper-0-2-15,
             .adWrapper-0-2-39,
             .adWrapper-0-2-47,
-            .adWrapper-0-2-163 {
+            .adWrapper-0-2-163,
+            [class*="adWrapper-"] {
                 display: none !important;
             }
         `;
