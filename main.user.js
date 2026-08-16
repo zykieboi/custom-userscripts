@@ -15,6 +15,7 @@
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/hide-alert.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/remove-ads.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/copy-user-id.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/ui/modal.js
 // @downloadURL  https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // @updateURL    https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
@@ -202,6 +203,10 @@
 
         if (settings.get('copyUserId') && window.NX.features.copyUserId) {
             window.NX.features.copyUserId.apply();
+        }
+
+        if (settings.get('inventorySearch') && window.NX.features.inventorySearch) {
+            window.NX.features.inventorySearch.apply();
         }
     }
 
