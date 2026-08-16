@@ -5,7 +5,8 @@
         panelIcon: false,
         hideAlert: false,
         removeAds: false,
-        copyUserId: false
+        copyUserId: false,
+        inventorySearch: false
     };
 
     function get(key) {
