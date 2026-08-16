@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      1.5
+// @version      1.0
 // @author       zykieboi
 // @description  testing stuff :)
 // @match        https://www.pekora.zip/*
