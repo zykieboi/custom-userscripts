@@ -1,5 +1,3 @@
-// src/features/panel-icon.js
-
 (function() {
     'use strict';
 
