@@ -14,7 +14,7 @@
         close.onclick = function() { overlay.remove(); };
 
         var title = document.createElement('h2');
-        title.textContent = 'NX Tweaks';
+        title.textContent = 'Nexus - NX';
 
         var sub = document.createElement('div');
         sub.className = 'sub';
@@ -114,7 +114,6 @@
 
         if (enabled) {
             feature.apply();
-        } else {
         }
     }
 
