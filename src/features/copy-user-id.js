@@ -1,16 +1,19 @@
+// src/features/copy-user-id.js
+
 (function() {
     'use strict';
 
     function apply() {
-        var links = document.querySelectorAll('a[href*="/users/"]');
+        var links = document.querySelectorAll('a[href*="/users/"]:not(.friendEntry-0-2-140 a)');
         links.forEach(function(el) {
             if (el.dataset.nxCopy) return;
+            var href = el.getAttribute('href');
+            if (!href || !href.match(/\/users\/(\d+)/)) return;
             el.dataset.nxCopy = '1';
             el.style.cursor = 'pointer';
             el.title = 'Click to copy user ID';
             el.addEventListener('click', function(e) {
-                var href = this.getAttribute('href');
-                var match = href.match(/\/users\/(\d+)/);
+                var match = this.getAttribute('href').match(/\/users\/(\d+)/);
                 if (match) {
                     e.preventDefault();
                     navigator.clipboard.writeText(match[1]).then(function() {
