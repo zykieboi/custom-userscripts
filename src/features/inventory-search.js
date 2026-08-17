@@ -54,20 +54,21 @@
             height: 32px;
             box-sizing: border-box;
             cursor: pointer;
-            min-width: 32px;
+            min-width: 34px;
             flex-shrink: 0;
         `;
 
+        // Use the same icon as the top nav search
         var iconSpan = document.createElement('span');
-        iconSpan.className = 'icon-0-2-82 icon-nav-search';
+        iconSpan.className = 'icon-nav-search';
         iconSpan.style.cssText = `
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 16px;
+            height: 16px;
             background-image: url('/img/navigation_02012016.svg');
             background-position: 0 -112px;
             background-repeat: no-repeat;
-            background-size: 28px auto;
+            background-size: auto auto;
             flex-shrink: 0;
         `;
 
