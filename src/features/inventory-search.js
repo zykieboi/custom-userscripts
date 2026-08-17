@@ -14,26 +14,47 @@
             return;
         }
 
+        var existing = container.querySelector('.nx-inventory-search');
+        if (existing) return;
+
         var searchWrapper = document.createElement('div');
-        searchWrapper.style.cssText = 'padding: 10px 0; display: flex; gap: 8px; align-items: center; width: 100%;';
+        searchWrapper.className = 'nx-inventory-search';
+        searchWrapper.style.cssText = 'padding: 10px 0; width: 100%;';
 
         var input = document.createElement('input');
         input.type = 'text';
         input.placeholder = 'Search inventory...';
-        input.style.cssText = 'padding: 8px 14px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; flex: 1; background: #fff; color: #333; outline: none;';
-        input.style.width = '100%';
-        input.style.maxWidth = '400px';
+        input.style.cssText = 'padding: 8px 14px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%; max-width: 400px; background: #fff; color: #333; outline: none; box-sizing: border-box;';
 
         input.addEventListener('input', function() {
             var query = this.value.toLowerCase().trim();
             var items = container.querySelectorAll('.avatarCardWrapper-0-2-729');
+            var count = 0;
 
             items.forEach(function(item) {
                 var link = item.querySelector('.avatarCardItemLink-0-2-732');
                 if (!link) return;
                 var text = link.textContent.toLowerCase();
-                item.style.display = text.includes(query) ? '' : 'none';
+                if (text.includes(query)) {
+                    item.style.display = '';
+                    count++;
+                } else {
+                    item.style.display = 'none';
+                }
             });
+
+            var noResults = container.querySelector('.nx-no-results');
+            if (count === 0 && query.length > 0) {
+                if (!noResults) {
+                    noResults = document.createElement('div');
+                    noResults.className = 'nx-no-results';
+                    noResults.style.cssText = 'padding: 20px 0; color: #999; font-size: 14px; text-align: center;';
+                    noResults.textContent = 'No items found matching "' + query + '"';
+                    container.appendChild(noResults);
+                }
+            } else if (noResults) {
+                noResults.remove();
+            }
         });
 
         searchWrapper.appendChild(input);
