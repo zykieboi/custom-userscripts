@@ -19,12 +19,18 @@
 
         var searchWrapper = document.createElement('div');
         searchWrapper.className = 'nx-inventory-search';
-        searchWrapper.style.cssText = 'padding: 10px 0; width: 100%;';
+        searchWrapper.style.cssText = 'padding: 10px 0 10px 0; width: 100%; border-bottom: 1px solid rgba(0,0,0,0.05); margin-bottom: 4px;';
 
         var input = document.createElement('input');
         input.type = 'text';
         input.placeholder = 'Search inventory...';
-        input.style.cssText = 'padding: 8px 14px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%; max-width: 400px; background: #fff; color: #333; outline: none; box-sizing: border-box;';
+        input.style.cssText = 'padding: 8px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; width: 100%; max-width: 400px; background: #fff; color: #333; outline: none; box-sizing: border-box; transition: border-color 0.2s;';
+        input.addEventListener('focus', function() {
+            this.style.borderColor = '#667eea';
+        });
+        input.addEventListener('blur', function() {
+            this.style.borderColor = '#ddd';
+        });
 
         function filterItems() {
             var query = input.value.toLowerCase().trim();
@@ -42,11 +48,20 @@
 
         searchWrapper.appendChild(input);
 
-        // Just append it to the container at the top
-        container.prepend(searchWrapper);
+        // Insert at the very top of the container
+        if (container.firstChild) {
+            container.insertBefore(searchWrapper, container.firstChild);
+        } else {
+            container.appendChild(searchWrapper);
+        }
 
+        // Watch for tab changes
         var observer = new MutationObserver(function() {
-            setTimeout(filterItems, 200);
+            // Check if search bar is still there, if not re-add
+            if (!container.querySelector('.nx-inventory-search')) {
+                container.insertBefore(searchWrapper, container.firstChild);
+            }
+            setTimeout(filterItems, 300);
         });
 
         observer.observe(container, {
