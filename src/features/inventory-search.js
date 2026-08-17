@@ -26,8 +26,8 @@
         input.placeholder = 'Search inventory...';
         input.style.cssText = 'padding: 8px 14px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; width: 100%; max-width: 400px; background: #fff; color: #333; outline: none; box-sizing: border-box;';
 
-        input.addEventListener('input', function() {
-            var query = this.value.toLowerCase().trim();
+        function filterItems() {
+            var query = input.value.toLowerCase().trim();
             var items = container.querySelectorAll('.avatarCardWrapper-0-2-160, .avatarCardWrapper-0-2-729');
 
             items.forEach(function(item) {
@@ -36,7 +36,23 @@
                 var text = link.textContent.toLowerCase();
                 item.style.display = text.includes(query) ? '' : 'none';
             });
+        }
+
+        input.addEventListener('input', filterItems);
+
+        // Also filter when tabs are clicked (category changes)
+        var observer = new MutationObserver(function() {
+            setTimeout(filterItems, 100);
         });
+
+        var tabs = container.querySelector('.buttonCol-0-2-51, .buttonCol-0-2-718');
+        if (tabs) {
+            observer.observe(tabs, {
+                childList: true,
+                subtree: true,
+                attributes: true
+            });
+        }
 
         searchWrapper.appendChild(input);
 
