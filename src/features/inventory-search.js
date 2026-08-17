@@ -42,12 +42,8 @@
 
         searchWrapper.appendChild(input);
 
-        var tabContainer = container.querySelector('.buttonCol-0-2-51, .buttonCol-0-2-718');
-        if (tabContainer) {
-            container.insertBefore(searchWrapper, tabContainer);
-        } else {
-            container.prepend(searchWrapper);
-        }
+        // Just append it to the container at the top
+        container.prepend(searchWrapper);
 
         var observer = new MutationObserver(function() {
             setTimeout(filterItems, 200);
