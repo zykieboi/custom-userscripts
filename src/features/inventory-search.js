@@ -17,20 +17,66 @@
         var existing = container.querySelector('.nx-inventory-search');
         if (existing) return;
 
+        // Create wrapper like .seniorClass-0-2-81
         var searchWrapper = document.createElement('div');
         searchWrapper.className = 'nx-inventory-search';
-        searchWrapper.style.cssText = 'padding: 10px 0 10px 0; width: 100%; border-bottom: 1px solid rgba(0,0,0,0.05); margin-bottom: 4px;';
+        searchWrapper.style.cssText = 'padding: 10px 0; width: 100%;';
 
+        // Inner div like .wrapper-0-2-79
+        var innerWrapper = document.createElement('div');
+        innerWrapper.style.cssText = 'width: 100%; position: relative; display: flex; align-items: center;';
+
+        // Input like .searchInput-0-2-80
         var input = document.createElement('input');
-        input.type = 'text';
+        input.className = 'searchInput-0-2-80';
         input.placeholder = 'Search inventory...';
-        input.style.cssText = 'padding: 8px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; width: 100%; max-width: 400px; background: #fff; color: #333; outline: none; box-sizing: border-box; transition: border-color 0.2s;';
-        input.addEventListener('focus', function() {
-            this.style.borderColor = '#667eea';
-        });
-        input.addEventListener('blur', function() {
-            this.style.borderColor = '#ddd';
-        });
+        input.style.cssText = `
+            flex: 1;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            font-size: 14px;
+            height: 32px;
+            background: #fff;
+            color: #333;
+            outline: none;
+            box-sizing: border-box;
+            border-right: none;
+        `;
+
+        // Search icon container like .searchIconContainer-0-2-83
+        var iconContainer = document.createElement('div');
+        iconContainer.className = 'searchIconContainer-0-2-83';
+        iconContainer.style.cssText = `
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 0 4px 4px 0;
+            background: #f5f5f5;
+            height: 32px;
+            box-sizing: border-box;
+            cursor: pointer;
+        `;
+
+        // Icon like .icon-0-2-82 .icon-nav-search
+        var iconSpan = document.createElement('span');
+        iconSpan.className = 'icon-0-2-82 icon-nav-search';
+        iconSpan.style.cssText = `
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-image: url('/img/navigation_02012016.svg');
+            background-position: 0 -112px;
+            background-repeat: no-repeat;
+            background-size: auto auto;
+        `;
+
+        iconContainer.appendChild(iconSpan);
+        innerWrapper.appendChild(input);
+        innerWrapper.appendChild(iconContainer);
+        searchWrapper.appendChild(innerWrapper);
 
         function filterItems() {
             var query = input.value.toLowerCase().trim();
@@ -46,20 +92,25 @@
 
         input.addEventListener('input', filterItems);
 
-        searchWrapper.appendChild(input);
+        // Click on icon triggers search (focus input)
+        iconContainer.addEventListener('click', function() {
+            input.focus();
+        });
 
-        // Insert at the very top of the container
+        // Insert at top
         if (container.firstChild) {
             container.insertBefore(searchWrapper, container.firstChild);
         } else {
             container.appendChild(searchWrapper);
         }
 
-        // Watch for tab changes
         var observer = new MutationObserver(function() {
-            // Check if search bar is still there, if not re-add
             if (!container.querySelector('.nx-inventory-search')) {
-                container.insertBefore(searchWrapper, container.firstChild);
+                if (container.firstChild) {
+                    container.insertBefore(searchWrapper, container.firstChild);
+                } else {
+                    container.appendChild(searchWrapper);
+                }
             }
             setTimeout(filterItems, 300);
         });
