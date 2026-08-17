@@ -40,28 +40,23 @@
 
         input.addEventListener('input', filterItems);
 
-        // Also filter when tabs are clicked (category changes)
-        var observer = new MutationObserver(function() {
-            setTimeout(filterItems, 100);
-        });
-
-        var tabs = container.querySelector('.buttonCol-0-2-51, .buttonCol-0-2-718');
-        if (tabs) {
-            observer.observe(tabs, {
-                childList: true,
-                subtree: true,
-                attributes: true
-            });
-        }
-
         searchWrapper.appendChild(input);
 
-        var target = container.querySelector('.buttonCol-0-2-51, .buttonCol-0-2-718');
-        if (target) {
-            target.parentNode.insertBefore(searchWrapper, target.nextSibling);
+        var tabContainer = container.querySelector('.buttonCol-0-2-51, .buttonCol-0-2-718');
+        if (tabContainer) {
+            container.insertBefore(searchWrapper, tabContainer);
         } else {
             container.prepend(searchWrapper);
         }
+
+        var observer = new MutationObserver(function() {
+            setTimeout(filterItems, 200);
+        });
+
+        observer.observe(container, {
+            childList: true,
+            subtree: true
+        });
 
         searchAdded = true;
     }
