@@ -17,16 +17,13 @@
         var existing = container.querySelector('.nx-inventory-search');
         if (existing) return;
 
-        // Create wrapper like .seniorClass-0-2-81
         var searchWrapper = document.createElement('div');
         searchWrapper.className = 'nx-inventory-search';
         searchWrapper.style.cssText = 'padding: 10px 0; width: 100%;';
 
-        // Inner div like .wrapper-0-2-79
         var innerWrapper = document.createElement('div');
         innerWrapper.style.cssText = 'width: 100%; position: relative; display: flex; align-items: center;';
 
-        // Input like .searchInput-0-2-80
         var input = document.createElement('input');
         input.className = 'searchInput-0-2-80';
         input.placeholder = 'Search inventory...';
@@ -44,7 +41,6 @@
             border-right: none;
         `;
 
-        // Search icon container like .searchIconContainer-0-2-83
         var iconContainer = document.createElement('div');
         iconContainer.className = 'searchIconContainer-0-2-83';
         iconContainer.style.cssText = `
@@ -58,19 +54,21 @@
             height: 32px;
             box-sizing: border-box;
             cursor: pointer;
+            min-width: 32px;
+            flex-shrink: 0;
         `;
 
-        // Icon like .icon-0-2-82 .icon-nav-search
         var iconSpan = document.createElement('span');
         iconSpan.className = 'icon-0-2-82 icon-nav-search';
         iconSpan.style.cssText = `
             display: inline-block;
-            width: 16px;
-            height: 16px;
+            width: 20px;
+            height: 20px;
             background-image: url('/img/navigation_02012016.svg');
             background-position: 0 -112px;
             background-repeat: no-repeat;
-            background-size: auto auto;
+            background-size: 28px auto;
+            flex-shrink: 0;
         `;
 
         iconContainer.appendChild(iconSpan);
@@ -92,12 +90,10 @@
 
         input.addEventListener('input', filterItems);
 
-        // Click on icon triggers search (focus input)
         iconContainer.addEventListener('click', function() {
             input.focus();
         });
 
-        // Insert at top
         if (container.firstChild) {
             container.insertBefore(searchWrapper, container.firstChild);
         } else {
