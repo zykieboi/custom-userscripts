@@ -58,13 +58,13 @@
             flex-shrink: 0;
         `;
 
-        // Use the same icon as the top nav search
+        // Copy the EXACT same classes and styles as the top nav search icon
         var iconSpan = document.createElement('span');
-        iconSpan.className = 'icon-nav-search';
+        iconSpan.className = 'col-2 icon-0-2-82 icon-nav-search';
         iconSpan.style.cssText = `
             display: inline-block;
-            width: 16px;
-            height: 16px;
+            width: 28px;
+            height: 28px;
             background-image: url('/img/navigation_02012016.svg');
             background-position: 0 -112px;
             background-repeat: no-repeat;
