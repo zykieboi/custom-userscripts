@@ -1,8 +1,8 @@
 # Nexus - NX
 
-<img src="banner.png" width="100%">
+<img src="img/banner.png" width="100%">
 
-<img src="icon.png" width="64" height="64">
+<img src="img/icon.png" width="64" height="64">
 
 A collection of features for pekora.zip.
 
