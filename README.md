@@ -7,7 +7,7 @@ A collection of features for pekora.zip.
 ## Installation
 
 1. Install Tampermonkey or ViolentMonkey
-2. Click [here](https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js) to install
+2. Click [here](https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js) to install or update
 
 ## Settings
 
