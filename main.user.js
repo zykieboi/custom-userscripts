@@ -19,6 +19,7 @@
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/copy-user-id.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/ui/modal.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/hide-donate.js
 // @downloadURL  https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // @updateURL    https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // ==/UserScript==
