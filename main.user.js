@@ -187,35 +187,35 @@
         }
     }
 
-    function applySettings() {
-        if (!window.NX || !window.NX.settings || !window.NX.features) return;
+function applySettings() {
+    if (!window.NX || !window.NX.settings || !window.NX.features) return;
 
-        var settings = window.NX.settings;
+    var settings = window.NX.settings;
 
-        if (settings.get('panelIcon') && window.NX.features.panelIcon) {
-            window.NX.features.panelIcon.apply();
-        }
-
-        if (settings.get('hideAlert') && window.NX.features.hideAlert) {
-            window.NX.features.hideAlert.apply();
-        }
-
-        if (settings.get('removeAds') && window.NX.features.removeAds) {
-            window.NX.features.removeAds.apply();
-        }
-
-        if (settings.get('copyUserId') && window.NX.features.copyUserId) {
-            window.NX.features.copyUserId.apply();
-        }
-
-        if (settings.get('inventorySearch') && window.NX.features.inventorySearch) {
-            window.NX.features.inventorySearch.apply();
-
-        if (settings.get('hideDonate') && window.NX.features.hideDonate) {
-        window.NX.features.hideDonate.apply();
-            
-        }
+    if (settings.get('panelIcon') && window.NX.features.panelIcon) {
+        window.NX.features.panelIcon.apply();
     }
+
+    if (settings.get('hideAlert') && window.NX.features.hideAlert) {
+        window.NX.features.hideAlert.apply();
+    }
+
+    if (settings.get('removeAds') && window.NX.features.removeAds) {
+        window.NX.features.removeAds.apply();
+    }
+
+    if (settings.get('copyUserId') && window.NX.features.copyUserId) {
+        window.NX.features.copyUserId.apply();
+    }
+
+    if (settings.get('inventorySearch') && window.NX.features.inventorySearch) {
+        window.NX.features.inventorySearch.apply();
+    }
+
+    if (settings.get('hideDonate') && window.NX.features.hideDonate) {
+        window.NX.features.hideDonate.apply();
+    }
+}
 
     if (window.location.hash === '#nx-settings') {
         setTimeout(function() {
