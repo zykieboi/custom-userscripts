@@ -20,6 +20,12 @@
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/ui/modal.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/hide-donate.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/auto-refresh.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/game-notes.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/friend-notes.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/wishlist.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/profile-views.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/game-server-region.js
 // @downloadURL  https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // @updateURL    https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // ==/UserScript==
