@@ -11,4 +11,4 @@ A collection of features for pekora.zip.
 
 ## Settings
 
-Click your profile dropdown → NX Settings
+Click your settings tab → Nexus Settings
