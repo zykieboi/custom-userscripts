@@ -92,6 +92,7 @@
         var optMap = {
             panelIcon: { cat: 'visual', label: 'Panel Icon' },
             hideAlert: { cat: 'visual', label: 'Hide Alert' },
+            hideDonate: { cat: 'visual', label: 'Hide Donate Button' },
             copyUserId: { cat: 'function', label: 'Copy User ID' },
             inventorySearch: { cat: 'function', label: 'Inventory Search' },
             removeAds: { cat: 'performance', label: 'Remove Ads' }
