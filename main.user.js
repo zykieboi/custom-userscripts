@@ -3,7 +3,7 @@
 // @namespace    https://github.com/zykieboi/custom-userscripts
 // @version      1.0
 // @author       zykieboi
-// @description  testing stuff :)
+// @description  W.I.P
 // @match        https://www.pekora.zip/*
 // @match        pekora.zip/*
 // @connect      http://www.pekora.zip
