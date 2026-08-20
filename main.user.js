@@ -220,6 +220,29 @@ function applySettings() {
 
     if (settings.get('hideDonate') && window.NX.features.hideDonate) {
         window.NX.features.hideDonate.apply();
+
+    if (settings.get('autoRefresh') && window.NX.features.autoRefresh) {
+    window.NX.features.autoRefresh.apply();
+    }
+
+if (settings.get('gameNotes') && window.NX.features.gameNotes) {
+    window.NX.features.gameNotes.apply();
+    }
+
+if (settings.get('friendNotes') && window.NX.features.friendNotes) {
+    window.NX.features.friendNotes.apply();
+    }
+
+if (settings.get('wishlist') && window.NX.features.wishlist) {
+    window.NX.features.wishlist.apply();
+    }
+
+if (settings.get('profileViews') && window.NX.features.profileViews) {
+    window.NX.features.profileViews.apply();
+    }
+
+if (settings.get('gameServerRegion') && window.NX.features.gameServerRegion) {
+    window.NX.features.gameServerRegion.apply();
     }
 }
 
