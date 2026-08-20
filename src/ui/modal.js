@@ -89,13 +89,19 @@
             { id: 'performance', label: 'Performance' }
         ];
 
-        var optMap = {
-            panelIcon: { cat: 'visual', label: 'Panel Icon' },
-            hideAlert: { cat: 'visual', label: 'Hide Alert' },
-            hideDonate: { cat: 'visual', label: 'Hide Donate Button' },
-            copyUserId: { cat: 'function', label: 'Copy User ID' },
-            inventorySearch: { cat: 'function', label: 'Inventory Search' },
-            removeAds: { cat: 'performance', label: 'Remove Ads' }
+    var optMap = {
+        panelIcon: { cat: 'visual', label: 'Panel Icon' },
+        hideAlert: { cat: 'visual', label: 'Hide Alert' },
+        hideDonate: { cat: 'visual', label: 'Hide Donate Button' },
+        copyUserId: { cat: 'function', label: 'Copy User ID' },
+        inventorySearch: { cat: 'function', label: 'Inventory Search' },
+        removeAds: { cat: 'performance', label: 'Remove Ads' },
+        autoRefresh: { cat: 'performance', label: 'Auto Refresh' },
+        gameNotes: { cat: 'function', label: 'Game Notes' },
+        friendNotes: { cat: 'function', label: 'Friend Notes' },
+        wishlist: { cat: 'function', label: 'Wishlist' },
+        profileViews: { cat: 'function', label: 'Profile Views' },
+        gameServerRegion: { cat: 'function', label: 'Game Server Region' }
         };
 
         var settings = window.NX.settings;
