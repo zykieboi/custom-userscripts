@@ -9,7 +9,13 @@
         removeAds: false,
         copyUserId: false,
         inventorySearch: false,
-        hideDonate: false
+        hideDonate: false,
+        autoRefresh: false,
+        gameNotes: false,
+        friendNotes: false,
+        wishlist: false,
+        profileViews: false,
+        gameServerRegion: false
     };
 
     function get(key) {
