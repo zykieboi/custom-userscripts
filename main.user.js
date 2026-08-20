@@ -11,7 +11,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
-// @run-at       document-end
+// @run-at       document-idle
 // @icon         https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/img/icon.png
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/settings.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/panel-icon.js
