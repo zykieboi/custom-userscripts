@@ -210,6 +210,10 @@
 
         if (settings.get('inventorySearch') && window.NX.features.inventorySearch) {
             window.NX.features.inventorySearch.apply();
+
+        if (settings.get('hideDonate') && window.NX.features.hideDonate) {
+        window.NX.features.hideDonate.apply();
+            
         }
     }
 
