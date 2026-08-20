@@ -8,7 +8,8 @@
         hideAlert: false,
         removeAds: false,
         copyUserId: false,
-        inventorySearch: false
+        inventorySearch: false,
+        hideDonate: false
     };
 
     function get(key) {
