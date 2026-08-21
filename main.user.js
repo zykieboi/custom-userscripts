@@ -3,7 +3,7 @@
 // @namespace    https://github.com/zykieboi/custom-userscripts
 // @version      1.0
 // @author       zykieboi
-// @description  W.I.P
+// @description  A collection of features for pekora.zip. This project is work in progress and 100% open-source.
 // @match        https://www.pekora.zip/*
 // @match        pekora.zip/*
 // @connect      http://www.pekora.zip
