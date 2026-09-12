@@ -6,73 +6,66 @@
     function apply() {
         if (panelAdded) return;
 
-        var style = document.createElement('style');
-        style.textContent = `
-            .icon-nav-panel {
-                background-image: url('/img/generic_03112016.svg');
-                background-position: 0 -84px;
-                background-repeat: no-repeat;
-                background-size: auto auto;
-                width: 28px;
-                height: 28px;
-                display: inline-block;
-                vertical-align: middle;
-            }
-            .hover-icon-nav-panel:hover .icon-nav-panel {
-                background-position: -28px -84px;
-            }
-            .hover-icon-nav-panel:hover {
-                color: #f68802;
-            }
-            .hover-icon-nav-panel {
-                margin-bottom: 8px !important;
-            }
-        `;
-        document.head.appendChild(style);
-
-        var upgrade = document.querySelector('[href*="Upgrade"], .upgradeNowButton-0-2-144, .upgradeNowButton-0-2-80');
+        var upgrade = document.querySelector('.upgradeNowButton-0-2-99, .upgradeNowButton-0-2-104, [class*="upgradeNowButton"]');
         if (!upgrade) {
-            setTimeout(apply, 400);
+            setTimeout(apply, 500);
             return;
         }
 
         if (document.querySelector('.hover-icon-nav-panel')) return;
 
         var container = upgrade.parentElement;
-        var first = container.querySelector('a[class*="link-"]');
-        if (!first) return;
 
-        var lc = first.className;
-        var wc = (first.querySelector('div[class*="wrapper-"]') || {}).className || 'wrapper-0-2-210';
-        var pc = (first.querySelector('p[class*="linkEntry-"]') || {}).className || 'linkEntry-0-2-208';
-        var ic = (first.querySelector('span[class*="icon-"]') || {}).className || 'icon-0-2-214';
-        var nc = (first.querySelector('span[class*="name-"]') || {}).className || 'name-0-2-209';
+        var firstLink = container.querySelector('a[href*="/home"]');
+        if (!firstLink) {
+            setTimeout(apply, 500);
+            return;
+        }
 
         var link = document.createElement('a');
-        link.className = lc;
+        link.className = 'link-0-2-201 link-d40-0-2-300';
         link.href = '/panel';
         link.style.color = 'inherit';
 
-        var wrap = document.createElement('div');
-        wrap.className = wc + ' hover-icon-nav-panel';
+        var wrapper = document.createElement('div');
+        wrapper.className = 'wrapper-0-2-200 hover-icon-nav-panel';
 
         var p = document.createElement('p');
-        p.className = pc;
+        p.className = 'linkEntry-0-2-198';
 
         var icon = document.createElement('span');
-        icon.className = 'icon-nav-panel ' + ic;
+        icon.className = 'icon-nav-panel';
 
         var name = document.createElement('span');
-        name.className = nc;
+        name.className = 'name-0-2-199';
         name.textContent = 'Panel';
 
         p.appendChild(icon);
         p.appendChild(document.createTextNode(' '));
         p.appendChild(name);
-        wrap.appendChild(p);
-        link.appendChild(wrap);
+        wrapper.appendChild(p);
+        link.appendChild(wrapper);
 
         container.insertBefore(link, upgrade);
+
+        var style = document.createElement('style');
+        style.textContent = `
+            .icon-nav-panel {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                background-image: url('/img/generic_03112016.svg');
+                background-position: 0 -84px;
+                background-repeat: no-repeat;
+                background-size: auto auto;
+                vertical-align: middle;
+            }
+            .hover-icon-nav-panel:hover .icon-nav-panel {
+                background-position: -28px -84px;
+            }
+        `;
+        document.head.appendChild(style);
+
         panelAdded = true;
     }
 
