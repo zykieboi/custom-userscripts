@@ -1,21 +1,11 @@
-// src/core/settings.js
-
 (function() {
     'use strict';
 
     var DEFAULTS = {
         panelIcon: false,
-        hideAlert: false,
         removeAds: false,
         copyUserId: false,
-        inventorySearch: false,
-        hideDonate: false,
-        autoRefresh: false,
-        gameNotes: false,
-        friendNotes: false,
-        wishlist: false,
-        profileViews: false,
-        gameServerRegion: false
+        inventorySearch: false
     };
 
     function get(key) {
