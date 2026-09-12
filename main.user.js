@@ -1,32 +1,23 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      1.0
+// @version      2.0
 // @author       zykieboi
-// @description  A collection of features for pekora.zip. This project is work in progress and 100% open-source.
-// @match        https://www.pekora.zip/*
-// @match        pekora.zip/*
-// @connect      http://www.pekora.zip
-// @connect      pekora.zip
+// @description  Testing stuff :)
+// @match        https://www.aisaka.me/*
+// @match        aisaka.me/*
+// @match        https://caelus.lol/*
+// @match        caelus.lol/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
-// @run-at       document-idle
-// @icon         https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/img/icon.png
+// @run-at       document-end
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/settings.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/panel-icon.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/hide-alert.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/remove-ads.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/copy-user-id.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/ui/modal.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/hide-donate.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/auto-refresh.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/game-notes.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/friend-notes.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/wishlist.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/profile-views.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/game-server-region.js
 // @downloadURL  https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // @updateURL    https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // ==/UserScript==
@@ -49,24 +40,26 @@
             justify-content: center;
         }
         #nx-modal {
-            background: #fff;
+            background: #2a2c2e;
             border-radius: 12px;
             padding: 30px;
             max-width: 500px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            color: #222;
+            color: #e0e0e0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             position: relative;
+            border: 1px solid #3a3c3e;
         }
         #nx-modal h2 {
             margin: 0 0 5px 0;
             font-size: 24px;
             font-weight: 700;
+            color: #fff;
         }
         #nx-modal .sub {
-            color: #777;
+            color: #999;
             font-size: 13px;
             margin-bottom: 20px;
         }
@@ -76,22 +69,22 @@
             right: 18px;
             font-size: 26px;
             cursor: pointer;
-            color: #aaa;
+            color: #666;
             background: none;
             border: none;
         }
         #nx-modal .close:hover {
-            color: #000;
+            color: #fff;
         }
         .nx-cat {
             font-size: 13px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #888;
+            color: #666;
             margin: 18px 0 8px 0;
             padding-bottom: 4px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #3a3c3e;
         }
         .nx-row {
             display: flex;
@@ -101,7 +94,7 @@
         }
         .nx-row span {
             font-size: 14px;
-            color: #333;
+            color: #e0e0e0;
         }
         .nx-toggle {
             position: relative;
@@ -121,7 +114,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: #ccc;
+            background: #555;
             border-radius: 24px;
             transition: 0.25s;
         }
@@ -161,7 +154,7 @@
     document.head.appendChild(style);
 
     function addSettingsLink() {
-        var dropdown = document.querySelector('[class*="dropdownNew-"]');
+        var dropdown = document.querySelector('[class*="dropdownNew-"], [class*="wrapper-0-2-28"], .wrapper-0-2-28');
         if (!dropdown) {
             setTimeout(addSettingsLink, 400);
             return;
@@ -170,12 +163,13 @@
         if (document.querySelector('.nx-entry')) return;
 
         var li = document.createElement('li');
-        li.className = 'dropdownItem-0-2-150 nx-entry';
+        li.className = 'nx-entry';
+        li.style.cssText = 'padding: 8px 16px; cursor: pointer; color: #e0e0e0;';
 
         var a = document.createElement('a');
-        a.className = 'dropdownItemLink-0-2-151';
         a.href = '#';
         a.textContent = 'NX Settings';
+        a.style.cssText = 'color: inherit; text-decoration: none;';
 
         a.onclick = function(e) {
             e.preventDefault();
@@ -185,13 +179,7 @@
         };
 
         li.appendChild(a);
-
-        var items = dropdown.querySelectorAll('.dropdownItem-0-2-150');
-        if (items.length) {
-            dropdown.insertBefore(li, items[items.length - 1]);
-        } else {
-            dropdown.appendChild(li);
-        }
+        dropdown.appendChild(li);
     }
 
     function applySettings() {
@@ -201,10 +189,6 @@
 
         if (settings.get('panelIcon') && window.NX.features.panelIcon) {
             window.NX.features.panelIcon.apply();
-        }
-
-        if (settings.get('hideAlert') && window.NX.features.hideAlert) {
-            window.NX.features.hideAlert.apply();
         }
 
         if (settings.get('removeAds') && window.NX.features.removeAds) {
@@ -217,34 +201,6 @@
 
         if (settings.get('inventorySearch') && window.NX.features.inventorySearch) {
             window.NX.features.inventorySearch.apply();
-        }
-
-        if (settings.get('hideDonate') && window.NX.features.hideDonate) {
-            window.NX.features.hideDonate.apply();
-        }
-
-        if (settings.get('autoRefresh') && window.NX.features.autoRefresh) {
-            window.NX.features.autoRefresh.apply();
-        }
-
-        if (settings.get('gameNotes') && window.NX.features.gameNotes) {
-            window.NX.features.gameNotes.apply();
-        }
-
-        if (settings.get('friendNotes') && window.NX.features.friendNotes) {
-            window.NX.features.friendNotes.apply();
-        }
-
-        if (settings.get('wishlist') && window.NX.features.wishlist) {
-            window.NX.features.wishlist.apply();
-        }
-
-        if (settings.get('profileViews') && window.NX.features.profileViews) {
-            window.NX.features.profileViews.apply();
-        }
-
-        if (settings.get('gameServerRegion') && window.NX.features.gameServerRegion) {
-            window.NX.features.gameServerRegion.apply();
         }
     }
 
