@@ -2,7 +2,7 @@
 
 <img src="img/banner.png" width="100%">
 
-A collection of features for pekora.zip. 
+A collection of features for aisaka.me. 
 This project is work in progress and 100% open-source. Any issues found, please report it!
 
 ## Installation
