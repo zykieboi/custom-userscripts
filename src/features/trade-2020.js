@@ -677,10 +677,12 @@
     }
 
     var booted = false;
+    var pathWatcher = null;
 
     function boot() {
         if (!/^\/trade\/tradewindow/.test(location.pathname)) return;
-        if (booted && document.querySelector('.nx20-root')) return;
+        if (document.querySelector('.nx20-root')) return;
+        if (booted) return;
         booted = true;
         ensureStyle();
 
@@ -698,19 +700,38 @@
         if (S.partnerId) load('partner');
     }
 
+    function scheduleBoot() {
+        var attempts = 0;
+        var max = 20;
+        var tick = function() {
+            if (/^\/trade\/tradewindow/.test(location.pathname)) {
+                if (document.querySelector('.main-0-2-45') || document.querySelector('main')) {
+                    boot();
+                    if (document.querySelector('.nx20-root')) return;
+                }
+            }
+            attempts++;
+            if (attempts < max) setTimeout(tick, 150);
+        };
+        tick();
+    }
+
     window.NX.features.trade2020 = {
         apply: function() {
-            boot();
+            scheduleBoot();
+
+            if (pathWatcher) clearInterval(pathWatcher);
             var lastPath = location.pathname + location.search;
-            setInterval(function() {
-                if ((location.pathname + location.search) !== lastPath) {
-                    lastPath = location.pathname + location.search;
+            pathWatcher = setInterval(function() {
+                var now = location.pathname + location.search;
+                if (now !== lastPath) {
+                    lastPath = now;
+                    booted = false;
                     if (/^\/trade\/tradewindow/.test(location.pathname)) {
-                        booted = false;
-                        setTimeout(boot, 300);
+                        scheduleBoot();
                     }
                 }
-            }, 500);
+            }, 300);
         }
     };
 
