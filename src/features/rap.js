@@ -9,8 +9,8 @@
             if (document.querySelector('.nx-rap-stat')) return;
             if (window.NX._rapLoading) return;
 
-            var statRow = document.querySelector('.statRow-0-2-108, [class*="statRow-"]');
-            if (!statRow) {
+            var statRows = document.querySelectorAll('.statRow-0-2-108, [class*="statRow-"]');
+            if (statRows.length < 3) {
                 setTimeout(window.NX.features.rap.apply, 500);
                 return;
             }
@@ -38,25 +38,27 @@
                         return;
                     }
 
-                    var wrapper = document.createElement('div');
-                    wrapper.className = 'col-auto wrapper-0-2-107 nx-rap-stat';
+                    var followingStat = statRows[2];
+                    var wrapper = followingStat.parentElement.cloneNode(true);
 
-                    var inner = document.createElement('div');
-                    inner.className = 'statRow-0-2-108';
+                    wrapper.classList.add('nx-rap-stat');
 
-                    var value = document.createElement('p');
-                    value.className = 'statValue-0-2-110 statValue-d5-0-2-116';
-                    value.textContent = match[1];
+                    var valueEl = wrapper.querySelector('.statValue-0-2-110, [class*="statValue-"]');
+                    var headerEl = wrapper.querySelector('.statHeader-0-2-109, [class*="statHeader-"]');
 
-                    var header = document.createElement('p');
-                    header.className = 'statHeader-0-2-109 statHeader-d4-0-2-115';
-                    header.textContent = 'RAP';
+                    if (valueEl) {
+                        var link = valueEl.querySelector('a');
+                        if (link) {
+                            link.href = '/internal/limiteds?userId=' + userId;
+                            link.textContent = match[1];
+                        } else {
+                            valueEl.textContent = match[1];
+                        }
+                    }
 
-                    inner.appendChild(value);
-                    inner.appendChild(header);
-                    wrapper.appendChild(inner);
+                    if (headerEl) headerEl.textContent = 'RAP';
 
-                    statRow.parentElement.parentElement.appendChild(wrapper);
+                    followingStat.parentElement.parentElement.appendChild(wrapper);
                 })
                 .catch(function() {
                     window.NX._rapLoading = false;
