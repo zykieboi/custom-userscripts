@@ -6,16 +6,16 @@
 
     var CATEGORIES = [
         { value: 'null', label: 'All Accessories' },
-        { value: '8',  label: 'Hats' },
-        { value: '41', label: 'Hair' },
-        { value: '42', label: 'Face' },
-        { value: '43', label: 'Neck' },
-        { value: '44', label: 'Shoulders' },
-        { value: '45', label: 'Front' },
-        { value: '46', label: 'Back' },
-        { value: '47', label: 'Waist' },
-        { value: '19', label: 'Gear' },
-        { value: '18', label: 'Faces' }
+        { value: 'Hat',  label: 'Hats' },
+        { value: 'HairAccessory', label: 'Hair' },
+        { value: 'FaceAccessory', label: 'Face' },
+        { value: 'NeckAccessory', label: 'Neck' },
+        { value: 'ShoulderAccessory', label: 'Shoulders' },
+        { value: 'FrontAccessory', label: 'Front' },
+        { value: 'BackAccessory', label: 'Back' },
+        { value: 'WaistAccessory', label: 'Waist' },
+        { value: 'Gear', label: 'Gear' },
+        { value: 'Face', label: 'Faces' }
     ];
 
     var CSS = [
@@ -97,7 +97,7 @@
     }
 
     function fmt(n) { return Number(n || 0).toLocaleString('en-US'); }
-    function keyOf(x) { return x.userAssetId != null ? x.userAssetId : x.assetId; }
+    function keyOf(x) { return x.userAssetId; }
     function has(list, item) { return list.some(function(x) { return keyOf(x) === keyOf(item); }); }
     function toggle(list, item) {
         var i = list.findIndex(function(x) { return keyOf(x) === keyOf(item); });
@@ -106,13 +106,12 @@
     }
 
     function norm(raw) {
-        var I = raw.Item || {}, P = raw.Product || {}, U = raw.UserItem || {};
         return {
-            assetId: I.AssetId,
-            userAssetId: U.UserAssetId != null ? U.UserAssetId : null,
-            name: I.Name || 'Unknown',
-            serialNumber: P.SerialNumber != null ? P.SerialNumber : null,
-            rap: P.PriceInRobux || 0,
+            assetId: raw.assetId,
+            userAssetId: raw.userAssetId,
+            name: raw.name || 'Unknown',
+            serialNumber: raw.serialNumber != null ? raw.serialNumber : null,
+            rap: raw.recentAveragePrice != null ? raw.recentAveragePrice : (raw.originalPrice || 0),
             thumbnail: null
         };
     }
@@ -135,20 +134,14 @@
 
     function fetchInventory(userId, assetTypeId, cursor) {
         cursor = cursor || '';
-        if (assetTypeId === 'null') {
-            return Promise.all([8,41,42,18,43,44,45,46,47].map(function(t) {
-                return fetchInventory(userId, String(t), cursor).catch(function() { return { items: [], nextCursor: null }; });
-            })).then(function(rs) {
-                return { items: rs.reduce(function(a, r) { return a.concat(r.items); }, []), nextCursor: null };
-            });
-        }
-        var qs = new URLSearchParams({ userId: userId, assetTypeId: assetTypeId, cursor: cursor, itemsPerPage: 10 });
-        return fetch('/users/inventory/list-json?' + qs, { credentials: 'include' })
+        var qs = new URLSearchParams({ limit: 10, cursor: cursor });
+        if (assetTypeId && assetTypeId !== 'null') qs.set('assetTypeId', assetTypeId);
+        return fetch('/apisite/inventory/v1/users/' + userId + '/assets/collectibles?' + qs, { credentials: 'include' })
             .then(function(r) { refreshCsrf(r); return r.json(); })
             .then(function(j) {
                 return {
-                    items: (j && j.Data && j.Data.Items ? j.Data.Items : []).map(norm),
-                    nextCursor: (j && j.Data && j.Data.nextPageCursor) || null
+                    items: (j && j.data ? j.data : []).map(norm),
+                    nextCursor: (j && j.nextPageCursor) || null
                 };
             });
     }
@@ -416,8 +409,8 @@
         var theirR = S.requestRobux ? parseInt(S.requestRobux, 10) : 0;
 
         var offers = [
-            { userId: S.meId, userAssetIds: S.offer.map(function(i) { return i.userAssetId != null ? i.userAssetId : i.assetId; }) },
-            { userId: S.partnerId, userAssetIds: S.request.map(function(i) { return i.userAssetId != null ? i.userAssetId : i.assetId; }) }
+            { userId: S.meId, userAssetIds: S.offer.map(function(i) { return i.userAssetId; }) },
+            { userId: S.partnerId, userAssetIds: S.request.map(function(i) { return i.userAssetId; }) }
         ];
         if (myR > 0) offers[0].robux = myR;
         if (theirR > 0) offers[1].robux = theirR;
@@ -442,17 +435,6 @@
         if (cached && (!S.partnerId || cached !== S.partnerId)) return cached;
 
         try {
-            var me = window.__NEXT_DATA__
-                && window.__NEXT_DATA__.props
-                && window.__NEXT_DATA__.props.pageProps
-                && window.__NEXT_DATA__.props.pageProps.user;
-            if (me && me.id && (!S.partnerId || me.id !== S.partnerId)) {
-                localStorage.setItem('nx_me_id', String(me.id));
-                return me.id;
-            }
-        } catch (e) {}
-
-        try {
             var m = document.cookie.match(/\.ROBLOSECURITY=([^;]+)/);
             if (m) {
                 var payload = decodeJwtPayload(m[1]);
@@ -463,17 +445,16 @@
             }
         } catch (e) {}
 
-        var links = document.querySelectorAll('a[href*="/users/"][href*="/profile"]');
-        for (var i = 0; i < links.length; i++) {
-            var href = links[i].getAttribute('href') || '';
-            var mm = href.match(/\/users\/(\d+)\/profile/);
-            if (!mm) continue;
-            var id = parseInt(mm[1], 10);
-            if (!S.partnerId || id !== S.partnerId) {
-                localStorage.setItem('nx_me_id', String(id));
-                return id;
+        try {
+            var me = window.__NEXT_DATA__
+                && window.__NEXT_DATA__.props
+                && window.__NEXT_DATA__.props.pageProps
+                && window.__NEXT_DATA__.props.pageProps.user;
+            if (me && me.id && (!S.partnerId || me.id !== S.partnerId)) {
+                localStorage.setItem('nx_me_id', String(me.id));
+                return me.id;
             }
-        }
+        } catch (e) {}
 
         return null;
     }
