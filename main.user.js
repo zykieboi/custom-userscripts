@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      2.2
+// @version      2.3
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
@@ -150,8 +150,9 @@
     document.head.appendChild(style);
 
     function renameRobuxTab() {
-        var tabs = document.querySelectorAll('.linkEntry-0-2-20');
-        tabs.forEach(function(tab) {
+        // Only target the main nav link (has linkEntry class), not the robux icon
+        var navLinks = document.querySelectorAll('.navlinks-0-2-4 .linkEntry-0-2-20, .navlinksRow-0-2-7 .linkEntry-0-2-20');
+        navLinks.forEach(function(tab) {
             if (tab.dataset.nxRenamed) return;
             if (tab.getAttribute('href') !== '/transactions') return;
 
