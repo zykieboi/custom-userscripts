@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      2.5
+// @version      2.6
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
@@ -155,7 +155,6 @@
         }
     }
 
-    // Intercept clicks at the capture phase before React can handle them
     document.addEventListener('click', function(e) {
         var target = e.target.closest('a[data-nx-renamed="1"]');
         if (!target) return;
@@ -178,6 +177,22 @@
         });
     }
 
+    function makeLogoClickable() {
+        var logo = document.querySelector('.logo-0-2-2');
+        if (!logo) {
+            setTimeout(makeLogoClickable, 500);
+            return;
+        }
+
+        if (logo.dataset.nxLogo) return;
+        logo.dataset.nxLogo = '1';
+        logo.style.cursor = 'pointer';
+
+        logo.addEventListener('click', function() {
+            window.location.href = '/home';
+        });
+    }
+
     function applySettings() {
         if (!window.NX || !window.NX.settings || !window.NX.features) return;
 
@@ -194,11 +209,13 @@
 
     setTimeout(function() {
         renameRobuxTab();
+        makeLogoClickable();
         applySettings();
     }, 1000);
 
     var observer = new MutationObserver(function() {
         renameRobuxTab();
+        makeLogoClickable();
     });
 
     observer.observe(document.body, {
