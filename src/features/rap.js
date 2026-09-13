@@ -52,7 +52,7 @@
                     statRowInner.appendChild(header);
                     wrapper.appendChild(statRowInner);
 
-                    var container = statRow.parentElement;
+                    var container = statRow.parentElement.parentElement;
                     if (container) container.appendChild(wrapper);
                 })
                 .catch(function() {});
