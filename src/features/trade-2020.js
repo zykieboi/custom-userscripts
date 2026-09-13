@@ -61,7 +61,25 @@
         '.nx20-actions button{min-width:90px;min-height:36px;padding:8px 18px;font-size:18px;cursor:pointer;border:0}',
         '.nx20-actions .ok{background:var(--primary-color,#00a2ff);color:#fff}',
         '.nx20-actions .cancel{background:#444;color:#fff}',
-        '.nx20-err{color:#e5484d;text-align:center;margin-top:12px}'
+        '.nx20-err{color:#e5484d;text-align:center;margin-top:12px}',
+
+        '.nx20-list-tabs{display:flex;gap:24px;margin-bottom:20px;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
+        '.nx20-list-tab{padding:8px 0;font-size:18px;color:#999;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}',
+        '.nx20-list-tab.active{color:var(--text-color-primary,#e8e8e8);border-bottom-color:var(--primary-color,#00a2ff)}',
+        '.nx20-list-empty{padding:40px 0;text-align:center;color:#999;font-size:16px}',
+        '.nx20-list-row{display:grid;grid-template-columns:64px 1fr 200px 150px 100px;gap:16px;padding:14px 0;align-items:center;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
+        '.nx20-list-row .avatar{width:48px;height:48px;background:rgba(255,255,255,0.06);border-radius:50%;overflow:hidden}',
+        '.nx20-list-row .avatar img{width:100%;height:100%;object-fit:cover}',
+        '.nx20-list-row .who{font-size:17px}',
+        '.nx20-list-row .who .sub{font-size:13px;color:#999}',
+        '.nx20-list-row .items{font-size:15px;color:#ccc}',
+        '.nx20-list-row .items span{display:inline-block;margin-right:6px;padding:2px 8px;background:rgba(255,255,255,0.08);border-radius:3px;font-size:13px}',
+        '.nx20-list-row .status{font-size:15px}',
+        '.nx20-list-row .status.pending{color:#f5a623}',
+        '.nx20-list-row .status.completed{color:#3ecf5a}',
+        '.nx20-list-row .status.declined{color:#e5484d}',
+        '.nx20-list-row .actions{text-align:right}',
+        '.nx20-list-row button{background:var(--primary-color,#00a2ff);color:#fff;border:0;padding:6px 14px;font-size:14px;cursor:pointer;border-radius:3px}'
     ].join('');
 
     var S = {
@@ -75,7 +93,11 @@
         offer: [], request: [],
         offerRobux: '', requestRobux: '',
         modalOpen: false, sentOpen: false,
-        sending: false, sendError: null
+        sending: false, sendError: null,
+        listTab: 'inbound',
+        listData: { inbound: null, outbound: null, completed: null, inactive: null },
+        listLoading: false,
+        listError: null
     };
 
     function el(tag, props) {
@@ -198,6 +220,19 @@
         });
     }
 
+    function fetchTrades(kind, cursor) {
+        cursor = cursor || '';
+        var qs = new URLSearchParams({ cursor: cursor });
+        return fetch('/apisite/trades/v1/trades/' + kind + '?' + qs, { credentials: 'include' })
+            .then(function(r) { refreshCsrf(r); return r.json(); })
+            .then(function(j) {
+                return {
+                    data: (j && (j.data || j.Data)) || [],
+                    nextCursor: j && j.nextPageCursor
+                };
+            });
+    }
+
     function Robux(v) {
         return el('span', { class: 'nx20-val' }, 'R$ ' + fmt(v));
     }
@@ -301,7 +336,7 @@
         return sec;
     }
 
-    function Shell() {
+    function TradeWindow() {
         var root = el('div', { class: 'nx20-root' });
         var shell = el('div', { class: 'nx20-shell' });
         shell.appendChild(el('h1', { class: 'nx20-title' }, 'Trade with User ' + (S.partnerId || '?')));
@@ -372,6 +407,99 @@
         return root;
     }
 
+    function TradeRow(trade) {
+        var isInbound = S.listTab === 'inbound';
+        var isOutbound = S.listTab === 'outbound';
+
+        var otherUser = trade.sender && trade.sender.id !== S.meId ? trade.sender
+                      : trade.receiver && trade.receiver.id !== S.meId ? trade.receiver
+                      : trade.sender || trade.receiver || {};
+
+        var theirItems = (trade.userAssets || []).filter(function (a) {
+            var ownerId = a.userId || (a.user && a.user.id);
+            return ownerId != null && ownerId !== S.meId;
+        });
+        var myItems = (trade.userAssets || []).filter(function (a) {
+            var ownerId = a.userId || (a.user && a.user.id);
+            return ownerId === S.meId;
+        });
+
+        var row = el('div', { class: 'nx20-list-row' });
+
+        var av = el('div', { class: 'avatar' });
+        if (otherUser && otherUser.avatarUrl) av.appendChild(el('img', { src: otherUser.avatarUrl }));
+        row.appendChild(av);
+
+        var who = el('div', { class: 'who' });
+        who.appendChild(el('div', {}, otherUser.name || otherUser.displayName || ('User ' + (otherUser.id || '?'))));
+        var sub = [];
+        if (isInbound) sub.push('wants: ' + (theirItems.length ? theirItems.map(function (a) { return a.name || a.assetName || 'item'; }).join(', ') : 'nothing'));
+        if (isOutbound) sub.push('offers: ' + (myItems.length ? myItems.map(function (a) { return a.name || a.assetName || 'item'; }).join(', ') : 'nothing'));
+        if (trade.robux) sub.push('R$ ' + trade.robux);
+        who.appendChild(el('div', { class: 'sub' }, sub.join(' • ') || (trade.id ? 'Trade #' + trade.id : '')));
+        row.appendChild(who);
+
+        var items = el('div', { class: 'items' });
+        var showing = isInbound ? theirItems : myItems;
+        showing.slice(0, 3).forEach(function (a) {
+            items.appendChild(el('span', {}, (a.name || a.assetName || 'item').slice(0, 22)));
+        });
+        if (showing.length > 3) items.appendChild(el('span', {}, '+' + (showing.length - 3)));
+        row.appendChild(items);
+
+        var statusText = trade.status || (isInbound ? 'Pending' : 'Pending');
+        var statusClass = /complet/i.test(statusText) ? 'completed'
+                       : /declin|reject|cancel/i.test(statusText) ? 'declined'
+                       : 'pending';
+        row.appendChild(el('div', { class: 'status ' + statusClass }, statusText));
+
+        var actions = el('div', { class: 'actions' });
+        var open = el('button', {}, 'Open');
+        open.addEventListener('click', function () {
+            var partnerId = otherUser && otherUser.id;
+            if (!partnerId) return;
+            location.href = '/trade/tradewindow?TradePartnerID=' + partnerId;
+        });
+        actions.appendChild(open);
+        row.appendChild(actions);
+
+        return row;
+    }
+
+    function TradeList() {
+        var root = el('div', { class: 'nx20-root' });
+        var shell = el('div', { class: 'nx20-shell' });
+        shell.appendChild(el('h1', { class: 'nx20-title' }, 'Trades'));
+
+        var tabs = el('div', { class: 'nx20-list-tabs' });
+        ['inbound', 'outbound', 'completed', 'inactive'].forEach(function (kind) {
+            var label = kind.charAt(0).toUpperCase() + kind.slice(1);
+            var tab = el('div', { class: 'nx20-list-tab' + (S.listTab === kind ? ' active' : ''), onclick: function () {
+                S.listTab = kind;
+                if (!S.listData[kind]) loadTrades(kind);
+                else render();
+            }}, label);
+            tabs.appendChild(tab);
+        });
+        shell.appendChild(tabs);
+
+        if (S.listLoading) {
+            shell.appendChild(el('div', { class: 'nx20-list-empty' }, 'Loading trades...'));
+        } else if (S.listError) {
+            shell.appendChild(el('div', { class: 'nx20-list-empty' }, S.listError));
+        } else {
+            var data = S.listData[S.listTab] || [];
+            if (!data.length) {
+                shell.appendChild(el('div', { class: 'nx20-list-empty' }, 'No trades available.'));
+            } else {
+                data.forEach(function (t) { shell.appendChild(TradeRow(t)); });
+            }
+        }
+
+        root.appendChild(shell);
+        return root;
+    }
+
     function ensureStyle() {
         if (document.getElementById('nx20-style')) return;
         var s = document.createElement('style');
@@ -382,8 +510,9 @@
 
     function render() {
         ensureStyle();
+        var isWindow = /^\/trade\/tradewindow/.test(location.pathname);
         var existing = document.querySelector('.nx20-root');
-        var next = Shell();
+        var next = isWindow ? TradeWindow() : TradeList();
         if (existing) { existing.replaceWith(next); return; }
         var host = document.querySelector('.main-0-2-45')
             || document.querySelector('main')
@@ -425,6 +554,24 @@
             })
             .then(function() {
                 if (mine) S.myLoading = false; else S.partnerLoading = false;
+                render();
+            });
+    }
+
+    function loadTrades(kind) {
+        S.listLoading = true;
+        S.listError = null;
+        render();
+        fetchTrades(kind, '')
+            .then(function(res) {
+                S.listData[kind] = res.data || [];
+            })
+            .catch(function(e) {
+                S.listError = e.message || 'Failed to load trades.';
+                S.listData[kind] = [];
+            })
+            .then(function() {
+                S.listLoading = false;
                 render();
             });
     }
@@ -487,12 +634,27 @@
             }
         } catch (e) {}
 
+        var link = document.querySelector('a[href*="/users/"][href*="/profile"]');
+        if (link) {
+            var mm = (link.getAttribute('href') || '').match(/\/users\/(\d+)\/profile/);
+            if (mm) {
+                var id = parseInt(mm[1], 10);
+                if (!S.partnerId || id !== S.partnerId) {
+                    localStorage.setItem('nx_me_id', String(id));
+                    return id;
+                }
+            }
+        }
+
         return null;
     }
 
     function boot() {
+        var onWindow = /^\/trade\/tradewindow/.test(location.pathname);
+        var onList = /^\/trades\/?$/.test(location.pathname);
+        if (!onWindow && !onList) return;
         if (document.querySelector('.nx20-root')) return;
-        if (!/^\/trade\/tradewindow/.test(location.pathname)) return;
+
         ensureStyle();
 
         var p = (location.search.match(/[?&]TradePartnerID=(\d+)/) || [])[1];
@@ -500,16 +662,21 @@
 
         S.meId = detectMe();
 
-        render();
-        if (S.meId && S.meId !== S.partnerId) load('my');
-        if (S.partnerId) load('partner');
+        if (onWindow) {
+            render();
+            if (S.meId && S.meId !== S.partnerId) load('my');
+            if (S.partnerId) load('partner');
+        } else {
+            render();
+            if (!S.listData[S.listTab]) loadTrades(S.listTab);
+        }
     }
 
     window.NX.features.trade2020 = {
         apply: function() {
             var attempt = function() {
-                if (/^\/trade\/tradewindow/.test(location.pathname)) {
-                    setTimeout(boot, 1200);
+                if (/^\/trade\/tradewindow/.test(location.pathname) || /^\/trades\/?$/.test(location.pathname)) {
+                    setTimeout(boot, 1000);
                 }
             };
             attempt();
