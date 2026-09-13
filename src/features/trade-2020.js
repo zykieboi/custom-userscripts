@@ -66,20 +66,23 @@
         '.nx20-list-tabs{display:flex;gap:24px;margin-bottom:20px;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
         '.nx20-list-tab{padding:8px 0;font-size:18px;color:#999;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}',
         '.nx20-list-tab.active{color:var(--text-color-primary,#e8e8e8);border-bottom-color:var(--primary-color,#00a2ff)}',
-        '.nx20-list-empty{padding:40px 0;text-align:center;color:#999;font-size:16px}',
-        '.nx20-list-row{display:grid;grid-template-columns:64px 1fr 200px 150px 100px;gap:16px;padding:14px 0;align-items:center;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
+        '.nx20-list-head{display:grid;grid-template-columns:64px 1fr 200px 160px 120px;gap:16px;padding:12px 0;border-bottom:1px solid var(--text-color-quinary,#3a3d40);color:#999;font-size:13px;text-transform:uppercase;letter-spacing:0.5px}',
+        '.nx20-list-row{display:grid;grid-template-columns:64px 1fr 200px 160px 120px;gap:16px;padding:14px 0;align-items:center;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
         '.nx20-list-row .avatar{width:48px;height:48px;background:rgba(255,255,255,0.06);border-radius:50%;overflow:hidden}',
         '.nx20-list-row .avatar img{width:100%;height:100%;object-fit:cover}',
         '.nx20-list-row .who{font-size:17px}',
-        '.nx20-list-row .who .sub{font-size:13px;color:#999}',
-        '.nx20-list-row .items{font-size:15px;color:#ccc}',
-        '.nx20-list-row .items span{display:inline-block;margin-right:6px;padding:2px 8px;background:rgba(255,255,255,0.08);border-radius:3px;font-size:13px}',
-        '.nx20-list-row .status{font-size:15px}',
-        '.nx20-list-row .status.pending{color:#f5a623}',
+        '.nx20-list-row .who .sub{font-size:13px;color:#999;margin-top:2px}',
+        '.nx20-list-row .when{font-size:14px;color:#bbb}',
+        '.nx20-list-row .when .sub{font-size:12px;color:#888;margin-top:2px}',
+        '.nx20-list-row .status{font-size:15px;font-weight:600}',
+        '.nx20-list-row .status.open{color:#00a2ff}',
         '.nx20-list-row .status.completed{color:#3ecf5a}',
-        '.nx20-list-row .status.declined{color:#e5484d}',
+        '.nx20-list-row .status.declined,.nx20-list-row .status.cancelled,.nx20-list-row .status.expired{color:#e5484d}',
+        '.nx20-list-row .status.inactive{color:#888}',
         '.nx20-list-row .actions{text-align:right}',
-        '.nx20-list-row button{background:var(--primary-color,#00a2ff);color:#fff;border:0;padding:6px 14px;font-size:14px;cursor:pointer;border-radius:3px}'
+        '.nx20-list-row button{background:var(--primary-color,#00a2ff);color:#fff;border:0;padding:6px 14px;font-size:14px;cursor:pointer;border-radius:3px}',
+        '.nx20-list-row button:disabled{background:#333;color:#666;cursor:not-allowed}',
+        '.nx20-list-empty{padding:40px 0;text-align:center;color:#999;font-size:16px}'
     ].join('');
 
     var S = {
@@ -220,14 +223,12 @@
         });
     }
 
-    function fetchTrades(kind, cursor) {
-        cursor = cursor || '';
-        var qs = new URLSearchParams({ cursor: cursor });
-        return fetch('/apisite/trades/v1/trades/' + kind + '?' + qs, { credentials: 'include' })
+    function fetchTrades(kind) {
+        return fetch('/apisite/trades/v1/trades/' + kind + '?cursor=', { credentials: 'include' })
             .then(function(r) { refreshCsrf(r); return r.json(); })
             .then(function(j) {
                 return {
-                    data: (j && (j.data || j.Data)) || [],
+                    data: (j && j.data) || [],
                     nextCursor: j && j.nextPageCursor
                 };
             });
@@ -235,6 +236,24 @@
 
     function Robux(v) {
         return el('span', { class: 'nx20-val' }, 'R$ ' + fmt(v));
+    }
+
+    function relTime(iso) {
+        if (!iso) return '—';
+        var t = Date.parse(iso);
+        if (isNaN(t)) return '—';
+        var s = Math.floor((Date.now() - t) / 1000);
+        if (s < 0) {
+            s = -s;
+            if (s < 60) return 'in ' + s + 's';
+            if (s < 3600) return 'in ' + Math.floor(s / 60) + 'm';
+            if (s < 86400) return 'in ' + Math.floor(s / 3600) + 'h';
+            return 'in ' + Math.floor(s / 86400) + 'd';
+        }
+        if (s < 60) return s + 's ago';
+        if (s < 3600) return Math.floor(s / 60) + 'm ago';
+        if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+        return Math.floor(s / 86400) + 'd ago';
     }
 
     function ItemCard(item, side) {
@@ -407,58 +426,38 @@
         return root;
     }
 
+    function statusClass(status) {
+        var s = (status || '').toLowerCase();
+        if (s === 'open' || s === 'pending') return 'open';
+        if (s === 'completed' || s === 'accepted') return 'completed';
+        if (s === 'declined' || s === 'rejected' || s === 'cancelled' || s === 'expired') return 'declined';
+        return 'inactive';
+    }
+
     function TradeRow(trade) {
-        var isInbound = S.listTab === 'inbound';
-        var isOutbound = S.listTab === 'outbound';
-
-        var otherUser = trade.sender && trade.sender.id !== S.meId ? trade.sender
-                      : trade.receiver && trade.receiver.id !== S.meId ? trade.receiver
-                      : trade.sender || trade.receiver || {};
-
-        var theirItems = (trade.userAssets || []).filter(function (a) {
-            var ownerId = a.userId || (a.user && a.user.id);
-            return ownerId != null && ownerId !== S.meId;
-        });
-        var myItems = (trade.userAssets || []).filter(function (a) {
-            var ownerId = a.userId || (a.user && a.user.id);
-            return ownerId === S.meId;
-        });
-
+        var u = trade.user || {};
         var row = el('div', { class: 'nx20-list-row' });
 
         var av = el('div', { class: 'avatar' });
-        if (otherUser && otherUser.avatarUrl) av.appendChild(el('img', { src: otherUser.avatarUrl }));
         row.appendChild(av);
 
         var who = el('div', { class: 'who' });
-        who.appendChild(el('div', {}, otherUser.name || otherUser.displayName || ('User ' + (otherUser.id || '?'))));
-        var sub = [];
-        if (isInbound) sub.push('wants: ' + (theirItems.length ? theirItems.map(function (a) { return a.name || a.assetName || 'item'; }).join(', ') : 'nothing'));
-        if (isOutbound) sub.push('offers: ' + (myItems.length ? myItems.map(function (a) { return a.name || a.assetName || 'item'; }).join(', ') : 'nothing'));
-        if (trade.robux) sub.push('R$ ' + trade.robux);
-        who.appendChild(el('div', { class: 'sub' }, sub.join(' • ') || (trade.id ? 'Trade #' + trade.id : '')));
+        who.appendChild(el('div', {}, u.displayName || u.name || ('User ' + (u.id || '?'))));
+        who.appendChild(el('div', { class: 'sub' }, u.name && u.displayName && u.name !== u.displayName ? '@' + u.name : 'Trade #' + trade.id));
         row.appendChild(who);
 
-        var items = el('div', { class: 'items' });
-        var showing = isInbound ? theirItems : myItems;
-        showing.slice(0, 3).forEach(function (a) {
-            items.appendChild(el('span', {}, (a.name || a.assetName || 'item').slice(0, 22)));
-        });
-        if (showing.length > 3) items.appendChild(el('span', {}, '+' + (showing.length - 3)));
-        row.appendChild(items);
+        var when = el('div', { class: 'when' });
+        when.appendChild(el('div', {}, relTime(trade.created)));
+        when.appendChild(el('div', { class: 'sub' }, 'expires ' + relTime(trade.expiration)));
+        row.appendChild(when);
 
-        var statusText = trade.status || (isInbound ? 'Pending' : 'Pending');
-        var statusClass = /complet/i.test(statusText) ? 'completed'
-                       : /declin|reject|cancel/i.test(statusText) ? 'declined'
-                       : 'pending';
-        row.appendChild(el('div', { class: 'status ' + statusClass }, statusText));
+        row.appendChild(el('div', { class: 'status ' + statusClass(trade.status) }, trade.status || '—'));
 
         var actions = el('div', { class: 'actions' });
-        var open = el('button', {}, 'Open');
+        var open = el('button', { disabled: !trade.isActive }, 'Open');
         open.addEventListener('click', function () {
-            var partnerId = otherUser && otherUser.id;
-            if (!partnerId) return;
-            location.href = '/trade/tradewindow?TradePartnerID=' + partnerId;
+            if (!u.id) return;
+            location.href = '/trade/tradewindow?TradePartnerID=' + u.id;
         });
         actions.appendChild(open);
         row.appendChild(actions);
@@ -474,11 +473,14 @@
         var tabs = el('div', { class: 'nx20-list-tabs' });
         ['inbound', 'outbound', 'completed', 'inactive'].forEach(function (kind) {
             var label = kind.charAt(0).toUpperCase() + kind.slice(1);
-            var tab = el('div', { class: 'nx20-list-tab' + (S.listTab === kind ? ' active' : ''), onclick: function () {
-                S.listTab = kind;
-                if (!S.listData[kind]) loadTrades(kind);
-                else render();
-            }}, label);
+            var tab = el('div', {
+                class: 'nx20-list-tab' + (S.listTab === kind ? ' active' : ''),
+                onclick: function () {
+                    S.listTab = kind;
+                    if (!S.listData[kind]) loadTrades(kind);
+                    else render();
+                }
+            }, label);
             tabs.appendChild(tab);
         });
         shell.appendChild(tabs);
@@ -492,6 +494,13 @@
             if (!data.length) {
                 shell.appendChild(el('div', { class: 'nx20-list-empty' }, 'No trades available.'));
             } else {
+                var header = el('div', { class: 'nx20-list-head' });
+                header.appendChild(el('div', {}, ''));
+                header.appendChild(el('div', {}, 'User'));
+                header.appendChild(el('div', {}, 'Sent'));
+                header.appendChild(el('div', {}, 'Status'));
+                header.appendChild(el('div', {}, ''));
+                shell.appendChild(header);
                 data.forEach(function (t) { shell.appendChild(TradeRow(t)); });
             }
         }
@@ -562,7 +571,7 @@
         S.listLoading = true;
         S.listError = null;
         render();
-        fetchTrades(kind, '')
+        fetchTrades(kind)
             .then(function(res) {
                 S.listData[kind] = res.data || [];
             })
