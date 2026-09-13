@@ -214,7 +214,7 @@
         sendTrade: function(payload, tradeId) {
             var url = tradeId
                 ? '/apisite/trades/v1/trades/' + tradeId + '/counter'
-                : '/apisite/trades/v1/trades';
+                : '/apisite/trades/v1/trades/send';
             var headers = { 'Content-Type': 'application/json' };
             if (window.NX_CSRF) headers['X-CSRF-Token'] = window.NX_CSRF;
             return fetch(url, {
@@ -293,7 +293,7 @@
 
         if (error) sec.appendChild(el('div', { class: 'nx20-empty' }, error));
         else if (loading) sec.appendChild(el('div', { class: 'nx20-empty' }, 'Loading inventory...'));
-        else if (!items.length) sec.appendChild(el('div', { class: 'nx20-empty' }, 'No items in this category.'));
+        else if (!items.length) sec.appendChild(el('div', { class: 'nx20-empty' }, 'No limiteds in this category.'));
         else {
             var grid = el('div', { class: 'nx20-items' });
             items.forEach(function(it) {
@@ -544,11 +544,12 @@
 
         API.inventory(userId, cat, cursor)
             .then(function(res) {
-                return API.thumbnails(res.items.map(function(i) { return i.assetId; }))
+                var lims = res.items.filter(function(i) { return i.serialNumber != null; });
+                return API.thumbnails(lims.map(function(i) { return i.assetId; }))
                     .then(function(thumbs) {
-                        res.items.forEach(function(it) { it.thumbnail = thumbs[it.assetId] || null; });
-                        if (mine) { S.myItems = res.items; S.myNext = res.nextCursor; }
-                        else { S.partnerItems = res.items; S.partnerNext = res.nextCursor; }
+                        lims.forEach(function(it) { it.thumbnail = thumbs[it.assetId] || null; });
+                        if (mine) { S.myItems = lims; S.myNext = res.nextCursor; }
+                        else { S.partnerItems = lims; S.partnerNext = res.nextCursor; }
                     });
             })
             .catch(function(e) {
