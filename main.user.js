@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      2.6
+// @version      2.7
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
@@ -178,18 +178,20 @@
     }
 
     function makeLogoClickable() {
-        var logo = document.querySelector('.logo-0-2-2');
-        if (!logo) {
+        var logos = document.querySelectorAll('.imgDesktop-0-2-12, .imgMobile-0-2-13');
+        if (!logos.length) {
             setTimeout(makeLogoClickable, 500);
             return;
         }
 
-        if (logo.dataset.nxLogo) return;
-        logo.dataset.nxLogo = '1';
-        logo.style.cursor = 'pointer';
+        logos.forEach(function(logo) {
+            if (logo.dataset.nxLogo) return;
+            logo.dataset.nxLogo = '1';
+            logo.style.cursor = 'pointer';
 
-        logo.addEventListener('click', function() {
-            window.location.href = '/home';
+            logo.addEventListener('click', function() {
+                window.location.href = '/home';
+            });
         });
     }
 
