@@ -6,8 +6,8 @@
 
     window.NX.features.rap = {
         apply: function() {
-            if (window.NX._rapLoading) return;
             if (document.querySelector('.nx-rap-stat')) return;
+            if (window.NX._rapLoading) return;
 
             var statRow = document.querySelector('.statRow-0-2-108, [class*="statRow-"]');
             if (!statRow) {
@@ -28,23 +28,28 @@
                     var match = html.match(/Total RAP:\s*<span[^>]*>([\d,]+)<\/span>/i);
                     if (!match) match = html.match(/Total RAP:\s*([\d,]+)/i);
 
-                    window.NX._rapLoading = false;
+                    if (!match) {
+                        window.NX._rapLoading = false;
+                        return;
+                    }
 
-                    if (!match) return;
-                    if (document.querySelector('.nx-rap-stat')) return;
+                    if (document.querySelector('.nx-rap-stat')) {
+                        window.NX._rapLoading = false;
+                        return;
+                    }
 
                     var wrapper = document.createElement('div');
-                    wrapper.className = 'col-auto wrapper-0-2-107 nx-rap-stat';
+                    wrapper.className = 'col-auto wrapper-0-2-208 nx-rap-stat';
 
                     var inner = document.createElement('div');
-                    inner.className = 'statRow-0-2-108';
+                    inner.className = 'statRow-0-2-209';
 
                     var value = document.createElement('p');
-                    value.className = 'statValue-0-2-110';
+                    value.className = 'statValue-0-2-211';
                     value.textContent = match[1];
 
                     var header = document.createElement('p');
-                    header.className = 'statHeader-0-2-109';
+                    header.className = 'statHeader-0-2-210';
                     header.textContent = 'RAP';
 
                     inner.appendChild(value);
@@ -52,6 +57,8 @@
                     wrapper.appendChild(inner);
 
                     statRow.parentElement.parentElement.appendChild(wrapper);
+
+                    // leave _rapLoading = true so no further calls run
                 })
                 .catch(function() {
                     window.NX._rapLoading = false;
