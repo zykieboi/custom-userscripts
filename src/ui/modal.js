@@ -27,11 +27,17 @@
             var content = document.createElement('div');
 
             var cats = [
+                { id: 'visual', label: 'Visual' },
                 { id: 'function', label: 'Function' },
                 { id: 'performance', label: 'Performance' }
             ];
 
             var optMap = {
+                hideAlert: {
+                    cat: 'visual',
+                    label: 'Hide Alert',
+                    desc: 'Hides the fake alert banner under the navigation bar.'
+                },
                 inventorySearch: {
                     cat: 'function',
                     label: 'Inventory Search',
