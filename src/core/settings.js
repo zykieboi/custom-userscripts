@@ -3,7 +3,8 @@
 
     var DEFAULTS = {
         removeAds: false,
-        inventorySearch: false
+        inventorySearch: false,
+        bulkUnfriend: false
     };
 
     function get(key) {
