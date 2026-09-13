@@ -6,7 +6,9 @@
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
-// @match        aisaka.me/*
+// @match        https://aisaka.me/*
+// @match        https://www.caelus.lol/*
+// @match        https://caelus.lol/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
