@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      2.0
+// @version      2.1
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
@@ -150,23 +150,26 @@
     document.head.appendChild(style);
 
     function renameRobuxTab() {
-        var robuxTab = document.querySelector('a[href="/transactions"]');
-        if (!robuxTab) {
-            setTimeout(renameRobuxTab, 400);
-            return;
-        }
+        var tabs = document.querySelectorAll('a[href="/transactions"]');
+        tabs.forEach(function(tab) {
+            if (tab.dataset.nxRenamed) return;
 
-        if (robuxTab.dataset.nxRenamed) return;
-        robuxTab.dataset.nxRenamed = '1';
-        robuxTab.textContent = 'Nexus';
-        robuxTab.href = '#';
+            var parent = tab.parentElement;
+            if (!parent) return;
 
-        robuxTab.onclick = function(e) {
-            e.preventDefault();
-            if (window.NX && window.NX.ui && window.NX.ui.modal) {
-                window.NX.ui.modal.build();
+            // only rename the nav link, not the robux amount text
+            if (!parent.classList.contains('linkContainer-0-2-87') && tab.classList.contains('linkEntry-0-2-20')) {
+                tab.dataset.nxRenamed = '1';
+                tab.textContent = 'Nexus';
+                tab.href = '#';
+                tab.onclick = function(e) {
+                    e.preventDefault();
+                    if (window.NX && window.NX.ui && window.NX.ui.modal) {
+                        window.NX.ui.modal.build();
+                    }
+                };
             }
-        };
+        });
     }
 
     function applySettings() {
