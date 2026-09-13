@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      2.3
+// @version      2.4
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
@@ -150,7 +150,6 @@
     document.head.appendChild(style);
 
     function renameRobuxTab() {
-        // Only target the main nav link (has linkEntry class), not the robux icon
         var navLinks = document.querySelectorAll('.navlinks-0-2-4 .linkEntry-0-2-20, .navlinksRow-0-2-7 .linkEntry-0-2-20');
         navLinks.forEach(function(tab) {
             if (tab.dataset.nxRenamed) return;
@@ -158,12 +157,15 @@
 
             tab.dataset.nxRenamed = '1';
             tab.textContent = 'Nexus';
-            tab.href = '#';
+            tab.setAttribute('href', 'javascript:void(0)');
             tab.onclick = function(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
                 if (window.NX && window.NX.ui && window.NX.ui.modal) {
                     window.NX.ui.modal.build();
                 }
+                return false;
             };
         });
     }
