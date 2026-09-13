@@ -312,7 +312,7 @@
         right.appendChild(SidePanel('offer'));
         right.appendChild(SidePanel('request'));
 
-        var canOffer = !!S.partnerId && S.offer.length > 0 && S.request.length > 0 && !S.sending;
+        var canOffer = !!S.partnerId && S.offer.length > 0 && S.request.length > 0 && !S.sending && !!S.meId;
         var btn = el('button', { class: 'nx20-offer', disabled: !canOffer, onclick: function() {
             S.sendError = null; S.modalOpen = true; render();
         }}, 'Make Offer');
@@ -374,8 +374,16 @@
         var mine = side === 'my';
         if (mine && !S.meId) return;
         if (!mine && !S.partnerId) return;
-        if (mine) S.myLoading = true; else S.partnerLoading = true;
+        if (mine && S.meId === S.partnerId) {
+            S.myError = 'Cannot load your inventory (your ID matches partner).';
+            S.myItems = [];
+            render();
+            return;
+        }
+        if (mine) { S.myLoading = true; S.myError = null; }
+        else { S.partnerLoading = true; S.partnerError = null; }
         render();
+
         var userId = mine ? S.meId : S.partnerId;
         var cat = mine ? S.myCat : S.partnerCat;
         var cursor = mine ? S.myCursor : S.partnerCursor;
@@ -401,6 +409,7 @@
 
     function submit() {
         if (S.sending) return;
+        if (!S.meId || !S.partnerId || S.meId === S.partnerId) return;
         S.sending = true; S.sendError = null; render();
 
         var myR = S.offerRobux ? parseInt(S.offerRobux, 10) : 0;
@@ -419,11 +428,32 @@
     }
 
     function detectMe() {
-        var el = document.querySelector('.linkEntry-0-2-163[href*="/users/"], a[href*="/users/"][href*="/profile"]');
-        if (el) {
-            var m = el.getAttribute('href').match(/\/users\/(\d+)/);
-            if (m) return parseInt(m[1], 10);
+        var cached = parseInt(localStorage.getItem('nx_me_id') || '0', 10);
+        if (cached) return cached;
+
+        try {
+            var me = window.__NEXT_DATA__
+                && window.__NEXT_DATA__.props
+                && window.__NEXT_DATA__.props.pageProps
+                && window.__NEXT_DATA__.props.pageProps.user;
+            if (me && me.id) {
+                localStorage.setItem('nx_me_id', String(me.id));
+                return me.id;
+            }
+        } catch (e) {}
+
+        var links = document.querySelectorAll('a[href*="/users/"][href*="/profile"]');
+        for (var i = 0; i < links.length; i++) {
+            var href = links[i].getAttribute('href') || '';
+            var m = href.match(/\/users\/(\d+)\/profile/);
+            if (!m) continue;
+            var id = parseInt(m[1], 10);
+            if (!S.partnerId || id !== S.partnerId) {
+                localStorage.setItem('nx_me_id', String(id));
+                return id;
+            }
         }
+
         return null;
     }
 
@@ -432,17 +462,13 @@
         if (!/^\/trade\/tradewindow/.test(location.pathname)) return;
         ensureStyle();
 
-        S.meId = detectMe();
         var p = (location.search.match(/[?&]TradePartnerID=(\d+)/) || [])[1];
         if (p) S.partnerId = parseInt(p, 10);
 
-        if (!S.meId) {
-            // If we can't find our own ID, still render so the user can enter partner manually
-            S.meId = S.partnerId;
-        }
+        S.meId = detectMe();
 
         render();
-        if (S.meId) load('my');
+        if (S.meId && S.meId !== S.partnerId) load('my');
         if (S.partnerId) load('partner');
     }
 
