@@ -12,4 +12,4 @@ This project is work in progress and 100% open-source. Any issues found, please 
 
 ## Settings
 
-Click your settings tab → Nexus Settings
+Click the Nexus tab at Homepage or any page and it will redirect to → Nexus Settings
