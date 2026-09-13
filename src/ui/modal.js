@@ -22,15 +22,16 @@
 
         var content = document.createElement('div');
 
-        var optMap = {
-            removeAds: { cat: 'performance', label: 'Remove Ads' },
-            inventorySearch: { cat: 'function', label: 'Inventory Search' }
-        };
-
         var cats = [
             { id: 'function', label: 'Function' },
             { id: 'performance', label: 'Performance' }
         ];
+
+        var optMap = {
+            inventorySearch: { cat: 'function', label: 'Inventory Search' },
+            bulkUnfriend: { cat: 'function', label: 'Bulk Unfriend' },
+            removeAds: { cat: 'performance', label: 'Remove Ads' }
+        };
 
         var settings = window.NX.settings;
 
