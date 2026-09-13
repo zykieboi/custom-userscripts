@@ -3,37 +3,36 @@
 
     window.NX_CSRF = window.NX_CSRF || GM_getValue('nx_csrf', '') || '';
 
+    function capture(value) {
+        if (value && value !== window.NX_CSRF) {
+            window.NX_CSRF = value;
+            try { GM_setValue('nx_csrf', value); } catch (e) {}
+        }
+    }
+
     var origFetch = window.fetch;
     window.fetch = function(input, init) {
         var p = origFetch.apply(this, arguments);
         try {
             p.then(function(res) {
-                var t = res && res.headers && res.headers.get('x-csrf-token');
-                if (t) {
-                    window.NX_CSRF = t;
-                    GM_setValue('nx_csrf', t);
-                }
+                try {
+                    var t = res && res.headers && res.headers.get('x-csrf-token');
+                    if (t) capture(t);
+                } catch (e) {}
             }).catch(function() {});
         } catch (e) {}
         return p;
     };
 
     var origOpen = XMLHttpRequest.prototype.open;
-    var origSend = XMLHttpRequest.prototype.send;
-
     XMLHttpRequest.prototype.open = function(method, url) {
-        this._nxUrl = url;
-        this.addEventListener('load', function() {
+        var self = this;
+        self.addEventListener('load', function() {
             try {
-                var t = this.getResponseHeader && this.getResponseHeader('x-csrf-token');
-                if (t) {
-                    window.NX_CSRF = t;
-                    GM_setValue('nx_csrf', t);
-                }
+                var t = self.getResponseHeader('x-csrf-token');
+                if (t) capture(t);
             } catch (e) {}
         });
         return origOpen.apply(this, arguments);
     };
-
-    XMLHttpRequest.prototype.send = origSend;
 })();
