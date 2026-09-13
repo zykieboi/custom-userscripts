@@ -163,7 +163,12 @@
             });
     }
 
+    var _sending = false;
+
     function sendTrade(offers) {
+        if (_sending) return Promise.reject(new Error('Trade already sending'));
+        _sending = true;
+
         return primeToken().then(function(token) {
             var headers = { 'Content-Type': 'application/json' };
             if (token) headers['X-CSRF-Token'] = token;
@@ -184,6 +189,12 @@
                 });
             }
             return r.json().catch(function() { return {}; });
+        }).then(function(result) {
+            _sending = false;
+            return result;
+        }).catch(function(err) {
+            _sending = false;
+            throw err;
         });
     }
 
@@ -321,8 +332,26 @@
             m.appendChild(el('h3', {}, 'Send Request'));
             m.appendChild(el('p', {}, 'Send this trade request?'));
             var acts = el('div', { class: 'nx20-actions' });
-            acts.appendChild(el('button', { class: 'ok', onclick: submit }, S.sending ? 'Sending...' : 'Send'));
-            acts.appendChild(el('button', { class: 'cancel', onclick: function() { S.modalOpen = false; render(); } }, 'Cancel'));
+
+            var ok = el('button', { class: 'ok' }, S.sending ? 'Sending...' : 'Send');
+            if (S.sending) {
+                ok.disabled = true;
+            } else {
+                ok.addEventListener('click', function(ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    ok.disabled = true;
+                    ok.textContent = 'Sending...';
+                    submit();
+                }, { once: true });
+            }
+            acts.appendChild(ok);
+
+            var cancel = el('button', { class: 'cancel' }, 'Cancel');
+            if (S.sending) cancel.disabled = true;
+            cancel.addEventListener('click', function() { S.modalOpen = false; render(); });
+            acts.appendChild(cancel);
+
             m.appendChild(acts);
             if (S.sendError) m.appendChild(el('div', { class: 'nx20-err' }, S.sendError));
             bg.appendChild(m);
@@ -403,7 +432,9 @@
     function submit() {
         if (S.sending) return;
         if (!S.meId || !S.partnerId || S.meId === S.partnerId) return;
-        S.sending = true; S.sendError = null; render();
+        S.sending = true;
+        S.sendError = null;
+        render();
 
         var myR = S.offerRobux ? parseInt(S.offerRobux, 10) : 0;
         var theirR = S.requestRobux ? parseInt(S.requestRobux, 10) : 0;
