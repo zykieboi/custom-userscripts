@@ -670,30 +670,50 @@
             if (m2) return parseInt(m2[1], 10);
         }
 
-        var m3 = location.pathname.match(/\/users\/(\d+)/);
-        if (m3) return parseInt(m3[1], 10);
+        var navProfile = document.querySelector('.linkEntry-0-2-163[href*="/users/"]');
+        if (navProfile) {
+            var m3 = navProfile.getAttribute('href').match(/\/users\/(\d+)/);
+            if (m3) return parseInt(m3[1], 10);
+        }
 
+        var anyUser = document.querySelector('.link-0-2-166[href*="/users/"]');
+        if (anyUser) {
+            var m4 = anyUser.getAttribute('href').match(/\/users\/(\d+)/);
+            if (m4) return parseInt(m4[1], 10);
+        }
+
+        var m5 = location.pathname.match(/\/users\/(\d+)/);
+        if (m5) return parseInt(m5[1], 10);
+
+        return null;
+    }
+
+    function findPartnerFromPage() {
+        var urlMatch = (location.search.match(/[?&]TradePartnerID=(\d+)/) || [])[1];
+        if (urlMatch) return parseInt(urlMatch, 10);
+
+        var m = location.pathname.match(/\/users\/(\d+)/);
+        if (m) return parseInt(m[1], 10);
         return null;
     }
 
     var booted = false;
     var pathWatcher = null;
+    var clickHandler = null;
 
     function boot() {
-        if (!/^\/trade\/tradewindow/.test(location.pathname)) return;
         if (document.querySelector('.nx20-root')) return;
         if (booted) return;
         booted = true;
         ensureStyle();
 
         S.meId = detectMe();
-        if (!S.meId) {
-            booted = false;
-            return;
-        }
+        if (!S.meId) { booted = false; return; }
 
-        var urlPartner = (location.search.match(/[?&]TradePartnerID=(\d+)/) || [])[1];
-        if (urlPartner) S.partnerId = parseInt(urlPartner, 10);
+        if (!S.partnerId) {
+            var p = findPartnerFromPage();
+            if (p) S.partnerId = p;
+        }
 
         render();
         load('my');
@@ -704,11 +724,9 @@
         var attempts = 0;
         var max = 20;
         var tick = function() {
-            if (/^\/trade\/tradewindow/.test(location.pathname)) {
-                if (document.querySelector('.main-0-2-45') || document.querySelector('main')) {
-                    boot();
-                    if (document.querySelector('.nx20-root')) return;
-                }
+            if (document.querySelector('.main-0-2-45') || document.querySelector('main')) {
+                boot();
+                if (document.querySelector('.nx20-root')) return;
             }
             attempts++;
             if (attempts < max) setTimeout(tick, 150);
@@ -718,7 +736,9 @@
 
     window.NX.features.trade2020 = {
         apply: function() {
-            scheduleBoot();
+            if (/^\/trade\/tradewindow/.test(location.pathname)) {
+                scheduleBoot();
+            }
 
             if (pathWatcher) clearInterval(pathWatcher);
             var lastPath = location.pathname + location.search;
@@ -732,6 +752,42 @@
                     }
                 }
             }, 300);
+
+            if (!clickHandler) {
+                clickHandler = function(e) {
+                    var target = e.target;
+                    if (!target) return;
+                    var txt = (target.textContent || '').trim();
+                    if (txt !== 'Trade') return;
+
+                    var entry = target.closest('.dropdownEntry-0-2-338, [class*="dropdownEntry-"]');
+                    if (!entry) return;
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+
+                    var partnerId = findPartnerFromPage();
+                    if (!partnerId) return;
+
+                    S.partnerId = partnerId;
+                    S.offer = [];
+                    S.request = [];
+                    S.offerRobux = '';
+                    S.requestRobux = '';
+                    S.modalOpen = false;
+                    S.sentOpen = false;
+
+                    history.pushState({}, '', '/trade/tradewindow?TradePartnerID=' + partnerId);
+
+                    booted = false;
+                    var existing = document.querySelector('.nx20-root');
+                    if (existing) existing.remove();
+
+                    scheduleBoot();
+                };
+                document.addEventListener('click', clickHandler, true);
+            }
         }
     };
 
