@@ -54,7 +54,7 @@
         '.nx20-offer{width:100%;min-height:36px;margin-top:18px;font-size:18px;cursor:pointer;background:var(--primary-color,#00a2ff);color:#fff;border:0}',
         '.nx20-offer:disabled{background:#333;color:#666;cursor:not-allowed}',
         '.nx20-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:99999}',
-        '.nx20-modal{background:var(--white-color,#2a2c2e);padding:20px;min-width:393px;max-width:440px}',
+        '.nx20-modal{background:var(--white-color,#2a2c2e);padding:20px;min-width:393px;max-width:520px}',
         '.nx20-modal h3{margin:0 0 12px;font-size:20px}',
         '.nx20-modal p{margin:0 0 18px;font-size:19px;color:#999}',
         '.nx20-actions{display:flex;gap:12px;justify-content:center}',
@@ -66,9 +66,8 @@
         '.nx20-list-tabs{display:flex;gap:24px;margin-bottom:20px;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
         '.nx20-list-tab{padding:8px 0;font-size:18px;color:#999;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}',
         '.nx20-list-tab.active{color:var(--text-color-primary,#e8e8e8);border-bottom-color:var(--primary-color,#00a2ff)}',
-        '.nx20-list-head{display:grid;grid-template-columns:64px 1fr 200px 160px 120px;gap:16px;padding:12px 0;border-bottom:1px solid var(--text-color-quinary,#3a3d40);color:#999;font-size:13px;text-transform:uppercase;letter-spacing:0.5px}',
-        '.nx20-list-row{display:grid;grid-template-columns:64px 1fr 200px 160px 120px;gap:16px;padding:14px 0;align-items:center;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
-        '.nx20-list-row .avatar{width:48px;height:48px;background:rgba(255,255,255,0.06);border-radius:50%;overflow:hidden}',
+        '.nx20-list-row{display:grid;grid-template-columns:64px 1fr 220px 140px 110px;gap:16px;padding:14px 0;align-items:center;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
+        '.nx20-list-row .avatar{width:48px;height:48px;background:rgba(255,255,255,0.06);border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center}',
         '.nx20-list-row .avatar img{width:100%;height:100%;object-fit:cover}',
         '.nx20-list-row .who{font-size:17px}',
         '.nx20-list-row .who .sub{font-size:13px;color:#999;margin-top:2px}',
@@ -79,10 +78,21 @@
         '.nx20-list-row .status.completed{color:#3ecf5a}',
         '.nx20-list-row .status.declined,.nx20-list-row .status.cancelled,.nx20-list-row .status.expired{color:#e5484d}',
         '.nx20-list-row .status.inactive{color:#888}',
-        '.nx20-list-row .actions{text-align:right}',
-        '.nx20-list-row button{background:var(--primary-color,#00a2ff);color:#fff;border:0;padding:6px 14px;font-size:14px;cursor:pointer;border-radius:3px}',
+        '.nx20-list-row .actions{text-align:right;display:flex;gap:6px;justify-content:flex-end}',
+        '.nx20-list-row button{background:var(--primary-color,#00a2ff);color:#fff;border:0;padding:6px 12px;font-size:13px;cursor:pointer;border-radius:3px}',
+        '.nx20-list-row button.ghost{background:#444}',
         '.nx20-list-row button:disabled{background:#333;color:#666;cursor:not-allowed}',
-        '.nx20-list-empty{padding:40px 0;text-align:center;color:#999;font-size:16px}'
+        '.nx20-list-empty{padding:40px 0;text-align:center;color:#999;font-size:16px}',
+
+        '.nx20-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}',
+        '.nx20-detail-col h4{margin:0 0 8px;font-size:15px;color:#999;text-transform:uppercase;letter-spacing:0.5px}',
+        '.nx20-detail-items{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}',
+        '.nx20-detail-items .cell{aspect-ratio:1/1;background:rgba(255,255,255,0.06);overflow:hidden}',
+        '.nx20-detail-items .cell img{width:100%;height:100%;object-fit:contain}',
+        '.nx20-detail-side{border:1px solid #555;padding:12px;border-radius:3px}',
+        '.nx20-detail-side h4{margin:0 0 8px;font-size:15px;color:#999;text-transform:uppercase;letter-spacing:0.5px}',
+        '.nx20-detail-empty{color:#777;font-size:14px;font-style:italic}',
+        '.nx20-detail-meta{font-size:14px;color:#bbb;margin-top:12px;text-align:center}'
     ].join('');
 
     var S = {
@@ -100,8 +110,14 @@
         listTab: 'inbound',
         listData: { inbound: null, outbound: null, completed: null, inactive: null },
         listLoading: false,
-        listError: null
+        listError: null,
+        viewTrade: null,
+        viewLoading: false,
+        viewError: null,
+        viewData: null
     };
+
+    var avatarCache = {};
 
     function el(tag, props) {
         var e = document.createElement(tag);
@@ -188,6 +204,29 @@
             });
     }
 
+    function fetchAvatars(userIds) {
+        var needed = userIds.filter(function (id) {
+            return id && !avatarCache[id];
+        });
+        if (!needed.length) return Promise.resolve();
+        var qs = new URLSearchParams({
+            userIds: needed.join(','),
+            size: '420x420',
+            format: 'png'
+        });
+        return fetch('/apisite/thumbnails/v1/users/avatar?' + qs, { credentials: 'include' })
+            .then(function (r) { return r.json(); })
+            .then(function (j) {
+                var list = (j && (j.data || j.Data)) || [];
+                list.forEach(function (t) {
+                    var id = t.targetId != null ? t.targetId : t.userId;
+                    var url = t.imageUrl || t.url;
+                    if (id != null && url) avatarCache[id] = url;
+                });
+            })
+            .catch(function () {});
+    }
+
     var _sending = false;
 
     function sendTrade(offers) {
@@ -232,6 +271,11 @@
                     nextCursor: j && j.nextPageCursor
                 };
             });
+    }
+
+    function fetchTradeDetails(id) {
+        return fetch('/apisite/trades/v1/trades/' + id, { credentials: 'include' })
+            .then(function(r) { refreshCsrf(r); return r.json(); });
     }
 
     function Robux(v) {
@@ -436,14 +480,18 @@
 
     function TradeRow(trade) {
         var u = trade.user || {};
+        var partnerId = u.id;
+
         var row = el('div', { class: 'nx20-list-row' });
 
         var av = el('div', { class: 'avatar' });
+        var src = avatarCache[partnerId];
+        if (src) av.appendChild(el('img', { src: src, alt: u.name || '' }));
         row.appendChild(av);
 
         var who = el('div', { class: 'who' });
-        who.appendChild(el('div', {}, u.displayName || u.name || ('User ' + (u.id || '?'))));
-        who.appendChild(el('div', { class: 'sub' }, u.name && u.displayName && u.name !== u.displayName ? '@' + u.name : 'Trade #' + trade.id));
+        who.appendChild(el('div', {}, u.displayName || u.name || ('User ' + (partnerId || '?'))));
+        who.appendChild(el('div', { class: 'sub' }, u.name ? '@' + u.name : 'Trade #' + trade.id));
         row.appendChild(who);
 
         var when = el('div', { class: 'when' });
@@ -454,15 +502,157 @@
         row.appendChild(el('div', { class: 'status ' + statusClass(trade.status) }, trade.status || '—'));
 
         var actions = el('div', { class: 'actions' });
-        var open = el('button', { disabled: !trade.isActive }, 'Open');
+        var viewBtn = el('button', { class: 'ghost' }, 'View');
+        viewBtn.addEventListener('click', function () {
+            S.viewTrade = trade;
+            S.viewData = null;
+            S.viewError = null;
+            S.viewLoading = true;
+            render();
+            fetchTradeDetails(trade.id)
+                .then(function (data) {
+                    S.viewData = data;
+                    S.viewLoading = false;
+                    render();
+                })
+                .catch(function (e) {
+                    S.viewError = e.message || 'Failed to load trade.';
+                    S.viewLoading = false;
+                    render();
+                });
+        });
+        actions.appendChild(viewBtn);
+
+        var open = el('button', { disabled: !partnerId || trade.isActive === false }, 'Open');
         open.addEventListener('click', function () {
-            if (!u.id) return;
-            location.href = '/trade/tradewindow?TradePartnerID=' + u.id;
+            if (!partnerId) return;
+            location.href = '/trade/tradewindow?TradePartnerID=' + partnerId;
         });
         actions.appendChild(open);
         row.appendChild(actions);
 
         return row;
+    }
+
+    function collectItemsFromTrade(data) {
+        if (!data) return [];
+        var bag = [];
+
+        function pushFromArray(arr) {
+            if (!Array.isArray(arr)) return;
+            arr.forEach(function (a) {
+                if (a && (a.assetId || a.userAssetId)) bag.push(a);
+            });
+        }
+
+        pushFromArray(data.userAssets);
+        pushFromArray(data.items);
+        pushFromArray(data.assets);
+
+        if (Array.isArray(data.offers)) {
+            data.offers.forEach(function (o) {
+                if (!o) return;
+                pushFromArray(o.userAssets);
+                pushFromArray(o.items);
+                pushFromArray(o.assets);
+            });
+        }
+        if (Array.isArray(data.users)) {
+            data.users.forEach(function (u) {
+                if (!u) return;
+                pushFromArray(u.userAssets);
+                pushFromArray(u.items);
+            });
+        }
+        return bag;
+    }
+
+    function collectRobuxFromTrade(data) {
+        if (!data) return 0;
+        var total = 0;
+        function add(n) { if (typeof n === 'number') total += n; }
+        add(data.robux);
+        add(data.offerRobux);
+        if (Array.isArray(data.offers)) {
+            data.offers.forEach(function (o) { if (o) add(o.robux); });
+        }
+        if (Array.isArray(data.users)) {
+            data.users.forEach(function (u) { if (u) add(u.robux); });
+        }
+        return total;
+    }
+
+    function renderItemCells(items, sideFallback) {
+        var grid = el('div', { class: 'nx20-detail-items' });
+        if (!items.length) {
+            grid.appendChild(el('div', { class: 'nx20-detail-empty' }, 'No items.'));
+            return grid;
+        }
+        items.forEach(function (it) {
+            var cell = el('div', { class: 'cell', title: it.name || it.assetName || '' });
+            var assetId = it.assetId || it.AssetId;
+            if (assetId) {
+                var url = 'https://www.aisaka.me/thumbs/asset.ashx?assetId=' + assetId + '&width=110&height=110&format=png';
+                cell.appendChild(el('img', { src: url, alt: it.name || '' }));
+            }
+            grid.appendChild(cell);
+        });
+        return grid;
+    }
+
+    function TradeViewModal() {
+        var bg = el('div', { class: 'nx20-modal-bg' });
+        bg.addEventListener('click', function (e) {
+            if (e.target === e.currentTarget) { S.viewTrade = null; S.viewData = null; render(); }
+        });
+
+        var m = el('div', { class: 'nx20-modal' });
+        var t = S.viewTrade || {};
+        var u = t.user || {};
+
+        m.appendChild(el('h3', {}, 'Trade with ' + (u.displayName || u.name || 'User ' + (u.id || '?'))));
+
+        if (S.viewLoading) {
+            m.appendChild(el('div', { class: 'nx20-detail-meta' }, 'Loading trade details...'));
+        } else if (S.viewError) {
+            m.appendChild(el('div', { class: 'nx20-err' }, S.viewError));
+        } else {
+            var data = S.viewData || {};
+            var items = collectItemsFromTrade(data);
+            var robux = collectRobuxFromTrade(data);
+
+            var grid = el('div', { class: 'nx20-detail-grid' });
+            var col = el('div', { class: 'nx20-detail-col' });
+            col.appendChild(el('h4', {}, 'Items'));
+            col.appendChild(renderItemCells(items));
+            grid.appendChild(col);
+
+            var side = el('div', { class: 'nx20-detail-side' });
+            side.appendChild(el('h4', {}, 'Robux'));
+            side.appendChild(el('div', {}, robux > 0 ? 'R$ ' + fmt(robux) : 'R$ 0'));
+            grid.appendChild(side);
+            m.appendChild(grid);
+
+            m.appendChild(el('div', { class: 'nx20-detail-meta' },
+                'Trade #' + (t.id || '?') + ' • sent ' + relTime(t.created) + ' • expires ' + relTime(t.expiration)
+            ));
+        }
+
+        var acts = el('div', { class: 'nx20-actions' });
+        if (u.id && t.isActive) {
+            var open = el('button', { class: 'ok' }, 'Open in Trade Window');
+            open.addEventListener('click', function () {
+                location.href = '/trade/tradewindow?TradePartnerID=' + u.id;
+            });
+            acts.appendChild(open);
+        }
+        var close = el('button', { class: 'cancel' }, 'Close');
+        close.addEventListener('click', function () { S.viewTrade = null; S.viewData = null; render(); });
+        acts.appendChild(close);
+        m.appendChild(acts);
+
+        bg.appendChild(m);
+        return bg;
     }
 
     function TradeList() {
@@ -494,18 +684,12 @@
             if (!data.length) {
                 shell.appendChild(el('div', { class: 'nx20-list-empty' }, 'No trades available.'));
             } else {
-                var header = el('div', { class: 'nx20-list-head' });
-                header.appendChild(el('div', {}, ''));
-                header.appendChild(el('div', {}, 'User'));
-                header.appendChild(el('div', {}, 'Sent'));
-                header.appendChild(el('div', {}, 'Status'));
-                header.appendChild(el('div', {}, ''));
-                shell.appendChild(header);
                 data.forEach(function (t) { shell.appendChild(TradeRow(t)); });
             }
         }
 
         root.appendChild(shell);
+        if (S.viewTrade) root.appendChild(TradeViewModal());
         return root;
     }
 
@@ -574,6 +758,10 @@
         fetchTrades(kind)
             .then(function(res) {
                 S.listData[kind] = res.data || [];
+                var ids = S.listData[kind]
+                    .map(function (t) { return t.user && t.user.id; })
+                    .filter(Boolean);
+                return fetchAvatars(ids);
             })
             .catch(function(e) {
                 S.listError = e.message || 'Failed to load trades.';
@@ -629,17 +817,6 @@
                     localStorage.setItem('nx_me_id', String(payload.userId));
                     return payload.userId;
                 }
-            }
-        } catch (e) {}
-
-        try {
-            var me = window.__NEXT_DATA__
-                && window.__NEXT_DATA__.props
-                && window.__NEXT_DATA__.props.pageProps
-                && window.__NEXT_DATA__.props.pageProps.user;
-            if (me && me.id && (!S.partnerId || me.id !== S.partnerId)) {
-                localStorage.setItem('nx_me_id', String(me.id));
-                return me.id;
             }
         } catch (e) {}
 
