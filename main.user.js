@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      4.0
+// @version      4.2
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
@@ -13,6 +13,8 @@
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/settings.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/csrf.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/remove-ads.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/hide-alert.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/rap.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/bulk-unfriend.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/ui/modal.js
@@ -198,6 +200,8 @@
 
     function applyAll() {
         if (window.NX.settings.get('removeAds')) window.NX.features.removeAds.apply();
+        if (window.NX.settings.get('hideAlert')) window.NX.features.hideAlert.apply();
+        if (window.NX.settings.get('rap')) window.NX.features.rap.apply();
         if (window.NX.settings.get('inventorySearch')) window.NX.features.inventorySearch.apply();
         if (window.NX.settings.get('bulkUnfriend')) window.NX.features.bulkUnfriend.apply();
     }
@@ -211,6 +215,7 @@
     var observer = new MutationObserver(function() {
         renameRobuxTab();
         makeLogoClickable();
+        if (window.NX.settings.get('rap')) window.NX.features.rap.apply();
         if (window.NX.settings.get('bulkUnfriend')) window.NX.features.bulkUnfriend.apply();
     });
 
