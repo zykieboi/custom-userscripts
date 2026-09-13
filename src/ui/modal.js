@@ -57,6 +57,12 @@
                     cat: 'performance',
                     label: 'Remove Ads',
                     desc: 'Hides all advertisement banners and skyscrapers across the site.'
+                },
+                trade2020: {
+                    cat: 'visual',
+                    label: '2020 Trade Theme',
+                    desc: 'Replaces the default trade page with the 2020 Roblox layout.'
+                    },
                 }
             };
 
