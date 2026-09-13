@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      2.8
+// @version      4.0
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
@@ -11,6 +11,7 @@
 // @grant        GM_addStyle
 // @run-at       document-end
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/settings.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/csrf.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/remove-ads.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/bulk-unfriend.js
@@ -85,13 +86,25 @@
         }
         .nx-row {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
-            padding: 6px 0;
+            padding: 8px 0;
+            gap: 16px;
         }
-        .nx-row span {
+        .nx-row-text {
+            flex: 1;
+        }
+        .nx-row-text .nx-label {
             font-size: 14px;
             color: #e0e0e0;
+            display: block;
+        }
+        .nx-row-text .nx-desc {
+            font-size: 12px;
+            color: #888;
+            display: block;
+            margin-top: 2px;
+            line-height: 1.4;
         }
         .nx-toggle {
             position: relative;
@@ -99,6 +112,7 @@
             height: 24px;
             flex-shrink: 0;
             cursor: pointer;
+            margin-top: 2px;
         }
         .nx-toggle input {
             opacity: 0;
@@ -150,10 +164,16 @@
     `;
     document.head.appendChild(style);
 
-    function openNxModal() {
-        if (window.NX && window.NX.ui && window.NX.ui.modal) {
-            window.NX.ui.modal.build();
-        }
+    function renameRobuxTab() {
+        var links = document.querySelectorAll('.navlinks-0-2-4 .linkEntry-0-2-20, .navlinksRow-0-2-7 .linkEntry-0-2-20');
+        links.forEach(function(tab) {
+            if (tab.dataset.nxRenamed) return;
+            if (tab.getAttribute('href') !== '/transactions') return;
+            tab.dataset.nxRenamed = '1';
+            tab.textContent = 'Nexus';
+            tab.removeAttribute('href');
+            tab.style.cursor = 'pointer';
+        });
     }
 
     document.addEventListener('click', function(e) {
@@ -162,67 +182,36 @@
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
-        openNxModal();
+        window.NX.ui.modal.build();
     }, true);
 
-    function renameRobuxTab() {
-        var navLinks = document.querySelectorAll('.navlinks-0-2-4 .linkEntry-0-2-20, .navlinksRow-0-2-7 .linkEntry-0-2-20');
-        navLinks.forEach(function(tab) {
-            if (tab.dataset.nxRenamed) return;
-            if (tab.getAttribute('href') !== '/transactions') return;
-
-            tab.dataset.nxRenamed = '1';
-            tab.textContent = 'Nexus';
-            tab.removeAttribute('href');
-            tab.style.cursor = 'pointer';
-        });
-    }
-
     function makeLogoClickable() {
-        var logos = document.querySelectorAll('.imgDesktop-0-2-12, .imgMobile-0-2-13');
-        if (!logos.length) {
-            setTimeout(makeLogoClickable, 500);
-            return;
-        }
-
-        logos.forEach(function(logo) {
+        document.querySelectorAll('.imgDesktop-0-2-12, .imgMobile-0-2-13').forEach(function(logo) {
             if (logo.dataset.nxLogo) return;
             logo.dataset.nxLogo = '1';
             logo.style.cursor = 'pointer';
-
             logo.addEventListener('click', function() {
                 window.location.href = '/home';
             });
         });
     }
 
-    function applySettings() {
-        if (!window.NX || !window.NX.settings || !window.NX.features) return;
-
-        var settings = window.NX.settings;
-
-        if (settings.get('removeAds') && window.NX.features.removeAds) {
-            window.NX.features.removeAds.apply();
-        }
-
-        if (settings.get('inventorySearch') && window.NX.features.inventorySearch) {
-            window.NX.features.inventorySearch.apply();
-        }
-
-        if (settings.get('bulkUnfriend') && window.NX.features.bulkUnfriend) {
-            window.NX.features.bulkUnfriend.apply();
-        }
+    function applyAll() {
+        if (window.NX.settings.get('removeAds')) window.NX.features.removeAds.apply();
+        if (window.NX.settings.get('inventorySearch')) window.NX.features.inventorySearch.apply();
+        if (window.NX.settings.get('bulkUnfriend')) window.NX.features.bulkUnfriend.apply();
     }
 
     setTimeout(function() {
         renameRobuxTab();
         makeLogoClickable();
-        applySettings();
+        applyAll();
     }, 1000);
 
     var observer = new MutationObserver(function() {
         renameRobuxTab();
         makeLogoClickable();
+        if (window.NX.settings.get('bulkUnfriend')) window.NX.features.bulkUnfriend.apply();
     });
 
     observer.observe(document.body, {
