@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      2.1
+// @version      2.2
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
@@ -150,25 +150,20 @@
     document.head.appendChild(style);
 
     function renameRobuxTab() {
-        var tabs = document.querySelectorAll('a[href="/transactions"]');
+        var tabs = document.querySelectorAll('.linkEntry-0-2-20');
         tabs.forEach(function(tab) {
             if (tab.dataset.nxRenamed) return;
+            if (tab.getAttribute('href') !== '/transactions') return;
 
-            var parent = tab.parentElement;
-            if (!parent) return;
-
-            // only rename the nav link, not the robux amount text
-            if (!parent.classList.contains('linkContainer-0-2-87') && tab.classList.contains('linkEntry-0-2-20')) {
-                tab.dataset.nxRenamed = '1';
-                tab.textContent = 'Nexus';
-                tab.href = '#';
-                tab.onclick = function(e) {
-                    e.preventDefault();
-                    if (window.NX && window.NX.ui && window.NX.ui.modal) {
-                        window.NX.ui.modal.build();
-                    }
-                };
-            }
+            tab.dataset.nxRenamed = '1';
+            tab.textContent = 'Nexus';
+            tab.href = '#';
+            tab.onclick = function(e) {
+                e.preventDefault();
+                if (window.NX && window.NX.ui && window.NX.ui.modal) {
+                    window.NX.ui.modal.build();
+                }
+            };
         });
     }
 
