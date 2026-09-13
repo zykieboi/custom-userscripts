@@ -17,6 +17,8 @@
             var userId = window.location.pathname.match(/\/users\/(\d+)\//)?.[1];
             if (!userId) return;
 
+            console.log('NX RAP: fetching for user', userId);
+
             fetch('/internal/limiteds?userId=' + userId, {
                 credentials: 'include'
             })
