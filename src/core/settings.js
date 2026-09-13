@@ -2,9 +2,7 @@
     'use strict';
 
     var DEFAULTS = {
-        panelIcon: false,
         removeAds: false,
-        copyUserId: false,
         inventorySearch: false
     };
 
