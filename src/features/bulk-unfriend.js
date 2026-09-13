@@ -47,7 +47,7 @@
     }
 
     function apply() {
-        var container = document.querySelector('.friendsContainer-0-2-51, .friendsContainer-0-2-202, [class*="friendsContainer"]');
+        var container = document.querySelector('.friendsContainer-0-2-201, [class*="friendsContainer-"]');
         if (!container) {
             removeToolbar();
             return;
@@ -61,7 +61,7 @@
 
         if (container.querySelector('.nx-bulk-toolbar')) return;
 
-        var cards = container.querySelectorAll('.friendCardWrapper-0-2-54, .friendCardWrapper-0-2-205, [class*="friendCardWrapper"]');
+        var cards = container.querySelectorAll('.friendCardWrapper-0-2-204, [class*="friendCardWrapper-"]');
         if (!cards.length) {
             setTimeout(apply, 500);
             return;
@@ -139,7 +139,7 @@
             var failed = 0;
 
             for (var i = 0; i < checked.length; i++) {
-                var card = checked[i].closest('.friendCardWrapper-0-2-54, .friendCardWrapper-0-2-205, [class*="friendCardWrapper"]');
+                var card = checked[i].closest('.friendCardWrapper-0-2-204, [class*="friendCardWrapper-"]');
                 if (!card) continue;
 
                 var link = card.querySelector('a[href*="/users/"]');
