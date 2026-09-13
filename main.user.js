@@ -6,16 +6,12 @@
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
 // @match        aisaka.me/*
-// @match        https://caelus.lol/*
-// @match        caelus.lol/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
 // @run-at       document-end
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/settings.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/panel-icon.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/remove-ads.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/copy-user-id.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/ui/modal.js
 // @downloadURL  https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
@@ -150,36 +146,43 @@
         #nx-modal .save-btn:hover {
             background: #0052cc;
         }
+        .nx-settings-tab {
+            display: inline-block;
+            padding: 8px 16px;
+            cursor: pointer;
+            color: #e0e0e0;
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .nx-settings-tab:hover {
+            color: #0066ff;
+        }
     `;
     document.head.appendChild(style);
 
-    function addSettingsLink() {
-        var dropdown = document.querySelector('[class*="dropdownNew-"], [class*="wrapper-0-2-28"], .wrapper-0-2-28');
-        if (!dropdown) {
-            setTimeout(addSettingsLink, 400);
+    function addSettingsTab() {
+        var navGroup = document.querySelector('.row-0-2-19');
+        if (!navGroup) {
+            setTimeout(addSettingsTab, 400);
             return;
         }
 
-        if (document.querySelector('.nx-entry')) return;
+        if (document.querySelector('.nx-settings-tab')) return;
 
-        var li = document.createElement('li');
-        li.className = 'nx-entry';
-        li.style.cssText = 'padding: 8px 16px; cursor: pointer; color: #e0e0e0;';
+        var tab = document.createElement('a');
+        tab.className = 'linkEntry-0-2-20 nx-settings-tab';
+        tab.href = '#';
+        tab.textContent = 'Nexus Settings';
 
-        var a = document.createElement('a');
-        a.href = '#';
-        a.textContent = 'NX Settings';
-        a.style.cssText = 'color: inherit; text-decoration: none;';
-
-        a.onclick = function(e) {
+        tab.onclick = function(e) {
             e.preventDefault();
             if (window.NX && window.NX.ui && window.NX.ui.modal) {
                 window.NX.ui.modal.build();
             }
         };
 
-        li.appendChild(a);
-        dropdown.appendChild(li);
+        navGroup.appendChild(tab);
     }
 
     function applySettings() {
@@ -187,16 +190,8 @@
 
         var settings = window.NX.settings;
 
-        if (settings.get('panelIcon') && window.NX.features.panelIcon) {
-            window.NX.features.panelIcon.apply();
-        }
-
         if (settings.get('removeAds') && window.NX.features.removeAds) {
             window.NX.features.removeAds.apply();
-        }
-
-        if (settings.get('copyUserId') && window.NX.features.copyUserId) {
-            window.NX.features.copyUserId.apply();
         }
 
         if (settings.get('inventorySearch') && window.NX.features.inventorySearch) {
@@ -213,7 +208,7 @@
         }, 500);
     } else {
         setTimeout(function() {
-            addSettingsLink();
+            addSettingsTab();
             applySettings();
         }, 1000);
     }
