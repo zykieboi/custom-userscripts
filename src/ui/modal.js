@@ -14,7 +14,7 @@
         close.onclick = function() { overlay.remove(); };
 
         var title = document.createElement('h2');
-        title.textContent = 'NX Settings';
+        title.textContent = 'Nexus Settings';
 
         var sub = document.createElement('div');
         sub.className = 'sub';
@@ -22,18 +22,15 @@
 
         var content = document.createElement('div');
 
+        var optMap = {
+            removeAds: { cat: 'performance', label: 'Remove Ads' },
+            inventorySearch: { cat: 'function', label: 'Inventory Search' }
+        };
+
         var cats = [
-            { id: 'visual', label: 'Visual' },
             { id: 'function', label: 'Function' },
             { id: 'performance', label: 'Performance' }
         ];
-
-        var optMap = {
-            panelIcon: { cat: 'visual', label: 'Panel Icon' },
-            copyUserId: { cat: 'function', label: 'Copy User ID' },
-            inventorySearch: { cat: 'function', label: 'Inventory Search' },
-            removeAds: { cat: 'performance', label: 'Remove Ads' }
-        };
 
         var settings = window.NX.settings;
 
