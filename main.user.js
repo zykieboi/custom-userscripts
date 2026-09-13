@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      2.7
+// @version      2.8
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
@@ -13,6 +13,7 @@
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/settings.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/remove-ads.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/bulk-unfriend.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/ui/modal.js
 // @downloadURL  https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // @updateURL    https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
@@ -206,6 +207,10 @@
 
         if (settings.get('inventorySearch') && window.NX.features.inventorySearch) {
             window.NX.features.inventorySearch.apply();
+        }
+
+        if (settings.get('bulkUnfriend') && window.NX.features.bulkUnfriend) {
+            window.NX.features.bulkUnfriend.apply();
         }
     }
 
