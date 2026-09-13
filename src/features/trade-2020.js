@@ -484,7 +484,7 @@
         back.addEventListener('click', function() {
             S.sentOpen = false;
             render();
-            location.reload();
+            location.href = '/trades';
         });
         actions.appendChild(back);
         m.appendChild(actions);
@@ -616,22 +616,26 @@
         S.sendError = null;
         render();
 
+        var myRobux = S.offerRobux ? parseInt(S.offerRobux, 10) : null;
+        var theirRobux = S.requestRobux ? parseInt(S.requestRobux, 10) : null;
+
         var offers = [
             {
                 userId: S.meId,
                 userAssetIds: S.offer.map(function(i) {
                     return i.userAssetId != null ? i.userAssetId : i.assetId;
-                }),
-                robux: S.offerRobux ? parseInt(S.offerRobux, 10) : 0
+                })
             },
             {
                 userId: S.partnerId,
                 userAssetIds: S.request.map(function(i) {
                     return i.userAssetId != null ? i.userAssetId : i.assetId;
-                }),
-                robux: S.requestRobux ? parseInt(S.requestRobux, 10) : 0
+                })
             }
         ];
+
+        if (myRobux && myRobux > 0) offers[0].robux = myRobux;
+        if (theirRobux && theirRobux > 0) offers[1].robux = theirRobux;
 
         API.sendTrade(offers).then(function() {
             S.sending = false;
@@ -654,27 +658,36 @@
             if (me && me.id) return me.id;
         } catch (e) {}
 
-        var a = document.querySelector('a[href*="/users/"]');
-        if (a) {
-            var m = a.getAttribute('href').match(/\/users\/(\d+)/);
-            if (m) return parseInt(m[1], 10);
+        var avatar = document.querySelector('.headshotWrapper-0-2-49 a[href*="/users/"]');
+        if (avatar) {
+            var m1 = avatar.getAttribute('href').match(/\/users\/(\d+)/);
+            if (m1) return parseInt(m1[1], 10);
         }
+
+        var profile = document.querySelector('a[href^="/users/"][href$="/profile"]');
+        if (profile) {
+            var m2 = profile.getAttribute('href').match(/\/users\/(\d+)/);
+            if (m2) return parseInt(m2[1], 10);
+        }
+
+        var m3 = location.pathname.match(/\/users\/(\d+)/);
+        if (m3) return parseInt(m3[1], 10);
+
         return null;
     }
 
     var booted = false;
 
     function boot() {
-        if (!/^\/trade(s)?(\/|$)/.test(location.pathname)) return;
+        if (!/^\/trade\/tradewindow/.test(location.pathname)) return;
         if (booted && document.querySelector('.nx20-root')) return;
         booted = true;
         ensureStyle();
 
         S.meId = detectMe();
         if (!S.meId) {
-            var id = parseInt(prompt('Nexus: could not detect your userId. Enter it:') || '', 10);
-            if (!id) { booted = false; return; }
-            S.meId = id;
+            booted = false;
+            return;
         }
 
         var urlPartner = (location.search.match(/[?&]TradePartnerID=(\d+)/) || [])[1];
@@ -692,7 +705,7 @@
             setInterval(function() {
                 if ((location.pathname + location.search) !== lastPath) {
                     lastPath = location.pathname + location.search;
-                    if (/^\/trade(s)?(\/|$)/.test(location.pathname)) {
+                    if (/^\/trade\/tradewindow/.test(location.pathname)) {
                         booted = false;
                         setTimeout(boot, 300);
                     }
