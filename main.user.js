@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      4.2
+// @version      4.3
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
