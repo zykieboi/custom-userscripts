@@ -210,17 +210,29 @@
             });
     }
 
+    function fixImageUrl(url) {
+        if (!url) return url;
+        if (/^https?:\/\//i.test(url)) return url;
+        if (url.indexOf('/') === 0) return 'https://tr.clscdn.lol' + url;
+        return 'https://tr.clscdn.lol/' + url;
+    }
+
     function fetchAvatars(userIds) {
         var needed = userIds.filter(function (id) { return id && !avatarCache[id]; });
         if (!needed.length) return Promise.resolve();
-        var qs = new URLSearchParams({ userIds: needed.join(','), size: '420x420', format: 'png' });
-        return fetch('/apisite/thumbnails/v1/users/avatar?' + qs, { credentials: 'include' })
+        var qs = new URLSearchParams({
+            userIds: needed.join(','),
+            size: '420x420',
+            format: 'png'
+        });
+        return fetch('/apisite/thumbnails/v1/users/avatar-headshot?' + qs, { credentials: 'include' })
             .then(function (r) { return r.json(); })
             .then(function (j) {
-                var list = (j && (j.data || j.Data)) || [];
+                var list = (j && (j.data && j.data.data)) || (j && j.data) || [];
+                if (!Array.isArray(list)) list = [];
                 list.forEach(function (t) {
                     var id = t.targetId != null ? t.targetId : t.userId;
-                    var url = t.imageUrl || t.url;
+                    var url = fixImageUrl(t.imageUrl || t.url);
                     if (id != null && url) avatarCache[id] = url;
                 });
             })
