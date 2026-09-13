@@ -39,17 +39,17 @@
                     }
 
                     var wrapper = document.createElement('div');
-                    wrapper.className = 'col-auto wrapper-0-2-208 nx-rap-stat';
+                    wrapper.className = 'col-auto wrapper-0-2-107 nx-rap-stat';
 
                     var inner = document.createElement('div');
-                    inner.className = 'statRow-0-2-209';
+                    inner.className = 'statRow-0-2-108';
 
                     var value = document.createElement('p');
-                    value.className = 'statValue-0-2-211';
+                    value.className = 'statValue-0-2-110 statValue-d5-0-2-116';
                     value.textContent = match[1];
 
                     var header = document.createElement('p');
-                    header.className = 'statHeader-0-2-210';
+                    header.className = 'statHeader-0-2-109 statHeader-d4-0-2-115';
                     header.textContent = 'RAP';
 
                     inner.appendChild(value);
@@ -57,8 +57,6 @@
                     wrapper.appendChild(inner);
 
                     statRow.parentElement.parentElement.appendChild(wrapper);
-
-                    // leave _rapLoading = true so no further calls run
                 })
                 .catch(function() {
                     window.NX._rapLoading = false;
