@@ -48,6 +48,11 @@
                     label: 'Bulk Unfriend',
                     desc: 'Select multiple friends and remove them all at once from the friends page.'
                 },
+                rap: {
+                    cat: 'function',
+                    label: 'RAP on Profile',
+                    desc: 'Shows the user\'s total RAP next to their friends/followers stats.'
+                },
                 removeAds: {
                     cat: 'performance',
                     label: 'Remove Ads',
