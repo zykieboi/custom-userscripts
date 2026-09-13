@@ -146,43 +146,27 @@
         #nx-modal .save-btn:hover {
             background: #0052cc;
         }
-        .nx-settings-tab {
-            display: inline-block;
-            padding: 8px 16px;
-            cursor: pointer;
-            color: #e0e0e0;
-            font-size: 14px;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        .nx-settings-tab:hover {
-            color: #0066ff;
-        }
     `;
     document.head.appendChild(style);
 
-    function addSettingsTab() {
-        var navGroup = document.querySelector('.row-0-2-19');
-        if (!navGroup) {
-            setTimeout(addSettingsTab, 400);
+    function renameRobuxTab() {
+        var robuxTab = document.querySelector('a[href="/transactions"]');
+        if (!robuxTab) {
+            setTimeout(renameRobuxTab, 400);
             return;
         }
 
-        if (document.querySelector('.nx-settings-tab')) return;
+        if (robuxTab.dataset.nxRenamed) return;
+        robuxTab.dataset.nxRenamed = '1';
+        robuxTab.textContent = 'Nexus';
+        robuxTab.href = '#';
 
-        var tab = document.createElement('a');
-        tab.className = 'linkEntry-0-2-20 nx-settings-tab';
-        tab.href = '#';
-        tab.textContent = 'Nexus Settings';
-
-        tab.onclick = function(e) {
+        robuxTab.onclick = function(e) {
             e.preventDefault();
             if (window.NX && window.NX.ui && window.NX.ui.modal) {
                 window.NX.ui.modal.build();
             }
         };
-
-        navGroup.appendChild(tab);
     }
 
     function applySettings() {
@@ -199,18 +183,18 @@
         }
     }
 
-    if (window.location.hash === '#nx-settings') {
-        setTimeout(function() {
-            if (window.NX && window.NX.ui && window.NX.ui.modal) {
-                window.NX.ui.modal.build();
-                history.replaceState(null, '', window.location.pathname);
-            }
-        }, 500);
-    } else {
-        setTimeout(function() {
-            addSettingsTab();
-            applySettings();
-        }, 1000);
-    }
+    setTimeout(function() {
+        renameRobuxTab();
+        applySettings();
+    }, 1000);
+
+    var observer = new MutationObserver(function() {
+        renameRobuxTab();
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 
 })();
