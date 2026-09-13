@@ -37,12 +37,6 @@
         return null;
     }
 
-    function isFriendsTabActive() {
-        var active = document.querySelector('.entryActive-0-2-105');
-        if (!active) return false;
-        return active.textContent.trim() === 'Friends';
-    }
-
     function removeToolbar() {
         var existing = document.querySelector('.nx-bulk-toolbar');
         if (existing) existing.remove();
@@ -53,20 +47,21 @@
     }
 
     function apply() {
-        if (!isFriendsTabActive()) {
+        var container = document.querySelector('.friendsContainer-0-2-51, .friendsContainer-0-2-202, [class*="friendsContainer"]');
+        if (!container) {
             removeToolbar();
             return;
         }
 
-        var container = document.querySelector('.friendsContainer-0-2-51, [class*="friendsContainer"]');
-        if (!container) {
-            setTimeout(apply, 500);
+        var header = container.querySelector('h2');
+        if (!header || !header.textContent.includes('FRIENDS')) {
+            removeToolbar();
             return;
         }
 
         if (container.querySelector('.nx-bulk-toolbar')) return;
 
-        var cards = container.querySelectorAll('.friendCardWrapper-0-2-54, [class*="friendCardWrapper"]');
+        var cards = container.querySelectorAll('.friendCardWrapper-0-2-54, .friendCardWrapper-0-2-205, [class*="friendCardWrapper"]');
         if (!cards.length) {
             setTimeout(apply, 500);
             return;
@@ -144,7 +139,7 @@
             var failed = 0;
 
             for (var i = 0; i < checked.length; i++) {
-                var card = checked[i].closest('.friendCardWrapper-0-2-54, [class*="friendCardWrapper"]');
+                var card = checked[i].closest('.friendCardWrapper-0-2-54, .friendCardWrapper-0-2-205, [class*="friendCardWrapper"]');
                 if (!card) continue;
 
                 var link = card.querySelector('a[href*="/users/"]');
