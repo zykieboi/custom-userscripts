@@ -17,14 +17,23 @@
             var userId = window.location.pathname.match(/\/users\/(\d+)\//)?.[1];
             if (!userId) return;
 
-            fetch('/internal/limiteds?userId=' + userId)
+            fetch('/internal/limiteds?userId=' + userId, {
+                credentials: 'include'
+            })
                 .then(function(r) { return r.text(); })
                 .then(function(html) {
-                    if (html.includes('cf-chl') || html.includes('challenge-platform')) return;
+                    console.log('NX RAP response length:', html.length);
+                    console.log('NX RAP first 500:', html.slice(0, 500));
 
                     var match = html.match(/Total RAP:\s*<span[^>]*>([\d,]+)<\/span>/i);
                     if (!match) match = html.match(/Total RAP:\s*([\d,]+)/i);
-                    if (!match) return;
+
+                    if (!match) {
+                        console.log('NX RAP: no match found');
+                        return;
+                    }
+
+                    console.log('NX RAP value:', match[1]);
 
                     var wrapper = document.createElement('div');
                     wrapper.className = 'col-auto wrapper-0-2-107 nx-rap-stat';
@@ -51,7 +60,9 @@
 
                     statRow.parentElement.parentElement.appendChild(wrapper);
                 })
-                .catch(function() {});
+                .catch(function(e) {
+                    console.log('NX RAP error:', e);
+                });
         }
     };
 
