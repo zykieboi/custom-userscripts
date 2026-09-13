@@ -54,19 +54,22 @@
         '.nx20-offer{width:100%;min-height:36px;margin-top:18px;font-size:18px;cursor:pointer;background:var(--primary-color,#00a2ff);color:#fff;border:0}',
         '.nx20-offer:disabled{background:#333;color:#666;cursor:not-allowed}',
         '.nx20-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:99999}',
-        '.nx20-modal{background:var(--white-color,#2a2c2e);padding:20px;min-width:393px;max-width:520px}',
+        '.nx20-modal{background:var(--white-color,#2a2c2e);padding:20px;min-width:520px;max-width:640px;max-height:85vh;overflow-y:auto}',
         '.nx20-modal h3{margin:0 0 12px;font-size:20px}',
         '.nx20-modal p{margin:0 0 18px;font-size:19px;color:#999}',
-        '.nx20-actions{display:flex;gap:12px;justify-content:center}',
-        '.nx20-actions button{min-width:90px;min-height:36px;padding:8px 18px;font-size:18px;cursor:pointer;border:0}',
+        '.nx20-actions{display:flex;gap:12px;justify-content:center;margin-top:18px}',
+        '.nx20-actions button{min-width:100px;min-height:36px;padding:8px 18px;font-size:16px;cursor:pointer;border:0}',
         '.nx20-actions .ok{background:var(--primary-color,#00a2ff);color:#fff}',
+        '.nx20-actions .accept{background:#3ecf5a;color:#fff}',
+        '.nx20-actions .decline{background:#e5484d;color:#fff}',
+        '.nx20-actions .counter{background:#f5a623;color:#fff}',
         '.nx20-actions .cancel{background:#444;color:#fff}',
         '.nx20-err{color:#e5484d;text-align:center;margin-top:12px}',
 
         '.nx20-list-tabs{display:flex;gap:24px;margin-bottom:20px;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
         '.nx20-list-tab{padding:8px 0;font-size:18px;color:#999;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}',
         '.nx20-list-tab.active{color:var(--text-color-primary,#e8e8e8);border-bottom-color:var(--primary-color,#00a2ff)}',
-        '.nx20-list-row{display:grid;grid-template-columns:64px 1fr 220px 140px 110px;gap:16px;padding:14px 0;align-items:center;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
+        '.nx20-list-row{display:grid;grid-template-columns:64px 1fr 200px 140px 140px;gap:16px;padding:14px 0;align-items:center;border-bottom:1px solid var(--text-color-quinary,#3a3d40)}',
         '.nx20-list-row .avatar{width:48px;height:48px;background:rgba(255,255,255,0.06);border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center}',
         '.nx20-list-row .avatar img{width:100%;height:100%;object-fit:cover}',
         '.nx20-list-row .who{font-size:17px}',
@@ -75,6 +78,8 @@
         '.nx20-list-row .when .sub{font-size:12px;color:#888;margin-top:2px}',
         '.nx20-list-row .status{font-size:15px;font-weight:600}',
         '.nx20-list-row .status.open{color:#00a2ff}',
+        '.nx20-list-row .status.pending{color:#f5a623}',
+        '.nx20-list-row .status.countered{color:#f5a623}',
         '.nx20-list-row .status.completed{color:#3ecf5a}',
         '.nx20-list-row .status.declined,.nx20-list-row .status.cancelled,.nx20-list-row .status.expired{color:#e5484d}',
         '.nx20-list-row .status.inactive{color:#888}',
@@ -84,15 +89,15 @@
         '.nx20-list-row button:disabled{background:#333;color:#666;cursor:not-allowed}',
         '.nx20-list-empty{padding:40px 0;text-align:center;color:#999;font-size:16px}',
 
-        '.nx20-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}',
-        '.nx20-detail-col h4{margin:0 0 8px;font-size:15px;color:#999;text-transform:uppercase;letter-spacing:0.5px}',
-        '.nx20-detail-items{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}',
-        '.nx20-detail-items .cell{aspect-ratio:1/1;background:rgba(255,255,255,0.06);overflow:hidden}',
-        '.nx20-detail-items .cell img{width:100%;height:100%;object-fit:contain}',
-        '.nx20-detail-side{border:1px solid #555;padding:12px;border-radius:3px}',
-        '.nx20-detail-side h4{margin:0 0 8px;font-size:15px;color:#999;text-transform:uppercase;letter-spacing:0.5px}',
-        '.nx20-detail-empty{color:#777;font-size:14px;font-style:italic}',
-        '.nx20-detail-meta{font-size:14px;color:#bbb;margin-top:12px;text-align:center}'
+        '.nx20-detail-label{font-weight:700;font-size:15px;margin:10px 0 6px}',
+        '.nx20-detail-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:14px}',
+        '.nx20-detail-cell{position:relative;aspect-ratio:1/1;background:rgba(255,255,255,0.06);border:1px solid #555;overflow:hidden}',
+        '.nx20-detail-cell img{width:100%;height:100%;object-fit:contain}',
+        '.nx20-detail-cell .caption{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.65);font-size:10px;padding:2px 4px;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}',
+        '.nx20-detail-value{float:right;font-size:13px;color:#bbb}',
+        '.nx20-detail-value b{color:#3ecf5a}',
+        '.nx20-detail-divider{border-top:1px solid #555;margin:14px 0}',
+        '.nx20-detail-meta{font-size:13px;color:#999;text-align:center;margin-top:10px}'
     ].join('');
 
     var S = {
@@ -114,7 +119,8 @@
         viewTrade: null,
         viewLoading: false,
         viewError: null,
-        viewData: null
+        viewData: null,
+        actionPending: false
     };
 
     var avatarCache = {};
@@ -205,15 +211,9 @@
     }
 
     function fetchAvatars(userIds) {
-        var needed = userIds.filter(function (id) {
-            return id && !avatarCache[id];
-        });
+        var needed = userIds.filter(function (id) { return id && !avatarCache[id]; });
         if (!needed.length) return Promise.resolve();
-        var qs = new URLSearchParams({
-            userIds: needed.join(','),
-            size: '420x420',
-            format: 'png'
-        });
+        var qs = new URLSearchParams({ userIds: needed.join(','), size: '420x420', format: 'png' });
         return fetch('/apisite/thumbnails/v1/users/avatar?' + qs, { credentials: 'include' })
             .then(function (r) { return r.json(); })
             .then(function (j) {
@@ -278,8 +278,28 @@
             .then(function(r) { refreshCsrf(r); return r.json(); });
     }
 
-    function Robux(v) {
-        return el('span', { class: 'nx20-val' }, 'R$ ' + fmt(v));
+    function actionTrade(id, action) {
+        return primeToken().then(function (token) {
+            var headers = { 'Content-Type': 'application/json' };
+            if (token) headers['X-CSRF-Token'] = token;
+            return fetch('/apisite/trades/v1/trades/' + id + '/' + action, {
+                method: 'POST', credentials: 'include', headers: headers,
+                body: JSON.stringify({})
+            });
+        }).then(function (r) {
+            refreshCsrf(r);
+            if (!r.ok) {
+                return r.json().catch(function () { return {}; }).then(function (e) {
+                    var msg = 'HTTP ' + r.status;
+                    if (e && e.errors) {
+                        if (Array.isArray(e.errors) && e.errors[0] && e.errors[0].message) msg = e.errors[0].message;
+                        else if (typeof e.errors === 'object') msg = Object.keys(e.errors).map(function (k) { return k + ': ' + e.errors[k]; }).join(' | ');
+                    }
+                    throw new Error(msg);
+                });
+            }
+            return r.json().catch(function () { return {}; });
+        });
     }
 
     function relTime(iso) {
@@ -298,6 +318,35 @@
         if (s < 3600) return Math.floor(s / 60) + 'm ago';
         if (s < 86400) return Math.floor(s / 3600) + 'h ago';
         return Math.floor(s / 86400) + 'd ago';
+    }
+
+    function fmtDate(iso) {
+        if (!iso) return '—';
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return '—';
+        return (d.getMonth() + 1) + '/' + d.getDate() + '/' + String(d.getFullYear()).slice(-2);
+    }
+
+    function statusClass(status) {
+        var s = (status || '').toLowerCase();
+        if (s === 'open') return 'open';
+        if (s === 'pending') return 'pending';
+        if (s === 'countered') return 'countered';
+        if (s === 'completed' || s === 'finished' || s === 'accepted') return 'completed';
+        if (s === 'declined' || s === 'rejected' || s === 'cancelled' || s === 'expired') return 'declined';
+        return 'inactive';
+    }
+
+    function statusLabel(trade, tab) {
+        var s = trade.status;
+        if (!s) s = trade.isActive ? 'Pending' : 'Inactive';
+        if (tab === 'completed') return 'Completed';
+        if (tab === 'inactive') return s === 'Open' ? 'Expired' : s;
+        return s;
+    }
+
+    function Robux(v) {
+        return el('span', { class: 'nx20-val' }, 'R$ ' + fmt(v));
     }
 
     function ItemCard(item, side) {
@@ -470,12 +519,153 @@
         return root;
     }
 
-    function statusClass(status) {
-        var s = (status || '').toLowerCase();
-        if (s === 'open' || s === 'pending') return 'open';
-        if (s === 'completed' || s === 'accepted') return 'completed';
-        if (s === 'declined' || s === 'rejected' || s === 'cancelled' || s === 'expired') return 'declined';
-        return 'inactive';
+    function DetailItemCell(item) {
+        var cell = el('div', { class: 'nx20-detail-cell', title: item.name || '' });
+        var assetId = item.assetId || item.AssetId;
+        if (assetId) {
+            cell.appendChild(el('img', {
+                src: 'https://www.aisaka.me/thumbs/asset.ashx?assetId=' + assetId + '&width=110&height=110&format=png',
+                alt: item.name || ''
+            }));
+        }
+        if (item.name) {
+            cell.appendChild(el('div', { class: 'caption' }, item.name));
+        }
+        return cell;
+    }
+
+    function DetailOfferBlock(offer, label) {
+        var wrap = el('div', {});
+        wrap.appendChild(el('div', { class: 'nx20-detail-label' }, label));
+        var items = (offer && offer.userAssets) || [];
+        var robux = (offer && offer.robux) || 0;
+        var total = items.reduce(function (t, i) { return t + (i.recentAveragePrice || 0); }, 0);
+
+        var value = el('div', { class: 'nx20-detail-value' });
+        value.appendChild(document.createTextNode('Value: '));
+        value.appendChild(el('b', {}, 'R$ ' + fmt(total + robux)));
+        wrap.appendChild(value);
+
+        var row = el('div', { class: 'nx20-detail-row' });
+        items.slice(0, 4).forEach(function (it) { row.appendChild(DetailItemCell(it)); });
+        if (robux) {
+            var robuxCell = el('div', { class: 'nx20-detail-cell' });
+            robuxCell.appendChild(el('div', { style: { fontSize: '20px', fontWeight: '700', textAlign: 'center', paddingTop: '30px', color: '#3ecf5a' } }, 'R$' + robux));
+            row.appendChild(robuxCell);
+        }
+        wrap.appendChild(row);
+        return wrap;
+    }
+
+    function acceptCurrentTrade(id) {
+        if (S.actionPending) return;
+        S.actionPending = true;
+        render();
+        actionTrade(id, 'accept')
+            .then(function () {
+                S.actionPending = false;
+                S.viewTrade = null;
+                S.viewData = null;
+                S.listData = { inbound: null, outbound: null, completed: null, inactive: null };
+                loadTrades(S.listTab);
+            })
+            .catch(function (e) {
+                S.actionPending = false;
+                S.viewError = e.message || 'Failed to accept trade.';
+                render();
+            });
+    }
+
+    function declineCurrentTrade(id) {
+        if (S.actionPending) return;
+        S.actionPending = true;
+        render();
+        actionTrade(id, 'decline')
+            .then(function () {
+                S.actionPending = false;
+                S.viewTrade = null;
+                S.viewData = null;
+                S.listData = { inbound: null, outbound: null, completed: null, inactive: null };
+                loadTrades(S.listTab);
+            })
+            .catch(function (e) {
+                S.actionPending = false;
+                S.viewError = e.message || 'Failed to decline trade.';
+                render();
+            });
+    }
+
+    function TradeViewModal() {
+        var bg = el('div', { class: 'nx20-modal-bg' });
+        bg.addEventListener('click', function (e) {
+            if (e.target === e.currentTarget) { S.viewTrade = null; S.viewData = null; S.viewError = null; render(); }
+        });
+
+        var m = el('div', { class: 'nx20-modal' });
+        var t = S.viewTrade || {};
+        var u = t.user || {};
+
+        m.appendChild(el('h3', {}, 'Trade with ' + (u.displayName || u.name || 'User ' + (u.id || '?'))));
+
+        if (S.viewLoading) {
+            m.appendChild(el('div', { class: 'nx20-detail-meta' }, 'Loading trade details...'));
+        } else if (S.viewError) {
+            m.appendChild(el('div', { class: 'nx20-err' }, S.viewError));
+        } else if (S.viewData) {
+            var data = S.viewData;
+            var offers = Array.isArray(data.offers) ? data.offers : [];
+            var mine = offers.find(function (o) { return o.user && o.user.id === S.meId; });
+            var theirs = offers.find(function (o) { return o.user && o.user.id !== S.meId; });
+
+            var givingLabel = t.status === 'Open' ? 'Items you will give' :
+                              t.status === 'Completed' ? 'Items you gave' :
+                              'Items you would have given';
+            var receivingLabel = t.status === 'Open' ? 'Items you will receive' :
+                                 t.status === 'Completed' ? 'Items you received' :
+                                 'Items you would have received';
+
+            m.appendChild(DetailOfferBlock(mine, givingLabel));
+            m.appendChild(el('div', { class: 'nx20-detail-divider' }));
+            m.appendChild(DetailOfferBlock(theirs, receivingLabel));
+
+            m.appendChild(el('div', { class: 'nx20-detail-meta' },
+                'Trade #' + (t.id || '?') + ' • ' + (t.status || '') + ' • expires ' + relTime(t.expiration)
+            ));
+        }
+
+        var acts = el('div', { class: 'nx20-actions' });
+
+        var canAct = S.viewData && t.status && (t.status === 'Open' || t.status === 'Countered') && S.meId !== (u.id);
+        var canDecline = S.viewData && (t.status === 'Open' || t.status === 'Countered') && (S.meId === (u.id) || S.meId !== (u.id));
+
+        if (canAct) {
+            var acceptBtn = el('button', { class: 'accept' }, S.actionPending ? '...' : 'Accept');
+            if (S.actionPending) acceptBtn.disabled = true;
+            acceptBtn.addEventListener('click', function () { acceptCurrentTrade(t.id); });
+            acts.appendChild(acceptBtn);
+
+            var counterBtn = el('button', { class: 'counter' }, 'Counter');
+            if (S.actionPending) counterBtn.disabled = true;
+            counterBtn.addEventListener('click', function () {
+                location.href = '/trade/tradewindow?TradePartnerID=' + (u.id || '');
+            });
+            acts.appendChild(counterBtn);
+        }
+
+        if (canDecline) {
+            var declineBtn = el('button', { class: 'decline' }, S.actionPending ? '...' : 'Decline');
+            if (S.actionPending) declineBtn.disabled = true;
+            declineBtn.addEventListener('click', function () { declineCurrentTrade(t.id); });
+            acts.appendChild(declineBtn);
+        }
+
+        var close = el('button', { class: 'cancel' }, 'Close');
+        close.addEventListener('click', function () { S.viewTrade = null; S.viewData = null; S.viewError = null; render(); });
+        acts.appendChild(close);
+        m.appendChild(acts);
+
+        bg.appendChild(m);
+        return bg;
     }
 
     function TradeRow(trade) {
@@ -495,19 +685,21 @@
         row.appendChild(who);
 
         var when = el('div', { class: 'when' });
-        when.appendChild(el('div', {}, relTime(trade.created)));
-        when.appendChild(el('div', { class: 'sub' }, 'expires ' + relTime(trade.expiration)));
+        when.appendChild(el('div', {}, fmtDate(trade.created)));
+        when.appendChild(el('div', { class: 'sub' }, 'expires ' + fmtDate(trade.expiration)));
         row.appendChild(when);
 
-        row.appendChild(el('div', { class: 'status ' + statusClass(trade.status) }, trade.status || '—'));
+        var label = statusLabel(trade, S.listTab);
+        row.appendChild(el('div', { class: 'status ' + statusClass(label) }, label));
 
         var actions = el('div', { class: 'actions' });
-        var viewBtn = el('button', { class: 'ghost' }, 'View');
+        var viewBtn = el('button', { class: 'ghost' }, 'View Details');
         viewBtn.addEventListener('click', function () {
             S.viewTrade = trade;
             S.viewData = null;
             S.viewError = null;
             S.viewLoading = true;
+            S.actionPending = false;
             render();
             fetchTradeDetails(trade.id)
                 .then(function (data) {
@@ -523,136 +715,16 @@
         });
         actions.appendChild(viewBtn);
 
-        var open = el('button', { disabled: !partnerId || trade.isActive === false }, 'Open');
-        open.addEventListener('click', function () {
-            if (!partnerId) return;
-            location.href = '/trade/tradewindow?TradePartnerID=' + partnerId;
-        });
-        actions.appendChild(open);
+        if (trade.isActive && partnerId) {
+            var open = el('button', {}, 'Open');
+            open.addEventListener('click', function () {
+                location.href = '/trade/tradewindow?TradePartnerID=' + partnerId;
+            });
+            actions.appendChild(open);
+        }
         row.appendChild(actions);
 
         return row;
-    }
-
-    function collectItemsFromTrade(data) {
-        if (!data) return [];
-        var bag = [];
-
-        function pushFromArray(arr) {
-            if (!Array.isArray(arr)) return;
-            arr.forEach(function (a) {
-                if (a && (a.assetId || a.userAssetId)) bag.push(a);
-            });
-        }
-
-        pushFromArray(data.userAssets);
-        pushFromArray(data.items);
-        pushFromArray(data.assets);
-
-        if (Array.isArray(data.offers)) {
-            data.offers.forEach(function (o) {
-                if (!o) return;
-                pushFromArray(o.userAssets);
-                pushFromArray(o.items);
-                pushFromArray(o.assets);
-            });
-        }
-        if (Array.isArray(data.users)) {
-            data.users.forEach(function (u) {
-                if (!u) return;
-                pushFromArray(u.userAssets);
-                pushFromArray(u.items);
-            });
-        }
-        return bag;
-    }
-
-    function collectRobuxFromTrade(data) {
-        if (!data) return 0;
-        var total = 0;
-        function add(n) { if (typeof n === 'number') total += n; }
-        add(data.robux);
-        add(data.offerRobux);
-        if (Array.isArray(data.offers)) {
-            data.offers.forEach(function (o) { if (o) add(o.robux); });
-        }
-        if (Array.isArray(data.users)) {
-            data.users.forEach(function (u) { if (u) add(u.robux); });
-        }
-        return total;
-    }
-
-    function renderItemCells(items, sideFallback) {
-        var grid = el('div', { class: 'nx20-detail-items' });
-        if (!items.length) {
-            grid.appendChild(el('div', { class: 'nx20-detail-empty' }, 'No items.'));
-            return grid;
-        }
-        items.forEach(function (it) {
-            var cell = el('div', { class: 'cell', title: it.name || it.assetName || '' });
-            var assetId = it.assetId || it.AssetId;
-            if (assetId) {
-                var url = 'https://www.aisaka.me/thumbs/asset.ashx?assetId=' + assetId + '&width=110&height=110&format=png';
-                cell.appendChild(el('img', { src: url, alt: it.name || '' }));
-            }
-            grid.appendChild(cell);
-        });
-        return grid;
-    }
-
-    function TradeViewModal() {
-        var bg = el('div', { class: 'nx20-modal-bg' });
-        bg.addEventListener('click', function (e) {
-            if (e.target === e.currentTarget) { S.viewTrade = null; S.viewData = null; render(); }
-        });
-
-        var m = el('div', { class: 'nx20-modal' });
-        var t = S.viewTrade || {};
-        var u = t.user || {};
-
-        m.appendChild(el('h3', {}, 'Trade with ' + (u.displayName || u.name || 'User ' + (u.id || '?'))));
-
-        if (S.viewLoading) {
-            m.appendChild(el('div', { class: 'nx20-detail-meta' }, 'Loading trade details...'));
-        } else if (S.viewError) {
-            m.appendChild(el('div', { class: 'nx20-err' }, S.viewError));
-        } else {
-            var data = S.viewData || {};
-            var items = collectItemsFromTrade(data);
-            var robux = collectRobuxFromTrade(data);
-
-            var grid = el('div', { class: 'nx20-detail-grid' });
-            var col = el('div', { class: 'nx20-detail-col' });
-            col.appendChild(el('h4', {}, 'Items'));
-            col.appendChild(renderItemCells(items));
-            grid.appendChild(col);
-
-            var side = el('div', { class: 'nx20-detail-side' });
-            side.appendChild(el('h4', {}, 'Robux'));
-            side.appendChild(el('div', {}, robux > 0 ? 'R$ ' + fmt(robux) : 'R$ 0'));
-            grid.appendChild(side);
-            m.appendChild(grid);
-
-            m.appendChild(el('div', { class: 'nx20-detail-meta' },
-                'Trade #' + (t.id || '?') + ' • sent ' + relTime(t.created) + ' • expires ' + relTime(t.expiration)
-            ));
-        }
-
-        var acts = el('div', { class: 'nx20-actions' });
-        if (u.id && t.isActive) {
-            var open = el('button', { class: 'ok' }, 'Open in Trade Window');
-            open.addEventListener('click', function () {
-                location.href = '/trade/tradewindow?TradePartnerID=' + u.id;
-            });
-            acts.appendChild(open);
-        }
-        var close = el('button', { class: 'cancel' }, 'Close');
-        close.addEventListener('click', function () { S.viewTrade = null; S.viewData = null; render(); });
-        acts.appendChild(close);
-        m.appendChild(acts);
-
-        bg.appendChild(m);
-        return bg;
     }
 
     function TradeList() {
