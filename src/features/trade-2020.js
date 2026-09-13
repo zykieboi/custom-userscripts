@@ -158,6 +158,13 @@
         };
     }
 
+    function refreshCsrf(res) {
+        try {
+            var t = res && res.headers && res.headers.get('x-csrf-token');
+            if (t) window.NX_CSRF = t;
+        } catch (e) {}
+    }
+
     var API = {
         inventory: function(userId, assetTypeId, cursor) {
             cursor = cursor || '';
@@ -181,7 +188,10 @@
                 itemsPerPage: 10
             });
             return fetch('/users/inventory/list-json?' + qs, { credentials: 'include' })
-                .then(function(r) { return r.json(); })
+                .then(function(r) {
+                    refreshCsrf(r);
+                    return r.json();
+                })
                 .then(function(j) {
                     return {
                         items: (j && j.Data && j.Data.Items ? j.Data.Items : []).map(normItem),
@@ -198,7 +208,10 @@
                 size: '420x420'
             });
             return fetch('/apisite/thumbnails/v1/assets?' + qs, { credentials: 'include' })
-                .then(function(r) { return r.json(); })
+                .then(function(r) {
+                    refreshCsrf(r);
+                    return r.json();
+                })
                 .then(function(j) {
                     var out = {};
                     var list = (j && (j.data || j.Data)) || (Array.isArray(j) ? j : []);
@@ -215,21 +228,33 @@
             var url = tradeId
                 ? '/apisite/trades/v1/trades/' + tradeId + '/counter'
                 : '/apisite/trades/v1/trades/send';
-            var headers = { 'Content-Type': 'application/json' };
-            if (window.NX_CSRF) headers['X-CSRF-Token'] = window.NX_CSRF;
-            return fetch(url, {
-                method: 'POST',
-                credentials: 'include',
-                headers: headers,
-                body: JSON.stringify(payload)
-            }).then(function(r) {
-                if (!r.ok) {
-                    return r.json().catch(function() { return {}; }).then(function(e) {
-                        throw new Error((e && e.errors && e.errors[0] && e.errors[0].message) || ('HTTP ' + r.status));
-                    });
-                }
-                return r.json();
-            });
+
+            var attempt = function(token, isRetry) {
+                var headers = { 'Content-Type': 'application/json' };
+                if (token) headers['X-CSRF-Token'] = token;
+
+                return fetch(url, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: headers,
+                    body: JSON.stringify(payload)
+                }).then(function(r) {
+                    refreshCsrf(r);
+
+                    if (r.status === 403 && !isRetry && window.NX_CSRF && window.NX_CSRF !== token) {
+                        return attempt(window.NX_CSRF, true);
+                    }
+
+                    if (!r.ok) {
+                        return r.json().catch(function() { return {}; }).then(function(e) {
+                            throw new Error((e && e.errors && e.errors[0] && e.errors[0].message) || ('HTTP ' + r.status));
+                        });
+                    }
+                    return r.json();
+                });
+            };
+
+            return attempt(window.NX_CSRF, false);
         }
     };
 
