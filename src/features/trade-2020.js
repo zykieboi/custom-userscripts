@@ -180,6 +180,22 @@
         });
     }
 
+    function extractError(e, status) {
+        if (e && e.errors) {
+            if (Array.isArray(e.errors)) {
+                if (e.errors[0] && e.errors[0].message) return e.errors[0].message;
+                return e.errors.join(', ');
+            }
+            if (typeof e.errors === 'object') {
+                return Object.keys(e.errors).map(function(k) {
+                    return k + ': ' + (Array.isArray(e.errors[k]) ? e.errors[k].join(', ') : e.errors[k]);
+                }).join(' | ');
+            }
+        }
+        if (e && e.title) return e.title;
+        return 'HTTP ' + status;
+    }
+
     var API = {
         inventory: function(userId, assetTypeId, cursor) {
             cursor = cursor || '';
@@ -239,7 +255,7 @@
                 });
         },
 
-        sendTrade: function(payload, tradeId) {
+        sendTrade: function(offers, tradeId) {
             var url = tradeId
                 ? '/apisite/trades/v1/trades/' + tradeId + '/counter'
                 : '/apisite/trades/v1/trades/send';
@@ -251,13 +267,13 @@
                     method: 'POST',
                     credentials: 'include',
                     headers: headers,
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ offers: offers })
                 });
             }).then(function(r) {
                 refreshCsrf(r);
                 if (!r.ok) {
                     return r.json().catch(function() { return {}; }).then(function(e) {
-                        throw new Error((e && e.errors && e.errors[0] && e.errors[0].message) || ('HTTP ' + r.status));
+                        throw new Error(extractError(e, r.status));
                     });
                 }
                 return r.json().catch(function() { return {}; });
@@ -600,18 +616,24 @@
         S.sendError = null;
         render();
 
-        API.sendTrade({
-            offerUserId: S.meId,
-            requestUserId: S.partnerId,
-            offerUserAssets: S.offer.map(function(i) {
-                return i.userAssetId != null ? i.userAssetId : i.assetId;
-            }),
-            requestUserAssets: S.request.map(function(i) {
-                return i.userAssetId != null ? i.userAssetId : i.assetId;
-            }),
-            offerRobux: S.offerRobux ? parseInt(S.offerRobux, 10) : null,
-            requestRobux: S.requestRobux ? parseInt(S.requestRobux, 10) : null
-        }).then(function() {
+        var offers = [
+            {
+                userId: S.meId,
+                userAssetIds: S.offer.map(function(i) {
+                    return i.userAssetId != null ? i.userAssetId : i.assetId;
+                }),
+                robux: S.offerRobux ? parseInt(S.offerRobux, 10) : 0
+            },
+            {
+                userId: S.partnerId,
+                userAssetIds: S.request.map(function(i) {
+                    return i.userAssetId != null ? i.userAssetId : i.assetId;
+                }),
+                robux: S.requestRobux ? parseInt(S.requestRobux, 10) : 0
+            }
+        ];
+
+        API.sendTrade(offers).then(function() {
             S.sending = false;
             S.modalOpen = false;
             S.sentOpen = true;
@@ -643,7 +665,7 @@
     var booted = false;
 
     function boot() {
-        if (!/^\/trades(\/|$)/.test(location.pathname) && !/^\/trade(\/|$)/.test(location.pathname)) return;
+        if (!/^\/trade(s)?(\/|$)/.test(location.pathname)) return;
         if (booted && document.querySelector('.nx20-root')) return;
         booted = true;
         ensureStyle();
@@ -655,18 +677,22 @@
             S.meId = id;
         }
 
+        var urlPartner = (location.search.match(/[?&]TradePartnerID=(\d+)/) || [])[1];
+        if (urlPartner) S.partnerId = parseInt(urlPartner, 10);
+
         render();
         load('my');
+        if (S.partnerId) load('partner');
     }
 
     window.NX.features.trade2020 = {
         apply: function() {
             boot();
-            var lastPath = location.pathname;
+            var lastPath = location.pathname + location.search;
             setInterval(function() {
-                if (location.pathname !== lastPath) {
-                    lastPath = location.pathname;
-                    if (/^\/trade(s)?(\/|$)/.test(lastPath)) {
+                if ((location.pathname + location.search) !== lastPath) {
+                    lastPath = location.pathname + location.search;
+                    if (/^\/trade(s)?(\/|$)/.test(location.pathname)) {
                         booted = false;
                         setTimeout(boot, 300);
                     }
