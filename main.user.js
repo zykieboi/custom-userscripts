@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      4.6
+// @version      4.8
 // @icon         https://github.com/zykieboi/custom-userscripts/blob/main/img/icon.png?raw=true
 // @author       zykieboi
 // @description  Testing stuff :)
