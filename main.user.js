@@ -206,6 +206,7 @@
         if (window.NX.settings.get('rap')) window.NX.features.rap.apply();
         if (window.NX.settings.get('inventorySearch')) window.NX.features.inventorySearch.apply();
         if (window.NX.settings.get('bulkUnfriend')) window.NX.features.bulkUnfriend.apply();
+        if (window.NX.settings.get('trade2020')) window.NX.features.trade2020.apply();
     }
 
     setTimeout(function() {
