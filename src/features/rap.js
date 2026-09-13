@@ -6,12 +6,6 @@
 
     window.NX.features.rap = {
         apply: function() {
-            var username = document.querySelector('.username-0-2-94, [class*="username-"]');
-            if (!username) {
-                setTimeout(window.NX.features.rap.apply, 500);
-                return;
-            }
-
             var statRow = document.querySelector('.statRow-0-2-108, [class*="statRow-"]');
             if (!statRow) {
                 setTimeout(window.NX.features.rap.apply, 500);
@@ -26,34 +20,36 @@
             fetch('/internal/limiteds?userId=' + userId)
                 .then(function(r) { return r.text(); })
                 .then(function(html) {
-                    var match = html.match(/Total RAP:\s*<span[^>]*>([\d,]+)<\/span>/i);
-                    if (!match) {
-                        match = html.match(/Total RAP:\s*([\d,]+)/i);
-                    }
-                    if (!match) return;
+                    if (html.includes('cf-chl') || html.includes('challenge-platform')) return;
 
-                    var rap = match[1];
+                    var match = html.match(/Total RAP:\s*<span[^>]*>([\d,]+)<\/span>/i);
+                    if (!match) match = html.match(/Total RAP:\s*([\d,]+)/i);
+                    if (!match) return;
 
                     var wrapper = document.createElement('div');
                     wrapper.className = 'col-auto wrapper-0-2-107 nx-rap-stat';
 
-                    var statRowInner = document.createElement('div');
-                    statRowInner.className = 'statRow-0-2-108';
+                    var inner = document.createElement('div');
+                    inner.className = 'statRow-0-2-108';
 
                     var value = document.createElement('p');
                     value.className = 'statValue-0-2-110';
-                    value.textContent = rap;
+
+                    var link = document.createElement('a');
+                    link.href = '/internal/limiteds?userId=' + userId;
+                    link.textContent = match[1];
+
+                    value.appendChild(link);
 
                     var header = document.createElement('p');
                     header.className = 'statHeader-0-2-109';
                     header.textContent = 'RAP';
 
-                    statRowInner.appendChild(value);
-                    statRowInner.appendChild(header);
-                    wrapper.appendChild(statRowInner);
+                    inner.appendChild(value);
+                    inner.appendChild(header);
+                    wrapper.appendChild(inner);
 
-                    var container = statRow.parentElement.parentElement;
-                    if (container) container.appendChild(wrapper);
+                    statRow.parentElement.parentElement.appendChild(wrapper);
                 })
                 .catch(function() {});
         }
