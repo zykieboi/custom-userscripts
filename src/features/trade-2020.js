@@ -312,7 +312,7 @@
         right.appendChild(SidePanel('offer'));
         right.appendChild(SidePanel('request'));
 
-        var canOffer = !!S.partnerId && S.offer.length > 0 && S.request.length > 0 && !S.sending && !!S.meId;
+        var canOffer = !!S.partnerId && S.offer.length > 0 && S.request.length > 0 && !S.sending && !!S.meId && S.meId !== S.partnerId;
         var btn = el('button', { class: 'nx20-offer', disabled: !canOffer, onclick: function() {
             S.sendError = null; S.modalOpen = true; render();
         }}, 'Make Offer');
@@ -375,7 +375,7 @@
         if (mine && !S.meId) return;
         if (!mine && !S.partnerId) return;
         if (mine && S.meId === S.partnerId) {
-            S.myError = 'Cannot load your inventory (your ID matches partner).';
+            S.myError = 'Could not detect your own user id.';
             S.myItems = [];
             render();
             return;
@@ -427,27 +427,48 @@
             .catch(function(e) { S.sending = false; S.sendError = e.message; render(); });
     }
 
+    function decodeJwtPayload(jwt) {
+        try {
+            var parts = jwt.split('.');
+            if (parts.length < 2) return null;
+            var pad = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+            while (pad.length % 4) pad += '=';
+            return JSON.parse(atob(pad));
+        } catch (e) { return null; }
+    }
+
     function detectMe() {
         var cached = parseInt(localStorage.getItem('nx_me_id') || '0', 10);
-        if (cached) return cached;
+        if (cached && (!S.partnerId || cached !== S.partnerId)) return cached;
 
         try {
             var me = window.__NEXT_DATA__
                 && window.__NEXT_DATA__.props
                 && window.__NEXT_DATA__.props.pageProps
                 && window.__NEXT_DATA__.props.pageProps.user;
-            if (me && me.id) {
+            if (me && me.id && (!S.partnerId || me.id !== S.partnerId)) {
                 localStorage.setItem('nx_me_id', String(me.id));
                 return me.id;
+            }
+        } catch (e) {}
+
+        try {
+            var m = document.cookie.match(/\.ROBLOSECURITY=([^;]+)/);
+            if (m) {
+                var payload = decodeJwtPayload(m[1]);
+                if (payload && payload.userId && (!S.partnerId || payload.userId !== S.partnerId)) {
+                    localStorage.setItem('nx_me_id', String(payload.userId));
+                    return payload.userId;
+                }
             }
         } catch (e) {}
 
         var links = document.querySelectorAll('a[href*="/users/"][href*="/profile"]');
         for (var i = 0; i < links.length; i++) {
             var href = links[i].getAttribute('href') || '';
-            var m = href.match(/\/users\/(\d+)\/profile/);
-            if (!m) continue;
-            var id = parseInt(m[1], 10);
+            var mm = href.match(/\/users\/(\d+)\/profile/);
+            if (!mm) continue;
+            var id = parseInt(mm[1], 10);
             if (!S.partnerId || id !== S.partnerId) {
                 localStorage.setItem('nx_me_id', String(id));
                 return id;
