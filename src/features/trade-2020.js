@@ -165,6 +165,21 @@
         } catch (e) {}
     }
 
+    function primeToken() {
+        return fetch('/apisite/presence/v1/presence/users', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userIds: [0] })
+        }).then(function(r) {
+            var t = r.headers.get('x-csrf-token');
+            if (t) window.NX_CSRF = t;
+            return window.NX_CSRF;
+        }).catch(function() {
+            return window.NX_CSRF;
+        });
+    }
+
     var API = {
         inventory: function(userId, assetTypeId, cursor) {
             cursor = cursor || '';
@@ -229,32 +244,24 @@
                 ? '/apisite/trades/v1/trades/' + tradeId + '/counter'
                 : '/apisite/trades/v1/trades/send';
 
-            var attempt = function(token, isRetry) {
+            return primeToken().then(function(token) {
                 var headers = { 'Content-Type': 'application/json' };
                 if (token) headers['X-CSRF-Token'] = token;
-
                 return fetch(url, {
                     method: 'POST',
                     credentials: 'include',
                     headers: headers,
                     body: JSON.stringify(payload)
-                }).then(function(r) {
-                    refreshCsrf(r);
-
-                    if (r.status === 403 && !isRetry && window.NX_CSRF && window.NX_CSRF !== token) {
-                        return attempt(window.NX_CSRF, true);
-                    }
-
-                    if (!r.ok) {
-                        return r.json().catch(function() { return {}; }).then(function(e) {
-                            throw new Error((e && e.errors && e.errors[0] && e.errors[0].message) || ('HTTP ' + r.status));
-                        });
-                    }
-                    return r.json();
                 });
-            };
-
-            return attempt(window.NX_CSRF, false);
+            }).then(function(r) {
+                refreshCsrf(r);
+                if (!r.ok) {
+                    return r.json().catch(function() { return {}; }).then(function(e) {
+                        throw new Error((e && e.errors && e.errors[0] && e.errors[0].message) || ('HTTP ' + r.status));
+                    });
+                }
+                return r.json().catch(function() { return {}; });
+            });
         }
     };
 
@@ -636,7 +643,7 @@
     var booted = false;
 
     function boot() {
-        if (!/^\/trades(\/|$)/.test(location.pathname)) return;
+        if (!/^\/trades(\/|$)/.test(location.pathname) && !/^\/trade(\/|$)/.test(location.pathname)) return;
         if (booted && document.querySelector('.nx20-root')) return;
         booted = true;
         ensureStyle();
@@ -659,7 +666,7 @@
             setInterval(function() {
                 if (location.pathname !== lastPath) {
                     lastPath = location.pathname;
-                    if (/^\/trades(\/|$)/.test(lastPath)) {
+                    if (/^\/trade(s)?(\/|$)/.test(lastPath)) {
                         booted = false;
                         setTimeout(boot, 300);
                     }
