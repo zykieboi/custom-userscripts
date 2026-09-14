@@ -69,7 +69,7 @@
                 trade2020: {
                     cat: 'visual',
                     label: '2020 Trade Theme',
-                    desc: 'Replaces the default trade page with the 2020 Roblox layout.'
+                    desc: '(Experimental) Replaces the default trade page with the similar 2020 Roblox layout.'
                 }
             };
 
