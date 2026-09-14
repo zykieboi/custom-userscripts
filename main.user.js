@@ -6,9 +6,7 @@
 // @author       zykieboi
 // @description  Testing stuff :)
 // @match        https://www.aisaka.me/*
-// @match        https://aisaka.me/*
-// @match        https://www.caelus.lol/*
-// @match        https://caelus.lol/*
+// @match        aisaka.me/*
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
@@ -21,6 +19,7 @@
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/bulk-unfriend.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/trade-2020.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/legacy-theme.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/ui/modal.js
 // @downloadURL  https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // @updateURL    https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
@@ -209,6 +208,7 @@
         if (window.NX.settings.get('inventorySearch')) window.NX.features.inventorySearch.apply();
         if (window.NX.settings.get('bulkUnfriend')) window.NX.features.bulkUnfriend.apply();
         if (window.NX.settings.get('trade2020')) window.NX.features.trade2020.apply();
+        if (window.NX.settings.get('legacyTheme')) window.NX.features.legacyTheme.apply();
     }
 
     setTimeout(function() {
