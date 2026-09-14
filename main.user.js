@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      5.7
+// @version      6.0
 // @icon         https://github.com/zykieboi/custom-userscripts/blob/main/img/icon.png?raw=true
 // @author       zykieboi
 // @description  Testing stuff :)
@@ -10,15 +10,19 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
+// @connect      nexus-admin.YOURNAME.workers.dev
 // @run-at       document-end
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/settings.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/csrf.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/core/server.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/remove-ads.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/hide-alert.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/rap.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/bulk-unfriend.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/trade-2020.js
+// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/admin/panel.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/ui/modal.js
 // @downloadURL  https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // @updateURL    https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
@@ -262,6 +266,7 @@
         if (window.NX.settings.get('inventorySearch')) window.NX.features.inventorySearch.apply();
         if (window.NX.settings.get('bulkUnfriend')) window.NX.features.bulkUnfriend.apply();
         if (window.NX.settings.get('trade2020')) window.NX.features.trade2020.apply();
+        if (window.NX.settings.get('nexusPanel')) window.NX.features.nexusPanel.apply();
     }
 
     setTimeout(function() {
