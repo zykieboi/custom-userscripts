@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      5.0
+// @version      5.1
 // @icon         https://github.com/zykieboi/custom-userscripts/blob/main/img/icon.png?raw=true
 // @author       zykieboi
 // @description  Testing stuff :)
@@ -170,10 +170,18 @@
     document.head.appendChild(style);
 
     function renameRobuxTab() {
-        var links = document.querySelectorAll('.navlinks-0-2-4 .linkEntry-0-2-20, .navlinksRow-0-2-7 .linkEntry-0-2-20');
+        var selectors = [
+            '.navlinks-0-2-4 .linkEntry-0-2-20',
+            '.navlinksRow-0-2-7 .linkEntry-0-2-20',
+            '.container-0-2-12 .linkEntry-0-2-13',
+            '.nx-legacy-nav .linkEntry-0-2-13'
+        ];
+        var links = document.querySelectorAll(selectors.join(','));
         links.forEach(function(tab) {
             if (tab.dataset.nxRenamed) return;
-            if (tab.getAttribute('href') !== '/transactions') return;
+            var href = tab.getAttribute('href');
+            var text = (tab.textContent || '').trim();
+            if (href !== '/transactions' && text !== 'Robux') return;
             tab.dataset.nxRenamed = '1';
             tab.textContent = 'Nexus';
             tab.removeAttribute('href');
@@ -182,7 +190,7 @@
     }
 
     document.addEventListener('click', function(e) {
-        var target = e.target.closest('a[data-nx-renamed="1"]');
+        var target = e.target.closest('[data-nx-renamed="1"]');
         if (!target) return;
         e.preventDefault();
         e.stopPropagation();
