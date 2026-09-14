@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Nexus - NX
 // @namespace    https://github.com/zykieboi/custom-userscripts
-// @version      5.5
+// @version      5.7
 // @icon         https://github.com/zykieboi/custom-userscripts/blob/main/img/icon.png?raw=true
 // @author       zykieboi
 // @description  Testing stuff :)
@@ -19,7 +19,6 @@
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/inventory-search.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/bulk-unfriend.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/trade-2020.js
-// @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/features/legacy-theme.js
 // @require      https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/src/ui/modal.js
 // @downloadURL  https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
 // @updateURL    https://raw.githubusercontent.com/zykieboi/custom-userscripts/main/main.user.js
@@ -221,16 +220,14 @@
     function renameRobuxTab() {
         var selectors = [
             '.navlinks-0-2-4 .linkEntry-0-2-20',
-            '.navlinksRow-0-2-7 .linkEntry-0-2-20',
-            '.container-0-2-12 .linkEntry-0-2-13',
-            '.nx-legacy-nav .linkEntry-0-2-13'
+            '.navlinksRow-0-2-7 .linkEntry-0-2-20'
         ];
         var links = document.querySelectorAll(selectors.join(','));
         links.forEach(function(tab) {
             if (tab.dataset.nxRenamed) return;
             var href = tab.getAttribute('href');
             var text = (tab.textContent || '').trim();
-            if (href !== '/transactions' && text !== 'Robux' && text !== 'ROBUX') return;
+            if (href !== '/transactions' && text !== 'Robux') return;
             tab.dataset.nxRenamed = '1';
             tab.textContent = 'Nexus';
             tab.removeAttribute('href');
@@ -265,7 +262,6 @@
         if (window.NX.settings.get('inventorySearch')) window.NX.features.inventorySearch.apply();
         if (window.NX.settings.get('bulkUnfriend')) window.NX.features.bulkUnfriend.apply();
         if (window.NX.settings.get('trade2020')) window.NX.features.trade2020.apply();
-        if (window.NX.settings.get('legacyTheme')) window.NX.features.legacyTheme.apply();
     }
 
     setTimeout(function() {
