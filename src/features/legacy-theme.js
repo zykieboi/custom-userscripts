@@ -10,7 +10,7 @@
     var REPLACE_TO = 'Caelus';
 
     var CSS = [
-        'body{background:#e3e3e3 !important}',
+        'html, body{background:#e3e3e3 !important}',
 
         '.nx-legacy-nav{background:#1e1e1e;position:fixed;top:0;left:0;right:0;z-index:1030;height:44px}',
         '.nx-legacy-nav .navContainer{max-width:1140px;margin:0 auto;padding:0 15px;height:44px}',
@@ -125,6 +125,15 @@
         document.head.appendChild(s);
     }
 
+    function killInlineBodyBackground() {
+        if (!document.body) return;
+        var bg = document.body.getAttribute('style') || '';
+        if (bg.indexOf('background') === -1) return;
+        var cleaned = bg.replace(/background\s*:\s*[^;]+;?/gi, '').trim();
+        if (cleaned) document.body.setAttribute('style', cleaned);
+        else document.body.removeAttribute('style');
+    }
+
     function loggedInUser() {
         try {
             var me = window.__NEXT_DATA__
@@ -166,7 +175,7 @@
                             '<p class="text-0-2-67"><a class="link-0-2-68" href="/users/' + user.id + '/profile">Profile</a></p>',
                             '<p class="text-0-2-67"><a class="link-0-2-68" href="/my/messages">Messages</a></p>',
                             '<p class="text-0-2-67"><a class="link-0-2-68" href="/trades">Trade</a></p>',
-                            '<p class="text-0-2-67"><a class="link-0-2-68" href="/transactions">Robux</a></p>',
+                            '<p class="text-0-2-67"><a class="link-0-2-68" data-nx-renamed="1" href="/transactions" style="cursor:pointer">Robux</a></p>',
                         '</div>',
                     '</div>',
                 '</div>',
@@ -252,15 +261,28 @@
         }
     }
 
+    var titleTimer = null;
+
+    function watchTitle() {
+        if (titleTimer) return;
+        titleTimer = setInterval(function() {
+            var t = document.title;
+            if (t && t.indexOf('Aisaka') !== -1) {
+                document.title = t.replace(REPLACE_FROM, REPLACE_TO);
+            }
+        }, 500);
+    }
+
     var observer = null;
 
     function startObserver() {
         if (observer) return;
-        observer = new MutationObserver(function(mutations) {
+        observer = new MutationObserver(function() {
             if (observer._scheduled) return;
             observer._scheduled = true;
             requestAnimationFrame(function() {
                 observer._scheduled = false;
+                killInlineBodyBackground();
                 if (document.querySelector('.navbar-wrapper-main')) {
                     var nav = document.querySelector('.navbar-wrapper-main');
                     if (!nav.dataset || !nav.dataset[LEGACY_MARKER]) applyLegacyNav();
@@ -280,6 +302,7 @@
 
     function teardown() {
         stopObserver();
+        if (titleTimer) { clearInterval(titleTimer); titleTimer = null; }
         var css = document.getElementById(CSS_ID);
         if (css) css.remove();
     }
@@ -287,10 +310,12 @@
     window.NX.features.legacyTheme = {
         apply: function() {
             ensureStyle();
+            killInlineBodyBackground();
             applyLegacyNav();
             applyLegacyFooter();
             applyTextReplace();
             startObserver();
+            watchTitle();
         },
         teardown: teardown
     };
