@@ -51,12 +51,7 @@
                 hideAlert: {
                     cat: 'visual',
                     label: 'Hide Alert',
-                    desc: 'Hides the alert banner under the navigation bar.'
-                },
-                legacyTheme: {
-                    cat: 'visual',
-                    label: 'Legacy Theme (Caelus)',
-                    desc: 'Rebuilds the navbar and footer.'
+                    desc: 'Hides the fake alert banner under the navigation bar.'
                 },
                 inventorySearch: {
                     cat: 'function',
