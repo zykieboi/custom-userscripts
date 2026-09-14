@@ -3,7 +3,7 @@
 
     window.NX = window.NX || {};
 
-    var API = '';
+    var API = 'nexus-admin.masonreed-exe.workers.dev';
 
     function getToken() {
         var t = GM_getValue('nx_token', '');
