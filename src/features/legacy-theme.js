@@ -27,46 +27,47 @@
         'body > div#__next{padding-top:44px !important}',
         'body > div#__next > div > div:first-child{position:fixed;top:0;left:0;right:0;z-index:1030}',
 
-        '.main-0-2-45{padding-top:0 !important;margin-top:0 !important}',
-        '.main-0-2-45 > .container{padding-top:20px !important}',
+        '.main-0-2-45{padding-top:0 !important;margin-top:0 !important;background:transparent !important}',
+        '.main-0-2-45 > .container{padding-top:24px !important}',
         '.container-0-2-47{padding-top:0 !important;margin-top:0 !important}',
+        '.container{max-width:970px !important}',
 
         '.adWrapper-0-2-106,.adWrapper-0-2-90,[class*="adWrapper-"]{display:none !important}',
         '.fakeAlert-0-2-41{display:none !important}',
 
-        '.nx-nav{background:' + BLUE + ';height:44px;display:flex;align-items:center;padding:0 16px;font-family:"Source Sans Pro",Arial,Helvetica,sans-serif}',
-        '.nx-nav *{box-sizing:border-box}',
-        '.nx-nav-inner{display:flex;align-items:center;width:100%;max-width:1600px;margin:0 auto;gap:16px}',
-        '.nx-nav-logo{width:118px;height:30px;background-image:url("/img/roblox_logo.svg");background-size:118px 30px;background-repeat:no-repeat;background-position:left center;cursor:pointer;flex-shrink:0}',
-        '.nx-nav-links{display:flex;gap:8px;flex-shrink:0}',
-        '.nx-nav-link{color:#fff;font-size:16px;font-weight:400;padding:6px 10px;border-radius:4px;text-decoration:none;white-space:nowrap}',
-        '.nx-nav-link:hover{background:rgba(25,25,25,0.1);color:#fff}',
-        '.nx-nav-search{flex:1 1 auto;position:relative;max-width:480px}',
-        '.nx-nav-search input{width:100%;height:30px;padding:0 32px 0 10px;border:1px solid ' + DIVIDER + ';border-radius:2px;background:#fff;color:#333;font-size:14px;font-family:inherit;outline:none}',
-        '.nx-nav-search .icon-nav-search{position:absolute;top:7px;right:8px;color:#666;font-size:14px;pointer-events:none}',
+        '.nx-nav{background:' + BLUE + ';height:44px;display:flex;align-items:center;padding:0 12px;font-family:"Source Sans Pro",Arial,Helvetica,sans-serif;box-shadow:0 1px 3px rgba(0,0,0,0.15)}',
+        '.nx-nav-inner{display:flex;align-items:center;width:100%;max-width:1400px;margin:0 auto;gap:8px}',
+        '.nx-nav-logo{width:118px;height:30px;background-image:url("/img/roblox_logo.svg");background-size:118px 30px;background-repeat:no-repeat;background-position:left center;cursor:pointer;flex-shrink:0;margin-right:20px}',
+        '.nx-nav-links{display:flex;gap:2px;flex-shrink:0}',
+        '.nx-nav-link{color:#fff !important;font-size:16px;font-weight:400;padding:6px 10px;border-radius:3px;text-decoration:none !important;white-space:nowrap;cursor:pointer;line-height:20px}',
+        '.nx-nav-link:hover{background:rgba(0,0,0,0.12);color:#fff !important}',
+        '.nx-nav-search{flex:0 1 380px;position:relative;margin-left:20px}',
+        '.nx-nav-search input{width:100%;height:28px;padding:0 30px 0 10px;border:1px solid transparent;border-radius:2px;background:#fff;color:#333;font-size:14px;font-family:inherit;outline:none;line-height:28px}',
+        '.nx-nav-search input:focus{border-color:#0055b3}',
+        '.nx-nav-search .icon-nav-search{position:absolute;top:6px;right:8px;color:#666;font-size:14px;pointer-events:none}',
         '.nx-nav-spacer{flex:1 1 auto}',
         '.nx-nav-auth{display:flex;align-items:center;gap:4px;flex-shrink:0}',
-        '.nx-nav-auth-link{color:#fff;font-size:16px;font-weight:400;padding:6px 10px;border-radius:4px;cursor:pointer}',
-        '.nx-nav-auth-link:hover{background:rgba(25,25,25,0.1)}',
-        '.nx-nav-balance{color:#fff;font-size:16px;font-weight:400;margin:0 6px}',
+        '.nx-nav-auth-link{color:#fff !important;font-size:16px;font-weight:400;padding:6px 10px;border-radius:3px;cursor:pointer;display:inline-flex;align-items:center;line-height:20px}',
+        '.nx-nav-auth-link:hover{background:rgba(0,0,0,0.12);color:#fff !important}',
+        '.nx-nav-balance{color:#fff;font-size:16px;font-weight:400;margin:0 4px 0 0;line-height:20px}',
 
-        '.nx-nav-settings-wrap{position:relative}',
-        '.nx-nav-settings-menu{position:absolute;top:38px;right:0;width:140px;background:#fff;box-shadow:0 2px 12px rgba(25,25,25,0.25);border-radius:3px;padding:4px 0;z-index:1100}',
-        '.nx-nav-settings-menu a{display:block;padding:10px 14px;color:' + TEXT_DARK + ' !important;font-size:15px;text-decoration:none}',
-        '.nx-nav-settings-menu a:hover{background:#eaeaea;border-left:4px solid ' + BLUE + ';margin-left:-4px;padding-left:10px}',
+        '.nx-nav-settings-wrap{position:relative;display:inline-flex}',
+        '.nx-nav-settings-menu{position:absolute;top:36px;right:0;width:150px;background:#fff;box-shadow:0 2px 12px rgba(25,25,25,0.25);border-radius:3px;padding:4px 0;z-index:1100}',
+        '.nx-nav-settings-menu a{display:block;padding:9px 14px;color:' + TEXT_DARK + ' !important;font-size:15px;text-decoration:none !important;border-left:4px solid transparent}',
+        '.nx-nav-settings-menu a:hover{background:#eaeaea;border-left-color:' + BLUE + '}',
 
-        '.nx-footer{background:#fff;padding:24px 0 20px;margin-top:40px;color:' + TEXT_MUTED + '}',
+        '.nx-footer{background:#fff;padding:26px 0 20px;margin-top:48px;color:' + TEXT_MUTED + ';border-top:1px solid #e0e0e0}',
         '.nx-footer-inner{max-width:970px;margin:0 auto;padding:0 16px}',
-        '.nx-footer-links{display:flex;flex-wrap:wrap;gap:40px;margin-bottom:16px}',
-        '.nx-footer-links a{color:' + TEXT_MUTED + ';font-size:21px;font-weight:300;text-decoration:none}',
-        '.nx-footer-links a:hover{color:' + TEXT_DARK + '}',
-        '.nx-footer-legal{color:' + TEXT_MUTED + ';font-size:12px;line-height:1.4}',
-        '.nx-footer-legal a{color:' + TEXT_MUTED + ';text-decoration:none}',
+        '.nx-footer-links{display:flex;flex-wrap:wrap;gap:36px;margin-bottom:18px}',
+        '.nx-footer-links a{color:' + TEXT_MUTED + ' !important;font-size:20px;font-weight:300;text-decoration:none !important}',
+        '.nx-footer-links a:hover{color:' + TEXT_DARK + ' !important}',
+        '.nx-footer-legal{color:' + TEXT_MUTED + ';font-size:12px;line-height:1.5;margin:0}',
+        '.nx-footer-legal a{color:' + TEXT_MUTED + ' !important;text-decoration:none !important}',
 
         '@media(max-width:900px){',
         '.nx-nav-links{display:none}',
-        '.nx-nav-search{max-width:none}',
-        '.nx-nav-logo{width:30px;background-image:url("/img/logo_R.svg");background-size:30px 30px}',
+        '.nx-nav-search{flex:1 1 auto;margin-left:8px}',
+        '.nx-nav-logo{width:30px;background-image:url("/img/logo_R.svg");background-size:30px 30px;margin-right:8px}',
         '}'
     ].join('');
 
@@ -113,11 +114,10 @@
             a.href = l[1];
             links.appendChild(a);
         });
-        var nexusLink = document.createElement('a');
+        var nexusLink = document.createElement('span');
         nexusLink.className = 'nx-nav-link';
         nexusLink.textContent = 'Nexus';
         nexusLink.dataset.nxRenamed = '1';
-        nexusLink.style.cursor = 'pointer';
         links.appendChild(nexusLink);
         inner.appendChild(links);
 
