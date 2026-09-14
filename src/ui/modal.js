@@ -53,6 +53,11 @@
                     label: 'Hide Alert',
                     desc: 'Hides the fake alert banner under the navigation bar.'
                 },
+                nexusPanel: {
+                    cat: 'visual',
+                    label: 'Nexus Panel',
+                    desc: 'Enables the /admin page for user management.'
+                },
                 inventorySearch: {
                     cat: 'function',
                     label: 'Inventory Search',
