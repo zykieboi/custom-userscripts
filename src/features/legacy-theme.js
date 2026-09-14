@@ -7,139 +7,90 @@
     var CSS_ID = 'nx-legacy-theme-style';
     var LEGACY_MARKER = 'nxLegacyNav';
 
+    var ROBLOX_BLUE = '#0074BD';
+    var TEXT_DARK = '#191919';
+    var TEXT_MUTED = '#B8B8B8';
+    var DIVIDER = '#c3c3c3';
+    var BODY_BG = '#e3e3e3';
+
     var CSS = [
-        'html,body{background:#e3e3e3 !important;font-family:Helvetica,Arial,sans-serif !important;color:#333 !important}',
+        '@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap");',
 
-        '.nx-legacy-nav{background:#2b6ab5 !important;position:fixed;top:0;left:0;right:0;z-index:1030;height:44px}',
-        '.nx-legacy-nav .navContainer{max-width:1140px;margin:0 auto;padding:0 15px;height:44px}',
-        '.nx-legacy-nav .row{margin:0;height:44px}',
-        '.nx-legacy-nav .col-12{padding:0}',
+        'html,body{padding:0;margin:0;font-family:"Source Sans Pro",Arial,Helvetica,sans-serif !important;font-size:14px;min-height:100vh;line-height:normal !important}',
+        'html,body{background:' + BODY_BG + ' !important}',
+        '*{box-sizing:border-box}',
+        'html{width:100%;overflow-x:hidden}',
+
+        'a{color:#0055b3;text-decoration:none !important;cursor:pointer}',
+        'a:hover{text-decoration:none !important}',
+        'a.nav-link:focus,a.nav-link:hover{color:white}',
+
+        'h1,h2,h3,h4,h5,h6{color:' + TEXT_DARK + ';line-height:normal;font-family:"Source Sans Pro",Arial,Helvetica,sans-serif !important}',
+        'h1{font-size:34px !important;font-weight:400 !important}',
+        'h2{font-size:23px !important;font-weight:400 !important}',
+        'h3{font-size:20px !important;font-weight:400 !important}',
+        'p,span,li,ul,ol,div{line-height:normal}',
+
+        'div.container{max-width:970px !important}',
+
+        '.divider-right{border-right:1px solid ' + DIVIDER + '}',
+        '.divider-top,.divider-bottom{border-top:1px solid ' + DIVIDER + '}',
+        '.divider-top-thick{border-top:2px solid ' + DIVIDER + '}',
+        '.divider-light{border-color:#ebebeb}',
+        '.br-none{border-radius:0 !important}',
+        '.cursor-pointer{cursor:pointer}',
+        '.truncate{white-space:nowrap;overflow-x:hidden;text-overflow:ellipsis}',
+
+        '.nx-legacy-nav{background:' + ROBLOX_BLUE + ' !important;padding-top:6px;padding-bottom:3px}',
+        '.nx-legacy-nav .container{max-width:100% !important;padding-top:0;padding-bottom:0}',
+        '.nx-legacy-nav .row{width:100%;margin:0}',
+        '.nx-legacy-nav .logo-col{max-width:140px;padding-left:15px}',
         '.nx-legacy-nav .openSideNavMobile{display:none}',
-        '.nx-legacy-nav .imgDesktop{background:url("/img/logo.png") no-repeat left center;background-size:contain;height:44px;width:110px;display:block}',
+        '.nx-legacy-nav .imgDesktop{width:118px;height:30px;background-image:url("/img/roblox_logo.svg");background-size:118px 30px;display:none}',
+        '.nx-legacy-nav .imgMobile{background-image:url("/img/logo_R.svg");width:30px;height:30px;display:block;background-size:30px}',
+        '.nx-legacy-nav .imgMobileWrapper{margin-left:40px}',
+        '.nx-legacy-nav .navLinksCol{padding-left:0;margin-left:0}',
+        '.nx-legacy-nav .navLinksContainer{margin-top:3px;margin-bottom:0;padding-bottom:0;padding-left:0}',
+        '.nx-legacy-nav .linkEntry{color:#fff !important;font-weight:400;margin-bottom:0;padding-bottom:0;text-align:center;font-size:16px;text-decoration:none;padding:4px 8px;transition:none}',
+        '.nx-legacy-nav .linkEntry:hover{color:#fff !important;background:rgba(25,25,25,0.1);cursor:pointer;border-radius:4px;transition:none}',
+        '.nx-legacy-nav .navItem{padding-right:2rem}',
+
+        '.nx-legacy-nav .searchWrap{padding:4px 2px;background:#fff;border-radius:2px;border:1px solid ' + DIVIDER + ';width:100%;position:relative}',
+        '.nx-legacy-nav .searchInput{width:100%;border:none !important;padding-top:0;padding-bottom:0;background:#fff !important;color:#333 !important;font-size:14px !important;height:auto !important;border-radius:0 !important;box-shadow:none !important;padding-left:8px}',
+        '.nx-legacy-nav .searchInput:focus{border:none !important;box-shadow:none !important;outline:none !important}',
+        '.nx-legacy-nav .icon-nav-search{float:right;margin-top:-24px;padding-top:0;margin-right:4px;color:#666}',
+
+        '.nx-legacy-nav .authText{color:#fff;font-weight:400;font-size:16px;border-bottom:0;margin-top:2px;margin-bottom:0;text-align:right;white-space:nowrap;display:inline}',
+        '.nx-legacy-nav .authLink{color:#fff !important;text-decoration:none;padding:4px 8px;display:inline-block}',
+        '.nx-legacy-nav .authLink:hover{color:#fff !important;background:rgba(25,25,25,0.1);cursor:pointer;border-radius:4px}',
+        '.nx-legacy-nav .settingsIcon{float:right}',
+        '.nx-legacy-nav .linkContainerCol{max-width:250px;float:right}',
+        '.nx-legacy-nav .robuxText{margin-right:20px;margin-left:5px}',
+
+        '.nx-legacy-nav .settingsDropdown{width:125px;position:absolute;top:45px;right:10px;box-shadow:0 -5px 20px rgba(25,25,25,0.15);user-select:none;background:#fff;z-index:1100}',
+        '.nx-legacy-nav .settingsDropdown p{padding:10px;margin-bottom:0;font-size:16px;color:#191919;cursor:pointer}',
+        '.nx-legacy-nav .settingsDropdown p:hover{background:#eaeaea;border-left:4px solid ' + ROBLOX_BLUE + ';margin-left:-4px;padding-left:6px}',
+
+        '.nx-legacy-footer{background:#fff !important;color:' + TEXT_MUTED + ' !important}',
+        '.nx-legacy-footer .footerContainer{padding-top:5px;padding-bottom:20px}',
+        '.nx-legacy-footer .fText{color:' + TEXT_MUTED + ' !important;font-size:12px;font-weight:400}',
+        '.nx-legacy-footer .fLink{font-size:21px !important;text-align:center;font-weight:300;text-decoration:none;color:' + TEXT_MUTED + ' !important}',
+        '.nx-legacy-footer .fLink:hover{color:' + TEXT_DARK + ' !important}',
+
+        '.nx-legacy-main{min-height:95vh}',
+
+        '.nx-legacy-nav-wrapper{margin-bottom:40px;max-width:100vw;overflow:auto}',
+
+        '.adWrapper-0-2-106,.adWrapper-0-2-90,[class*="adWrapper-"]{display:none !important}',
+
+        '@media(min-width:1301px){',
+        '.nx-legacy-nav .imgDesktop{display:block}',
         '.nx-legacy-nav .imgMobileWrapper{display:none}',
-        '.nx-legacy-nav .container-0-2-12{height:44px}',
-        '.nx-legacy-nav .container-0-2-12 .row{display:flex;align-items:center;height:44px}',
-        '.nx-legacy-nav .container-0-2-12 .col-3{padding:0 20px 0 0;flex:0 0 auto;max-width:none;text-align:left}',
-        '.nx-legacy-nav .linkEntry{color:#fff !important;text-decoration:none !important;font-size:14px;font-weight:500;display:inline-block;padding:12px 0;line-height:20px;white-space:nowrap}',
-        '.nx-legacy-nav .linkEntry:hover{color:#e2e2e2 !important;text-decoration:none !important}',
-        '.nx-legacy-nav .wrapper-0-2-16{position:relative;width:100%;margin-top:7px}',
-        '.nx-legacy-nav .searchInput{width:100%;height:30px;background:#fff;border:0;color:#333;border-radius:0;padding:0 30px 0 10px;font-size:13px;outline:0}',
-        '.nx-legacy-nav .icon-nav-search{position:absolute;right:9px;top:7px;color:#999;font-size:14px;pointer-events:none}',
-        '.nx-legacy-nav .text-0-2-67{margin:0;font-size:14px;line-height:44px;text-align:center}',
-        '.nx-legacy-nav .text-0-2-67 a{color:#fff !important;text-decoration:none !important;cursor:pointer}',
-        '.nx-legacy-nav .text-0-2-67 a:hover{color:#e2e2e2 !important}',
-        '.nx-legacy-nav .spacer-right{display:flex;justify-content:flex-end;gap:24px;padding-right:8px}',
-
-        '.nx-legacy-footer{background:#2b6ab5 !important;color:#fff !important;padding:24px 0 12px;margin-top:40px}',
-        '.nx-legacy-footer .footerContainer{max-width:1140px;margin:0 auto;padding:0 15px}',
-        '.nx-legacy-footer .row{display:flex;flex-wrap:wrap;margin:0 -8px}',
-        '.nx-legacy-footer .col-2{flex:0 0 16.666%;max-width:16.666%;padding:0 8px 8px}',
-        '.nx-legacy-footer .text-0-2-32{color:#fff !important;font-size:13px;margin:0;line-height:1.4}',
-        '.nx-legacy-footer .link-0-2-33{color:#fff !important;text-decoration:none;font-weight:500}',
-        '.nx-legacy-footer .link-0-2-33:hover{color:#cce4ff !important;text-decoration:none}',
-        '.nx-legacy-footer .disclaimer{margin-top:16px;padding:0 8px;color:#dbe8f7 !important;font-size:12px;line-height:1.4}',
-        '.nx-legacy-footer .disclaimer a{color:#fff !important}',
-
-        '.nx-legacy-nav + .fakeAlert-0-2-41{display:none !important}',
-        '.fakeAlert-0-2-41{display:none !important}',
-
-        'body::before{content:"";display:block;height:44px}',
-
-        'h1,h2,h3,h4,h5{font-family:Helvetica,Arial,sans-serif !important;color:#333 !important;font-weight:400 !important}',
-        'h1{font-size:34px !important}',
-        'h2{font-size:23px !important}',
-        'h3{font-size:20px !important}',
-        'a{color:#2b6ab5}',
-        'a:hover{color:#1d4a80}',
-
-        '.card{border-radius:0 !important;box-shadow:none !important;border:1px solid #c3c3c3 !important;background:#fff !important}',
-        '[class*="card-0-2-"]{border-radius:0 !important;box-shadow:none !important;background:#fff !important;border:1px solid #c3c3c3 !important}',
-
-        '.btn,.btn-primary,[class*="btn-0-2-"]{border-radius:0 !important;background:#2b6ab5 !important;color:#fff !important;border:1px solid #2b6ab5 !important;font-weight:500 !important;padding:6px 16px !important}',
-        '.btn:hover,.btn-primary:hover,[class*="btn-0-2-"]:hover{background:#1d4a80 !important;border-color:#1d4a80 !important}',
-
-        'input:not([type="checkbox"]):not([type="radio"]),select,textarea{border-radius:0 !important;border:1px solid #999 !important;background:#fff !important;color:#333 !important;font-family:Helvetica,Arial,sans-serif !important}',
-
-        '.container{max-width:1140px !important}',
-
-        '.main-0-2-45{background:#e3e3e3 !important}',
-
-        'table{border-collapse:collapse !important}',
-        'table th{background:#e3e3e3 !important;color:#555 !important;font-weight:600 !important;border-bottom:2px solid #c3c3c3 !important;padding:6px 8px !important;font-size:13px !important;text-transform:none !important}',
-        'table td{border-bottom:1px solid #d9d9d9 !important;padding:6px 8px !important;font-size:13px !important}',
-
-        '::-webkit-scrollbar{width:12px;height:12px}',
-        '::-webkit-scrollbar-track{background:#e3e3e3}',
-        '::-webkit-scrollbar-thumb{background:#b8b8b8;border:2px solid #e3e3e3}',
-
-        '@media(max-width:991px){',
-        '.nx-legacy-nav{height:auto}',
-        '.nx-legacy-nav .navContainer{height:auto}',
-        '.nx-legacy-nav .imgDesktop{display:none}',
-        '.nx-legacy-nav .imgMobileWrapper{display:block;height:44px;width:80px}',
-        '.nx-legacy-nav .imgMobile{background:url("/img/logo.png") no-repeat left center;background-size:contain;height:44px;width:80px}',
-        '.nx-legacy-nav .container-0-2-12 .col-3{display:none}',
-        '.nx-legacy-nav .wrapper-0-2-16{margin:7px 8px}',
-        '.nx-legacy-footer .col-2{flex:0 0 50%;max-width:50%}',
+        '}',
+        '@media(max-width:1300px){',
+        '.nx-legacy-nav .openSideNavMobile{display:block;float:left;height:30px;width:30px;cursor:pointer;color:#fff;margin-right:12px}',
+        '.nx-legacy-nav-wrapper{margin-bottom:98px}',
         '}'
-    ].join('');
-
-    var NAV_HTML_TOP = [
-        '<div class="wrapper-0-2-5 navbar-wrapper-main">',
-            '<nav class="navbar fixed-top navbar-expand-lg navbar-0-2-1 navbar-d0-0-2-6">',
-                '<div class="navContainer-0-2-2 container">',
-                    '<div class="row-0-2-4 row">',
-                        '<div class="col-12 col-lg-8">',
-                            '<div class="row-0-2-4 row">',
-                                '<div class="col-0-2-10 col-2 col-lg-2">',
-                                    '<div class="openSideNavMobile-0-2-11 icon-menu"></div>',
-                                    '<div class="imgDesktop-0-2-7" data-nx-logo="1" style="cursor:pointer"></div>',
-                                    '<div class="imgMobileWrapper-0-2-9">',
-                                        '<div class="imgMobile-0-2-8" data-nx-logo="1" style="cursor:pointer"></div>',
-                                    '</div>',
-                                '</div>',
-                                '<div class="col-0-2-15 col-10 col-lg-5">',
-                                    '<div class="container-0-2-12">',
-                                        '<div class="row">',
-                                            '<div class="col-3"><a class="linkEntry-0-2-13 nav-link active pt-0" href="/games">Games</a></div>',
-                                            '<div class="col-3"><a class="linkEntry-0-2-13 nav-link active pt-0" href="/catalog">Catalog</a></div>',
-                                            '<div class="col-3"><a class="linkEntry-0-2-13 nav-link active pt-0" href="/develop">Develop</a></div>',
-                                            '<div class="col-3"><a class="linkEntry-0-2-13 nav-link active pt-0" href="/transactions">Robux</a></div>',
-                                        '</div>',
-                                    '</div>',
-                                '</div>',
-                                '<div class="col-12 col-lg-5">',
-                                    '<div style="width:100%">',
-                                        '<div class="wrapper-0-2-16">',
-                                            '<input value="" class="form-control searchInput-0-2-17" placeholder="Search">',
-                                            '<span class="icon-0-2-18 icon-nav-search"></span>',
-                                        '</div>',
-                                    '</div>',
-                                '</div>',
-                            '</div>',
-                        '</div>'
-    ].join('');
-
-    var NAV_HTML_BOTTOM = [
-                    '</div>',
-                '</div>',
-            '</nav>',
-        '</div>'
-    ].join('');
-
-    var FOOTER_HTML = [
-        '<footer class="footer-0-2-34 nx-legacy-footer">',
-            '<div class="container mt-4 mb-0 footerContainer-0-2-35">',
-                '<div class="row">',
-                    '<div class="col-2 mb-2"><h2 class="text-0-2-32 link-0-2-33"><a class="text-0-2-32 link-0-2-33" href="/about-us">About Us</a></h2></div>',
-                    '<div class="col-2 mb-2"><h2 class="text-0-2-32 link-0-2-33"><a class="text-0-2-32 link-0-2-33" href="/jobs">Jobs</a></h2></div>',
-                    '<div class="col-2 mb-2"><h2 class="text-0-2-32 link-0-2-33"><a class="text-0-2-32 link-0-2-33" href="/info/blog">Blog</a></h2></div>',
-                    '<div class="col-2 mb-2"><h2 class="text-0-2-32 link-0-2-33"><a class="text-0-2-32 link-0-2-33" href="/privacy">Privacy</a></h2></div>',
-                    '<div class="col-2 mb-2"><h2 class="text-0-2-32 link-0-2-33"><a class="text-0-2-32 link-0-2-33" href="/help">Help</a></h2></div>',
-                    '<div class="col-12 disclaimer"><p class="text-0-2-32">Caelus, "Online Building Toy", characters, logos, names, and all related indicia are trademarks of <a href="https://corp.roblox.com/">ROBLOX Corporation</a>, ©2016. Patents pending. ROBLOX is not sponsored, authorized or endorsed by any producer of plastic building bricks, including The LEGO Group, MEGA Brands, and K\'Nex, and no resemblance to the products of these companies is intended. Use of this site signifies your acceptance of the <a href="/terms-and-conditions">Terms and Conditions</a>.</p></div>',
-                '</div>',
-            '</div>',
-        '</footer>'
     ].join('');
 
     function ensureStyle() {
@@ -150,28 +101,39 @@
         document.head.appendChild(s);
     }
 
-    function stripInlineBodyStyle() {
+    function setBodyBackground() {
         if (!document.body) return;
-        document.body.removeAttribute('style');
+        document.body.setAttribute('style', 'background: ' + BODY_BG + ' !important');
+    }
+
+    function readNextData() {
+        try {
+            return window.__NEXT_DATA__ && window.__NEXT_DATA__.props && window.__NEXT_DATA__.props.pageProps;
+        } catch (e) { return null; }
     }
 
     function loggedInUser() {
-        try {
-            var me = window.__NEXT_DATA__
-                && window.__NEXT_DATA__.props
-                && window.__NEXT_DATA__.props.pageProps
-                && window.__NEXT_DATA__.props.pageProps.user;
-            if (me && me.id) return me;
-        } catch (e) {}
-        var link = document.querySelector('a[href*="/users/"][href$="/profile"]');
+        var data = readNextData();
+        if (data && data.user && data.user.id) return data.user;
+        if (data && data.userId) return { id: data.userId, name: data.username || data.name || '' };
+
+        var link = document.querySelector('a[href*="/users/"][href*="/profile"]');
         if (link) {
             var m = (link.getAttribute('href') || '').match(/\/users\/(\d+)\/profile/);
-            if (m) return { id: parseInt(m[1], 10) };
+            if (m) {
+                var cached = parseInt(localStorage.getItem('nx_me_id') || '0', 10);
+                var id = parseInt(m[1], 10);
+                if (cached && cached === id) return { id: id };
+            }
         }
+
+        var cached = parseInt(localStorage.getItem('nx_me_id') || '0', 10);
+        if (cached) return { id: cached };
+
         return null;
     }
 
-    function rightColumn() {
+    function authArea() {
         var user = loggedInUser();
         if (!user) {
             return [
@@ -179,8 +141,8 @@
                     '<div class="row">',
                         '<div class="col-6 offset-6">',
                             '<div class="row">',
-                                '<div class="col-6"><p class="text-0-2-67"><a class="link-0-2-68" href="/signup">Sign Up</a></p></div>',
-                                '<div class="col-6"><p class="text-0-2-67"><a class="link-0-2-68" href="/login">Login</a></p></div>',
+                                '<div class="col-6"><p class="authText"><a class="authLink" href="/signup">Sign Up</a></p></div>',
+                                '<div class="col-6"><p class="authText"><a class="authLink" href="/login">Login</a></p></div>',
                             '</div>',
                         '</div>',
                     '</div>',
@@ -189,13 +151,17 @@
         }
         return [
             '<div class="col-12 col-lg-4">',
-                '<div class="row">',
-                    '<div class="col-12">',
-                        '<div class="spacer-right">',
-                            '<p class="text-0-2-67"><a class="link-0-2-68" href="/users/' + user.id + '/profile">Profile</a></p>',
-                            '<p class="text-0-2-67"><a class="link-0-2-68" href="/my/messages">Messages</a></p>',
-                            '<p class="text-0-2-67"><a class="link-0-2-68" href="/trades">Trade</a></p>',
-                            '<p class="text-0-2-67"><a class="link-0-2-68" data-nx-renamed="1" href="/transactions" style="cursor:pointer">Robux</a></p>',
+                '<div class="linkContainerCol">',
+                    '<div class="row">',
+                        '<div class="col-12">',
+                            '<p class="authText"><a class="authLink" href="/transactions" data-nx-renamed="1" style="cursor:pointer"><span class="icon-nav-robux"></span></a></p>',
+                            '<p class="authText robuxText"><span>0</span></p>',
+                            '<p class="authText"><a class="authLink" id="nx-legacy-settings-toggle"><span class="icon-nav-settings settingsIcon"></span></a></p>',
+                            '<div class="settingsDropdown" id="nx-legacy-settings-menu" style="display:none">',
+                                '<p><a href="/my/account">Settings</a></p>',
+                                '<p><a href="/help">Help</a></p>',
+                                '<p><a id="nx-legacy-logout">Logout</a></p>',
+                            '</div>',
                         '</div>',
                     '</div>',
                 '</div>',
@@ -203,15 +169,72 @@
         ].join('');
     }
 
-    function applyLegacyNav() {
+    function navMarkup() {
+        return [
+            '<div class="nx-legacy-nav-wrapper navbar-wrapper-main">',
+                '<nav class="navbar fixed-top navbar-expand-lg nx-legacy-nav">',
+                    '<div class="container">',
+                        '<div class="row">',
+                            '<div class="col-12 col-lg-8">',
+                                '<div class="row">',
+                                    '<div class="col-2 col-lg-2 logo-col">',
+                                        '<div class="openSideNavMobile icon-menu"></div>',
+                                        '<div class="imgDesktop" data-nx-logo="1" style="cursor:pointer"></div>',
+                                        '<div class="imgMobileWrapper"><div class="imgMobile" data-nx-logo="1" style="cursor:pointer"></div></div>',
+                                    '</div>',
+                                    '<div class="col-10 col-lg-5 navLinksCol">',
+                                        '<div class="navLinksContainer">',
+                                            '<div class="row">',
+                                                '<div class="col-3"><a class="linkEntry nav-link active pt-0" href="/games">Games</a></div>',
+                                                '<div class="col-3"><a class="linkEntry nav-link active pt-0" href="/catalog">Catalog</a></div>',
+                                                '<div class="col-3"><a class="linkEntry nav-link active pt-0" href="/develop">Develop</a></div>',
+                                                '<div class="col-3"><a class="linkEntry nav-link active pt-0" href="/transactions">ROBUX</a></div>',
+                                            '</div>',
+                                        '</div>',
+                                    '</div>',
+                                    '<div class="col-12 col-lg-5">',
+                                        '<div style="width:100%">',
+                                            '<div class="searchWrap">',
+                                                '<input value="" class="form-control searchInput" placeholder="Search">',
+                                                '<span class="icon-nav-search"></span>',
+                                            '</div>',
+                                        '</div>',
+                                    '</div>',
+                                '</div>',
+                            '</div>',
+                            authArea(),
+                        '</div>',
+                    '</div>',
+                '</nav>',
+            '</div>'
+        ].join('');
+    }
+
+    var FOOTER_HTML = [
+        '<footer class="nx-legacy-footer">',
+            '<div class="container mt-4 mb-0 footerContainer">',
+                '<div class="row">',
+                    '<div class="col-2 mb-2"><h2 class="fText fLink"><a class="fText fLink" href="/about-us">About Us</a></h2></div>',
+                    '<div class="col-2 mb-2"><h2 class="fText fLink"><a class="fText fLink" href="/jobs">Jobs</a></h2></div>',
+                    '<div class="col-2 mb-2"><h2 class="fText fLink"><a class="fText fLink" href="/info/blog">Blog</a></h2></div>',
+                    '<div class="col-2 mb-2"><h2 class="fText fLink"><a class="fText fLink" href="/privacy">Privacy</a></h2></div>',
+                    '<div class="col-2 mb-2"><h2 class="fText fLink"><a class="fText fLink" href="/help">Help</a></h2></div>',
+                    '<div class="col-12 col-lg-10 offset-lg-1">',
+                        '<p class="fText">ROBLOX, "Online Building Toy", characters, logos, names, and all related indicia are trademarks of <a href="https://corp.roblox.com"> ROBLOX Corporation</a>, ©2016. Patents pending. ROBLOX is not sponsored, authorized or endorsed by any producer of plastic building bricks, including The LEGO Group, MEGA Brands, and K\'Nex, and no resemblance to the products of these companies is intended. Use of this site signifies your acceptance of the <a href="/terms-and-conditions">Terms and Conditions</a>.</p>',
+                    '</div>',
+                '</div>',
+            '</div>',
+        '</footer>'
+    ].join('');
+
+    function applyNav() {
         var existing = document.querySelector('.navbar-wrapper-main');
         if (!existing) return;
         if (existing.dataset[LEGACY_MARKER]) return;
 
         var wrapper = document.createElement('div');
-        wrapper.innerHTML = NAV_HTML_TOP + rightColumn() + NAV_HTML_BOTTOM;
+        wrapper.innerHTML = navMarkup();
         var newNav = wrapper.firstChild;
-
         existing.parentNode.replaceChild(newNav, existing);
         newNav.dataset[LEGACY_MARKER] = '1';
 
@@ -219,7 +242,7 @@
             logo.addEventListener('click', function() { window.location.href = '/home'; });
         });
 
-        var search = newNav.querySelector('.searchInput-0-2-17');
+        var search = newNav.querySelector('.searchInput');
         if (search) {
             search.addEventListener('keydown', function(e) {
                 if (e.key !== 'Enter') return;
@@ -228,9 +251,21 @@
                 window.location.href = '/search/users?keyword=' + encodeURIComponent(q);
             });
         }
+
+        var toggle = newNav.querySelector('#nx-legacy-settings-toggle');
+        var menu = newNav.querySelector('#nx-legacy-settings-menu');
+        if (toggle && menu) {
+            toggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+            });
+            document.addEventListener('click', function(e) {
+                if (!menu.contains(e.target) && e.target !== toggle) menu.style.display = 'none';
+            });
+        }
     }
 
-    function applyLegacyFooter() {
+    function applyFooter() {
         var existing = document.querySelector('footer.footer-0-2-59, footer.footer-0-2-75, footer[class*="footer-"]');
         if (!existing) return;
         if (existing.classList.contains('nx-legacy-footer')) return;
@@ -269,9 +304,9 @@
     }
 
     function applyAll() {
-        stripInlineBodyStyle();
-        applyLegacyNav();
-        applyLegacyFooter();
+        setBodyBackground();
+        applyNav();
+        applyFooter();
         replaceText(document.body);
         replaceAttributes(document.body);
         if (document.title && document.title.indexOf('Aisaka') !== -1) {
@@ -308,9 +343,7 @@
         if (titleTimer) { clearInterval(titleTimer); titleTimer = null; }
         var css = document.getElementById(CSS_ID);
         if (css) css.remove();
-        if (document.body && !document.body.getAttribute('style')) {
-            document.body.setAttribute('style', 'background: #f2f4f5');
-        }
+        if (document.body) document.body.setAttribute('style', 'background: #f2f4f5');
     }
 
     window.NX.features.legacyTheme = {
