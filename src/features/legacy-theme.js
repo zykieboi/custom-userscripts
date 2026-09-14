@@ -4,15 +4,13 @@
     window.NX = window.NX || {};
     window.NX.features = window.NX.features || {};
 
-    var LEGACY_MARKER = 'nxLegacyNav';
     var CSS_ID = 'nx-legacy-theme-style';
-    var REPLACE_FROM = /Aisaka/g;
-    var REPLACE_TO = 'Caelus';
+    var LEGACY_MARKER = 'nxLegacyNav';
 
     var CSS = [
-        'html, body{background:#e3e3e3 !important}',
+        'html,body{background:#e3e3e3 !important;font-family:Helvetica,Arial,sans-serif !important;color:#333 !important}',
 
-        '.nx-legacy-nav{background:#1e1e1e;position:fixed;top:0;left:0;right:0;z-index:1030;height:44px}',
+        '.nx-legacy-nav{background:#2b6ab5 !important;position:fixed;top:0;left:0;right:0;z-index:1030;height:44px}',
         '.nx-legacy-nav .navContainer{max-width:1140px;margin:0 auto;padding:0 15px;height:44px}',
         '.nx-legacy-nav .row{margin:0;height:44px}',
         '.nx-legacy-nav .col-12{padding:0}',
@@ -21,26 +19,58 @@
         '.nx-legacy-nav .imgMobileWrapper{display:none}',
         '.nx-legacy-nav .container-0-2-12{height:44px}',
         '.nx-legacy-nav .container-0-2-12 .row{display:flex;align-items:center;height:44px}',
-        '.nx-legacy-nav .container-0-2-12 .col-3{padding:0;flex:1 1 auto;max-width:none;text-align:left}',
-        '.nx-legacy-nav .linkEntry{color:#fff;text-decoration:none;font-size:14px;font-weight:500;display:inline-block;padding:12px 0;line-height:20px;white-space:nowrap}',
-        '.nx-legacy-nav .linkEntry:hover{color:#e2e2e2;text-decoration:none}',
+        '.nx-legacy-nav .container-0-2-12 .col-3{padding:0 20px 0 0;flex:0 0 auto;max-width:none;text-align:left}',
+        '.nx-legacy-nav .linkEntry{color:#fff !important;text-decoration:none !important;font-size:14px;font-weight:500;display:inline-block;padding:12px 0;line-height:20px;white-space:nowrap}',
+        '.nx-legacy-nav .linkEntry:hover{color:#e2e2e2 !important;text-decoration:none !important}',
         '.nx-legacy-nav .wrapper-0-2-16{position:relative;width:100%;margin-top:7px}',
-        '.nx-legacy-nav .searchInput{width:100%;height:30px;background:#2b2b2b;border:1px solid #444;color:#ddd;border-radius:2px;padding:0 30px 0 10px;font-size:13px;outline:0}',
+        '.nx-legacy-nav .searchInput{width:100%;height:30px;background:#fff;border:0;color:#333;border-radius:0;padding:0 30px 0 10px;font-size:13px;outline:0}',
         '.nx-legacy-nav .icon-nav-search{position:absolute;right:9px;top:7px;color:#999;font-size:14px;pointer-events:none}',
         '.nx-legacy-nav .text-0-2-67{margin:0;font-size:14px;line-height:44px;text-align:center}',
-        '.nx-legacy-nav .text-0-2-67 a{color:#fff;text-decoration:none;cursor:pointer}',
-        '.nx-legacy-nav .text-0-2-67 a:hover{color:#e2e2e2}',
+        '.nx-legacy-nav .text-0-2-67 a{color:#fff !important;text-decoration:none !important;cursor:pointer}',
+        '.nx-legacy-nav .text-0-2-67 a:hover{color:#e2e2e2 !important}',
         '.nx-legacy-nav .spacer-right{display:flex;justify-content:flex-end;gap:24px;padding-right:8px}',
 
-        '.nx-legacy-footer{background:#1e1e1e;color:#ccc;padding:24px 0 12px;margin-top:40px}',
+        '.nx-legacy-footer{background:#2b6ab5 !important;color:#fff !important;padding:24px 0 12px;margin-top:40px}',
         '.nx-legacy-footer .footerContainer{max-width:1140px;margin:0 auto;padding:0 15px}',
         '.nx-legacy-footer .row{display:flex;flex-wrap:wrap;margin:0 -8px}',
         '.nx-legacy-footer .col-2{flex:0 0 16.666%;max-width:16.666%;padding:0 8px 8px}',
-        '.nx-legacy-footer .text-0-2-32{color:#ccc;font-size:13px;margin:0;line-height:1.4}',
-        '.nx-legacy-footer .link-0-2-33{color:#ccc;text-decoration:none;font-weight:500}',
-        '.nx-legacy-footer .link-0-2-33:hover{color:#fff;text-decoration:none}',
-        '.nx-legacy-footer .disclaimer{margin-top:16px;padding:0 8px;color:#999;font-size:12px;line-height:1.4}',
-        '.nx-legacy-footer .disclaimer a{color:#ccc}',
+        '.nx-legacy-footer .text-0-2-32{color:#fff !important;font-size:13px;margin:0;line-height:1.4}',
+        '.nx-legacy-footer .link-0-2-33{color:#fff !important;text-decoration:none;font-weight:500}',
+        '.nx-legacy-footer .link-0-2-33:hover{color:#cce4ff !important;text-decoration:none}',
+        '.nx-legacy-footer .disclaimer{margin-top:16px;padding:0 8px;color:#dbe8f7 !important;font-size:12px;line-height:1.4}',
+        '.nx-legacy-footer .disclaimer a{color:#fff !important}',
+
+        '.nx-legacy-nav + .fakeAlert-0-2-41{display:none !important}',
+        '.fakeAlert-0-2-41{display:none !important}',
+
+        'body::before{content:"";display:block;height:44px}',
+
+        'h1,h2,h3,h4,h5{font-family:Helvetica,Arial,sans-serif !important;color:#333 !important;font-weight:400 !important}',
+        'h1{font-size:34px !important}',
+        'h2{font-size:23px !important}',
+        'h3{font-size:20px !important}',
+        'a{color:#2b6ab5}',
+        'a:hover{color:#1d4a80}',
+
+        '.card{border-radius:0 !important;box-shadow:none !important;border:1px solid #c3c3c3 !important;background:#fff !important}',
+        '[class*="card-0-2-"]{border-radius:0 !important;box-shadow:none !important;background:#fff !important;border:1px solid #c3c3c3 !important}',
+
+        '.btn,.btn-primary,[class*="btn-0-2-"]{border-radius:0 !important;background:#2b6ab5 !important;color:#fff !important;border:1px solid #2b6ab5 !important;font-weight:500 !important;padding:6px 16px !important}',
+        '.btn:hover,.btn-primary:hover,[class*="btn-0-2-"]:hover{background:#1d4a80 !important;border-color:#1d4a80 !important}',
+
+        'input:not([type="checkbox"]):not([type="radio"]),select,textarea{border-radius:0 !important;border:1px solid #999 !important;background:#fff !important;color:#333 !important;font-family:Helvetica,Arial,sans-serif !important}',
+
+        '.container{max-width:1140px !important}',
+
+        '.main-0-2-45{background:#e3e3e3 !important}',
+
+        'table{border-collapse:collapse !important}',
+        'table th{background:#e3e3e3 !important;color:#555 !important;font-weight:600 !important;border-bottom:2px solid #c3c3c3 !important;padding:6px 8px !important;font-size:13px !important;text-transform:none !important}',
+        'table td{border-bottom:1px solid #d9d9d9 !important;padding:6px 8px !important;font-size:13px !important}',
+
+        '::-webkit-scrollbar{width:12px;height:12px}',
+        '::-webkit-scrollbar-track{background:#e3e3e3}',
+        '::-webkit-scrollbar-thumb{background:#b8b8b8;border:2px solid #e3e3e3}',
 
         '@media(max-width:991px){',
         '.nx-legacy-nav{height:auto}',
@@ -50,11 +80,6 @@
         '.nx-legacy-nav .imgMobile{background:url("/img/logo.png") no-repeat left center;background-size:contain;height:44px;width:80px}',
         '.nx-legacy-nav .container-0-2-12 .col-3{display:none}',
         '.nx-legacy-nav .wrapper-0-2-16{margin:7px 8px}',
-        '.nx-legacy-nav .row-0-2-4{display:flex;flex-wrap:wrap;align-items:center}',
-        '.nx-legacy-nav .col-0-2-10{flex:0 0 auto;max-width:none;padding:0 8px 0 0}',
-        '.nx-legacy-nav .col-0-2-15{flex:1 1 auto;max-width:none;padding:0 8px}',
-        '.nx-legacy-nav .col-12.col-lg-4{flex:0 0 100%;max-width:100%}',
-        '.nx-legacy-nav .col-6.offset-6{padding-right:16px}',
         '.nx-legacy-footer .col-2{flex:0 0 50%;max-width:50%}',
         '}'
     ].join('');
@@ -125,13 +150,9 @@
         document.head.appendChild(s);
     }
 
-    function killInlineBodyBackground() {
+    function stripInlineBodyStyle() {
         if (!document.body) return;
-        var bg = document.body.getAttribute('style') || '';
-        if (bg.indexOf('background') === -1) return;
-        var cleaned = bg.replace(/background\s*:\s*[^;]+;?/gi, '').trim();
-        if (cleaned) document.body.setAttribute('style', cleaned);
-        else document.body.removeAttribute('style');
+        document.body.removeAttribute('style');
     }
 
     function loggedInUser() {
@@ -142,7 +163,6 @@
                 && window.__NEXT_DATA__.props.pageProps.user;
             if (me && me.id) return me;
         } catch (e) {}
-
         var link = document.querySelector('a[href*="/users/"][href$="/profile"]');
         if (link) {
             var m = (link.getAttribute('href') || '').match(/\/users\/(\d+)\/profile/);
@@ -159,8 +179,8 @@
                     '<div class="row">',
                         '<div class="col-6 offset-6">',
                             '<div class="row">',
-                                '<div class="col-6"><p class="text-0-2-67"><a class="link-0-2-68" href="/login">Login</a></p></div>',
                                 '<div class="col-6"><p class="text-0-2-67"><a class="link-0-2-68" href="/signup">Sign Up</a></p></div>',
+                                '<div class="col-6"><p class="text-0-2-67"><a class="link-0-2-68" href="/login">Login</a></p></div>',
                             '</div>',
                         '</div>',
                     '</div>',
@@ -183,46 +203,13 @@
         ].join('');
     }
 
-    function buildNav() {
-        return NAV_HTML_TOP + rightColumn() + NAV_HTML_BOTTOM;
-    }
-
-    function replaceText(root) {
-        if (!root) return;
-        var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-            acceptNode: function(node) {
-                if (!node.nodeValue || node.nodeValue.indexOf('Aisaka') === -1) return NodeFilter.FILTER_REJECT;
-                var p = node.parentNode;
-                if (!p) return NodeFilter.FILTER_REJECT;
-                var tag = p.tagName;
-                if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') return NodeFilter.FILTER_REJECT;
-                return NodeFilter.FILTER_ACCEPT;
-            }
-        });
-        var nodes = [];
-        while (walker.nextNode()) nodes.push(walker.currentNode);
-        nodes.forEach(function(n) { n.nodeValue = n.nodeValue.replace(REPLACE_FROM, REPLACE_TO); });
-    }
-
-    function replaceAttributes(root) {
-        if (!root || !root.querySelectorAll) return;
-        root.querySelectorAll('[title],[alt],[placeholder],[aria-label]').forEach(function(node) {
-            ['title', 'alt', 'placeholder', 'aria-label'].forEach(function(attr) {
-                var v = node.getAttribute(attr);
-                if (v && v.indexOf('Aisaka') !== -1) {
-                    node.setAttribute(attr, v.replace(REPLACE_FROM, REPLACE_TO));
-                }
-            });
-        });
-    }
-
     function applyLegacyNav() {
         var existing = document.querySelector('.navbar-wrapper-main');
         if (!existing) return;
         if (existing.dataset[LEGACY_MARKER]) return;
 
         var wrapper = document.createElement('div');
-        wrapper.innerHTML = buildNav();
+        wrapper.innerHTML = NAV_HTML_TOP + rightColumn() + NAV_HTML_BOTTOM;
         var newNav = wrapper.firstChild;
 
         existing.parentNode.replaceChild(newNav, existing);
@@ -252,28 +239,48 @@
         existing.parentNode.replaceChild(wrapper.firstChild, existing);
     }
 
-    function applyTextReplace() {
+    function replaceText(root) {
+        if (!root) return;
+        var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+            acceptNode: function(node) {
+                if (!node.nodeValue || node.nodeValue.indexOf('Aisaka') === -1) return NodeFilter.FILTER_REJECT;
+                var p = node.parentNode;
+                if (!p) return NodeFilter.FILTER_REJECT;
+                var tag = p.tagName;
+                if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') return NodeFilter.FILTER_REJECT;
+                return NodeFilter.FILTER_ACCEPT;
+            }
+        });
+        var nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(function(n) { n.nodeValue = n.nodeValue.split('Aisaka').join('Caelus'); });
+    }
+
+    function replaceAttributes(root) {
+        if (!root || !root.querySelectorAll) return;
+        root.querySelectorAll('[title],[alt],[placeholder],[aria-label]').forEach(function(node) {
+            ['title', 'alt', 'placeholder', 'aria-label'].forEach(function(attr) {
+                var v = node.getAttribute(attr);
+                if (v && v.indexOf('Aisaka') !== -1) {
+                    node.setAttribute(attr, v.split('Aisaka').join('Caelus'));
+                }
+            });
+        });
+    }
+
+    function applyAll() {
+        stripInlineBodyStyle();
+        applyLegacyNav();
+        applyLegacyFooter();
         replaceText(document.body);
         replaceAttributes(document.body);
-        var title = document.title;
-        if (title && title.indexOf('Aisaka') !== -1) {
-            document.title = title.replace(REPLACE_FROM, REPLACE_TO);
+        if (document.title && document.title.indexOf('Aisaka') !== -1) {
+            document.title = document.title.split('Aisaka').join('Caelus');
         }
     }
 
-    var titleTimer = null;
-
-    function watchTitle() {
-        if (titleTimer) return;
-        titleTimer = setInterval(function() {
-            var t = document.title;
-            if (t && t.indexOf('Aisaka') !== -1) {
-                document.title = t.replace(REPLACE_FROM, REPLACE_TO);
-            }
-        }, 500);
-    }
-
     var observer = null;
+    var titleTimer = null;
 
     function startObserver() {
         if (observer) return;
@@ -282,40 +289,35 @@
             observer._scheduled = true;
             requestAnimationFrame(function() {
                 observer._scheduled = false;
-                killInlineBodyBackground();
-                if (document.querySelector('.navbar-wrapper-main')) {
-                    var nav = document.querySelector('.navbar-wrapper-main');
-                    if (!nav.dataset || !nav.dataset[LEGACY_MARKER]) applyLegacyNav();
-                }
-                if (document.querySelector('footer:not(.nx-legacy-footer)')) applyLegacyFooter();
-                applyTextReplace();
+                applyAll();
             });
         });
         observer.observe(document.body, { childList: true, subtree: true, characterData: true });
-    }
 
-    function stopObserver() {
-        if (!observer) return;
-        observer.disconnect();
-        observer = null;
+        if (!titleTimer) {
+            titleTimer = setInterval(function() {
+                if (document.title && document.title.indexOf('Aisaka') !== -1) {
+                    document.title = document.title.split('Aisaka').join('Caelus');
+                }
+            }, 500);
+        }
     }
 
     function teardown() {
-        stopObserver();
+        if (observer) { observer.disconnect(); observer = null; }
         if (titleTimer) { clearInterval(titleTimer); titleTimer = null; }
         var css = document.getElementById(CSS_ID);
         if (css) css.remove();
+        if (document.body && !document.body.getAttribute('style')) {
+            document.body.setAttribute('style', 'background: #f2f4f5');
+        }
     }
 
     window.NX.features.legacyTheme = {
         apply: function() {
             ensureStyle();
-            killInlineBodyBackground();
-            applyLegacyNav();
-            applyLegacyFooter();
-            applyTextReplace();
+            applyAll();
             startObserver();
-            watchTitle();
         },
         teardown: teardown
     };
