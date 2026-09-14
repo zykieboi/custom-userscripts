@@ -39,7 +39,7 @@
                 hideAlert: {
                     cat: 'visual',
                     label: 'Hide Alert',
-                    desc: 'Hides the fake alert banner under the navigation bar.'
+                    desc: 'Hides the alert banner under the navigation bar.'
                 },
 
                 inventorySearch: {
@@ -69,7 +69,7 @@
                 trade2020: {
                     cat: 'visual',
                     label: '2020 Trade Theme',
-                    desc: '(Experimental) Replaces the default trade page with the similar 2020 Roblox layout.'
+                    desc: '(W.I.P) Replaces the default trade page with the similar 2020 Roblox layout.'
                 }
             };
 
