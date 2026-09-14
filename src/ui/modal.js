@@ -6,16 +6,17 @@
 
     window.NX.ui.modal = {
         build: function() {
+            var existing = document.getElementById('nx-overlay');
+            if (existing) existing.remove();
+
             var overlay = document.createElement('div');
             overlay.id = 'nx-overlay';
 
             var modal = document.createElement('div');
             modal.id = 'nx-modal';
 
-            var close = document.createElement('button');
-            close.className = 'close';
-            close.textContent = '×';
-            close.onclick = function() { overlay.remove(); };
+            var header = document.createElement('div');
+            header.className = 'nx-header';
 
             var title = document.createElement('h2');
             title.textContent = 'Nexus Settings';
@@ -24,7 +25,21 @@
             sub.className = 'sub';
             sub.textContent = 'Settings are saved automatically';
 
+            var titleBlock = document.createElement('div');
+            titleBlock.className = 'title-block';
+            titleBlock.appendChild(title);
+            titleBlock.appendChild(sub);
+
+            var close = document.createElement('button');
+            close.className = 'close';
+            close.textContent = '×';
+            close.onclick = function() { overlay.remove(); };
+
+            header.appendChild(titleBlock);
+            header.appendChild(close);
+
             var content = document.createElement('div');
+            content.className = 'nx-content';
 
             var cats = [
                 { id: 'visual', label: 'Visual' },
@@ -41,7 +56,7 @@
                 legacyTheme: {
                     cat: 'visual',
                     label: 'Legacy Theme (Caelus)',
-                    desc: 'Rebuilds the 2016 navbar and footer.'
+                    desc: 'Rebuilds the navbar and footer.'
                 },
                 inventorySearch: {
                     cat: 'function',
@@ -61,7 +76,7 @@
                 trade2020: {
                     cat: 'function',
                     label: '2020 Trade Theme',
-                    desc: '[BETA] Replaces the default trade list and window with a similar 2020 Roblox layout.'
+                    desc: 'Replaces the default trade list and window with the 2020 Roblox layout.'
                 },
                 removeAds: {
                     cat: 'performance',
@@ -70,9 +85,10 @@
                 }
             };
 
-            cats.forEach(function(cat) {
+            cats.forEach(function(cat, ci) {
                 var catDiv = document.createElement('div');
                 catDiv.className = 'nx-cat';
+                if (ci === 0) catDiv.classList.add('first');
                 catDiv.textContent = cat.label;
                 content.appendChild(catDiv);
 
@@ -129,16 +145,19 @@
                 }
             });
 
+            var footer = document.createElement('div');
+            footer.className = 'nx-footer';
+
             var saveBtn = document.createElement('button');
             saveBtn.className = 'save-btn';
             saveBtn.textContent = 'Save & Reload';
             saveBtn.onclick = function() { location.reload(); };
 
-            modal.appendChild(close);
-            modal.appendChild(title);
-            modal.appendChild(sub);
+            footer.appendChild(saveBtn);
+
+            modal.appendChild(header);
             modal.appendChild(content);
-            modal.appendChild(saveBtn);
+            modal.appendChild(footer);
             overlay.appendChild(modal);
 
             overlay.addEventListener('click', function(e) {
