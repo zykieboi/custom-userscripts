@@ -15,10 +15,7 @@
             var close = document.createElement('button');
             close.className = 'close';
             close.textContent = '×';
-
-            close.onclick = function() {
-                overlay.remove();
-            };
+            close.onclick = function() { overlay.remove(); };
 
             var title = document.createElement('h2');
             title.textContent = 'Nexus Settings';
@@ -41,35 +38,35 @@
                     label: 'Hide Alert',
                     desc: 'Hides the alert banner under the navigation bar.'
                 },
-
+                legacyTheme: {
+                    cat: 'visual',
+                    label: 'Legacy Theme (Caelus)',
+                    desc: 'Rebuilds the 2016 navbar and footer.'
+                },
                 inventorySearch: {
                     cat: 'function',
                     label: 'Inventory Search',
                     desc: 'Adds a search bar to your inventory so you can filter items by name.'
                 },
-
                 bulkUnfriend: {
                     cat: 'function',
                     label: 'Bulk Unfriend',
                     desc: 'Select multiple friends and remove them all at once from the friends page.'
                 },
-
                 rap: {
                     cat: 'function',
                     label: 'RAP on Profile',
                     desc: 'Shows the user\'s total RAP next to their friends/followers stats.'
                 },
-
+                trade2020: {
+                    cat: 'function',
+                    label: '2020 Trade Theme',
+                    desc: '[BETA] Replaces the default trade list and window with a similar 2020 Roblox layout.'
+                },
                 removeAds: {
                     cat: 'performance',
                     label: 'Remove Ads',
                     desc: 'Hides all advertisement banners and skyscrapers across the site.'
-                },
-
-                trade2020: {
-                    cat: 'visual',
-                    label: '2020 Trade Theme',
-                    desc: '(W.I.P) Replaces the default trade page with the similar 2020 Roblox layout.'
                 }
             };
 
@@ -104,20 +101,19 @@
 
                     var input = document.createElement('input');
                     input.type = 'checkbox';
-
                     input.checked = window.NX.settings.get(key);
 
                     input.addEventListener('change', (function(k) {
                         return function() {
                             window.NX.settings.set(k, this.checked);
-
-                            if (
-                                this.checked &&
-                                window.NX.features &&
-                                window.NX.features[k] &&
-                                typeof window.NX.features[k].apply === 'function'
-                            ) {
-                                window.NX.features[k].apply();
+                            if (this.checked) {
+                                if (window.NX.features[k] && window.NX.features[k].apply) {
+                                    window.NX.features[k].apply();
+                                }
+                            } else {
+                                if (window.NX.features[k] && window.NX.features[k].teardown) {
+                                    window.NX.features[k].teardown();
+                                }
                             }
                         };
                     })(key));
@@ -127,10 +123,8 @@
 
                     toggle.appendChild(input);
                     toggle.appendChild(slider);
-
                     row.appendChild(text);
                     row.appendChild(toggle);
-
                     content.appendChild(row);
                 }
             });
@@ -138,23 +132,17 @@
             var saveBtn = document.createElement('button');
             saveBtn.className = 'save-btn';
             saveBtn.textContent = 'Save & Reload';
-
-            saveBtn.onclick = function() {
-                location.reload();
-            };
+            saveBtn.onclick = function() { location.reload(); };
 
             modal.appendChild(close);
             modal.appendChild(title);
             modal.appendChild(sub);
             modal.appendChild(content);
             modal.appendChild(saveBtn);
-
             overlay.appendChild(modal);
 
             overlay.addEventListener('click', function(e) {
-                if (e.target === overlay) {
-                    overlay.remove();
-                }
+                if (e.target === overlay) overlay.remove();
             });
 
             document.body.appendChild(overlay);
